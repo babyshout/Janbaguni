@@ -49,17 +49,19 @@ public class CommunityController {
         //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
+        List<CommunityDTO> rList = CommunityService.getCommunityList();
+
         //로그인된 사용자 아이디는 Session에 저장함
         // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음
         // 추후 로그인을 구현할 것으로 가정하고, 공지사항 리스트를 출력하는 함수에서 로그인 한 것처럼 Session 값을 임의로 생성해준다.
-        session.setAttribute("SESSION_USER_ID", "USER01");
+//        session.setAttribute("SESSION_USER_ID", "USER01");
 
         //공지사항 리스트 조회하기
         // java8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         //service를 호출하여 공지사항 결과를 받아줌
-        List<CommunityDTO> rList = Optional.ofNullable(
-                CommunityService.getCommunityList()
-        ).orElseGet(ArrayList::new);
+//        List<CommunityDTO> rList = Optional.ofNullable(
+//                CommunityService.getCommunityList()
+//        ).orElseGet(ArrayList::new);
 
 
 //        리스트 값 찍어보기
