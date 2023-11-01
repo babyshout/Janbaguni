@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.order.persistance.mapper.IImageMapper">
+    <insert id="insertImageUrlCheckY" parameterType="ImageDTO">
+        INSERT INTO IMAGE
+            (
+             SEQ,
+             URL,
+             USER_ID,
+             OCR_DATE
+            )
+        VALUES (
+                (SELECT COALESCE(MAX(I.SEQ), 0) + 1 FROM IMAGE AS I WHERE I.USER_ID = #{userId} AND I.OCR_DATE = #{ocrDate}),
+                #{url},
+                #{userId},
+                #{ocrDate}
+               )
+    </insert>
+    <insert id="insertImageUrlCheckN" parameterType="ImageDTO">
+        INSERT INTO IMAGE
+            (
+             SEQ,
+             URL,
+             USER_ID,
+             OCR_DATE
+            )
+        VALUES (
+                (SELECT COALESCE(MAX(I.SEQ), 0) + 1 FROM IMAGE AS I WHERE I.USER_ID = #{userId} AND I.OCR_DATE = #{ocrDate}),
+                '/image/notCheckingSave.png',
+                #{userId},
+                #{ocrDate}
+               )
+    </insert>
+</mapper>
