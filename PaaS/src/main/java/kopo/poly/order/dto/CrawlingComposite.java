@@ -14,6 +14,8 @@ public class CrawlingComposite {
 
     private List<List<ProductCrawlingDTO>> monoMartList;
 
+
+
     public CrawlingComposite(List<List<ProductCrawlingDTO>> aceList, List<List<ProductCrawlingDTO>> goodFoodList,
                              List<List<ProductCrawlingDTO>> babyLeafList, List<List<ProductCrawlingDTO>> foodEnList,
                              List<List<ProductCrawlingDTO>> monoMartList){
@@ -23,6 +25,5 @@ public class CrawlingComposite {
         this.foodEnList = foodEnList;
         this.monoMartList = monoMartList;
     }
-
 
 }

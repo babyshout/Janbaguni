@@ -53,6 +53,7 @@ public class CrawlingService implements ICrawlingService {
                 pDTO.setShop(shop);
                 Element tmp = content.select(getUrl).first();
                 String resultUrl = linkUrl + tmp.attr("href");
+                log.info("url : " + resultUrl);
                 pDTO.setUrl(resultUrl);
 
                 productList.add(pDTO);

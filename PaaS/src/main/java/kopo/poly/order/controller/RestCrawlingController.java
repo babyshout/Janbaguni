@@ -10,6 +10,7 @@ import kopo.poly.order.utill.StringPreprocessingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -253,7 +254,39 @@ public class RestCrawlingController {
         CrawlingComposite crawlingComposite = new CrawlingComposite(acePriceList, goodFoodList, babyLeafList, foodEnList, monoMartList);
         // getPrice 기준으로 정렬
         sortUtil.sortCrawlingComposite(crawlingComposite);
-
+        acePriceList = null;
+        goodFoodList = null;
+        babyLeafList = null;
+        foodEnList = null;
+        monoMartList = null;
+        sortUtil = null;
         return crawlingComposite;
+    }
+
+    private SearchCrawlingComposite searchCrawling(String keyWord){
+        SearchCrawlingComposite searchCrawlingComposite = null;
+        SortUtil sortUtil = new SortUtil();
+        try{
+
+            List<ProductCrawlingDTO> searchAce = crawlingService.getAceData(keyWord);
+            List<ProductCrawlingDTO> searchGoodFood = crawlingService.getGoodFood(keyWord);
+            List<ProductCrawlingDTO> searchBabyLeaf = crawlingService.getBabyleaf(keyWord);
+            List<ProductCrawlingDTO> searchFoodEn = crawlingService.getFoodEn(keyWord);
+            List<ProductCrawlingDTO> searchMonoMart = crawlingService.getMonoMart(keyWord);
+
+            searchAce = sortUtil.sortSearchCrawlingComposite(searchAce);
+            searchGoodFood = sortUtil.sortSearchCrawlingComposite(searchGoodFood);
+            searchBabyLeaf = sortUtil.sortSearchCrawlingComposite(searchBabyLeaf);
+            searchFoodEn = sortUtil.sortSearchCrawlingComposite(searchFoodEn);
+            searchMonoMart = sortUtil.sortSearchCrawlingComposite(searchMonoMart);
+            searchCrawlingComposite = new SearchCrawlingComposite(searchAce, searchGoodFood, searchBabyLeaf, searchFoodEn, searchMonoMart);
+
+
+        }catch (Exception e){
+            log.info("써치크롤링~~");
+        }finally {
+            return searchCrawlingComposite;
+        }
+
     }
 }

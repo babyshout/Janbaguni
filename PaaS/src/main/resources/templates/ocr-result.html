@@ -84,7 +84,7 @@
                 $.each(innerList, function (innerIndex, item) {
                     let productRow = $("<tr>");
 
-                    let productLink = $("<a>").attr("href", item.linkUrl).attr("target", "_blank").text(item.productName);
+                    let productLink = $("<a>").attr("href", item.url).attr("target", "_blank").text(item.productName);
 
                     let productCell = $("<td>").css("width", "650px").append(productLink);
                     productRow.append(productCell);
