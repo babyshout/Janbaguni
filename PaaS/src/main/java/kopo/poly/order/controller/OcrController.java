@@ -24,8 +24,13 @@ public class OcrController {
 
 
     @GetMapping("/upload-form")
-    public String uploadForm() throws Exception {
-        return "/upload-form"; // Return the name of the HTML template (upload-form.html)
+    public String uploadForm(HttpSession session) throws Exception {
+        String userId = (String) session.getAttribute("SS_USER_ID");
+        if(userId == null || userId.equals("")){
+            return"user/sign-in_sign-up";
+        }else{
+            return "/upload-form"; // Return the name of the HTML template (upload-form.html)
+        }
     }
 
 

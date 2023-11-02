@@ -1,6 +1,5 @@
 package kopo.poly.order.persistance.mapper;
 
-import kopo.poly.order.dto.ImageDTO;
 import kopo.poly.order.dto.OcrDTO;
 import org.apache.ibatis.annotations.Mapper;
 
