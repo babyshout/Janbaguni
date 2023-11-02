@@ -1,6 +1,6 @@
 package kopo.poly.order.controller;
 
-import kopo.poly.order.dto.ImageDTO;
+import kopo.poly.order.dto.OrderDTO;
 import kopo.poly.order.service.IS3UploadService;
 import kopo.poly.order.utill.CmmUtil;
 import kopo.poly.order.utill.DateUtil;
@@ -39,7 +39,7 @@ public class S3Controller {
             userId = "user01";
         }
 
-        ImageDTO orderDTO = new ImageDTO();
+        OrderDTO orderDTO = new OrderDTO();
         try{
             imageUrl = s3UploadService.upload(mf, saveFileName);
 

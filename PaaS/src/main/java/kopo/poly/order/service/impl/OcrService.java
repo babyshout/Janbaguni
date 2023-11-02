@@ -1,17 +1,12 @@
 package kopo.poly.order.service.impl;
 
 import kopo.poly.order.dto.OcrComposite;
-
-import kopo.poly.order.dto.OcrDTO;
 import kopo.poly.order.infra.naver.ocr.NaverOrderPaperOcr;
-//import kopo.poly.order.persistance.mapper.IOrderPaperMapper;
 import kopo.poly.order.service.IOcrService;
 import kopo.poly.order.utill.StringPreprocessingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-
 
 import java.util.List;
 

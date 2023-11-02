@@ -1,6 +1,6 @@
 package kopo.poly.order.service;
 
-import kopo.poly.order.dto.ImageDTO;
+import kopo.poly.order.dto.OcrDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IS3UploadService {
@@ -10,5 +10,5 @@ public interface IS3UploadService {
 
     int fileDelete(String fileName) throws Exception;
 
-    int insertImageUrl(ImageDTO pDTO, boolean save) throws Exception;
+    int insertImageUrl(OcrDTO pDTO, boolean save) throws Exception;
 }
