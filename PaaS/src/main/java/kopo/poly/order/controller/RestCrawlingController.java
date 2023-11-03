@@ -220,6 +220,39 @@ public class RestCrawlingController {
         return dto;
     }
 
+    @PostMapping("searchCrawlingItem")
+    @ResponseBody
+    public MsgDTO searchCrawlingItem(@RequestParam String searchText, HttpSession session){
+        MsgDTO dto = null;
+        String msg = "";
+        int res = 0;
+
+        if(searchText.equals("")){
+            msg = "찾으시는 물품을 입력해주세요.";
+            res = 2;
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+            dto.setResult(res);
+            return dto;
+        } else if (searchText == null) {
+            msg = "알 수 없는 오류가 발생하였습니다. \n다시 시도해주세요.";
+            res = 2;
+            dto = new MsgDTO();
+            dto.setResult(res);
+            dto.setMsg(msg);
+            return dto;
+        }else{
+            SearchCrawlingComposite searchCrawlingComposite = searchCrawling(searchText);
+        
+            session.setAttribute( "SS_SEARCH_CRAWLING",searchCrawlingComposite);
+            msg = "찾으시는 물품의 최저가를 찾아봤어요!";
+            res = 1;
+            dto.setMsg(msg);
+            dto.setResult(res);
+            return dto;
+        }
+    }
+
 
     private CrawlingComposite mkListForCrawling() throws IOException {
         List<List<ProductCrawlingDTO>> acePriceList = new ArrayList<>();
@@ -266,13 +299,27 @@ public class RestCrawlingController {
     private SearchCrawlingComposite searchCrawling(String keyWord){
         SearchCrawlingComposite searchCrawlingComposite = null;
         SortUtil sortUtil = new SortUtil();
+        List<ProductCrawlingDTO> searchAce = new ArrayList<>();
+        List<ProductCrawlingDTO> searchGoodFood = new ArrayList<>();
+        List<ProductCrawlingDTO> searchBabyLeaf = new ArrayList<>();
+        List<ProductCrawlingDTO> searchFoodEn = new ArrayList<>();
+        List<ProductCrawlingDTO> searchMonoMart = new ArrayList<>();
         try{
-
-            List<ProductCrawlingDTO> searchAce = crawlingService.getAceData(keyWord);
-            List<ProductCrawlingDTO> searchGoodFood = crawlingService.getGoodFood(keyWord);
-            List<ProductCrawlingDTO> searchBabyLeaf = crawlingService.getBabyleaf(keyWord);
-            List<ProductCrawlingDTO> searchFoodEn = crawlingService.getFoodEn(keyWord);
-            List<ProductCrawlingDTO> searchMonoMart = crawlingService.getMonoMart(keyWord);
+            if(crawlingService.getAceData(keyWord) != null){
+                searchAce = crawlingService.getAceData(keyWord);
+            }
+            if(crawlingService.getGoodFood(keyWord) != null){
+                searchGoodFood = crawlingService.getGoodFood(keyWord);
+            }
+            if(crawlingService.getGoodFood(keyWord) != null){
+                searchBabyLeaf = crawlingService.getBabyleaf(keyWord);
+            }
+            if(crawlingService.getFoodEn(keyWord) != null){
+                searchFoodEn = crawlingService.getFoodEn(keyWord);
+            }
+            if(crawlingService.getMonoMart(keyWord) != null){
+                searchMonoMart = crawlingService.getMonoMart(keyWord);
+            }
 
             searchAce = sortUtil.sortSearchCrawlingComposite(searchAce);
             searchGoodFood = sortUtil.sortSearchCrawlingComposite(searchGoodFood);
@@ -285,6 +332,11 @@ public class RestCrawlingController {
         }catch (Exception e){
             log.info("써치크롤링~~");
         }finally {
+            searchAce = null;
+            searchGoodFood = null;
+            searchBabyLeaf = null;
+            searchFoodEn = null;
+            searchMonoMart = null;
             return searchCrawlingComposite;
         }
 

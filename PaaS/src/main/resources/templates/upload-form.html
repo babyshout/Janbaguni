@@ -25,6 +25,83 @@
     <link rel="stylesheet" href="/community/css/assets/css/slick.css">
     <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
     <link rel="stylesheet" href="/community/css/assets/css/style.css">
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let f = document.getElementById("f");
+            let searchForm = document.getElementById('search_form');
+            let searchInput = document.querySelector('.search__input');
+
+            let searchText = searchInput.value;
+
+            $("#btnUpload").on("click", function () {
+
+                imageSubmit(f);
+            })
+
+            searchForm.addEventListener('submit', function (e) {
+                e.preventDefault();  // 폼의 기본 동작을 중지합니다.
+
+                // 입력된 텍스트를 가져옵니다.
+                var searchText = searchInput.value;
+
+                // AJAX 요청을 보냅니다.
+                $.ajax({
+                    url: "/searchCrawlingItem",
+                    type: "POST",
+                    data: {searchText: searchText},
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result === 1) {
+                            // 검색 결과가 성공적으로 반환될 경우, searchResult 페이지로 이동합니다.
+                            alert(json.msg);
+                            location.href = "/searchResult";
+                        } else {
+                            // 검색이 실패한 경우에 대한 처리를 여기에 추가하세요.
+                            alert(json.msg);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // AJAX 요청이 실패한 경우에 대한 처리를 여기에 추가하세요.
+                        console.error(xhr, status, error);
+                    }
+                });
+            });
+
+        })
+
+        function imageSubmit(f) {
+            let fileInput = f.image;
+            if (fileInput.files.length === 0) {
+                alert("이미지를 선택하세요.");
+                fileInput.click();
+                return;
+            } else {
+                $("#body").load("/load/Loading");
+
+                let formData = new FormData($("#f")[0]);
+                $.ajax({
+                    url: "/uploadAndOcr",
+                    type: "post",
+                    // dataType:"JSON",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (json) {
+                        if (json.result === 1) {
+                            alert(json.msg);
+                            location.href = "ocr-result";
+                        } else {
+                            alert(json.msg);
+                        }
+                    }
+
+                })
+            }
+        }
+
+
+    </script>
 </head>
 
 <body>
@@ -58,7 +135,7 @@
                             <div class="main-menu d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li class="active" ><a href="index">Home</a></li>
+                                        <li class="active"><a href="index">Home</a></li>
                                         <li><a href="courses">Courses</a></li>
                                         <li><a href="communityList">Community</a></li>
                                         <li><a href="#">Blog</a>
@@ -97,7 +174,7 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-11 col-md-12">
                             <div class="hero__caption hero__caption2">
-                                <h1 data-animation="bounceIn" data-delay="0.2s">Community</h1>
+                                <h1 data-animation="bounceIn" data-delay="0.2s">Search</h1>
                                 <!-- breadcrumb Start-->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
@@ -115,12 +192,20 @@
     </section>
 
 
-
     <div class="board_wrap">
         <div class="board_title">
             <strong>최저가 검색</strong>
         </div>
         <div class="board_list_wrap">
+            <form id="search_form" method="post"
+                  style=" width: 430px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
+                <div class="search__container">
+                    <p class="search__title">
+                        Go ahead, hover over search
+                    </p>
+                    <input class="search__input" type="text" placeholder="Search">
+                </div>
+            </form>
             <form id="f" method="post" enctype="multipart/form-data"
                   style=" width: 750px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
                 <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
@@ -128,20 +213,13 @@
                 <label for="save">이미지 저장하기</label>
                 <button id="btnUpload" type="button">Upload and OCR</button>
             </form>
-            <form id="search_form" method="post" style=" width: 430px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
-                <div class="search__container">
-                    <p class="search__title">
-                        Go ahead, hover over search
-                    </p>
-                    <input class="search__input" type="...,.,text" placeholder="Search">
-                </div>
+            <div class="credits__container">
+                <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
+                        href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
+            </div>
 
-                <div class="credits__container">
-                    <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
-                            href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
-                </div>
+        </div>
     </div>
-
 
     <!-- About Area End -->
     <!--? top subjects Area Start -->
@@ -150,6 +228,7 @@
     <!--? About Area-3 Start -->
 
     <!-- Services End -->
+
 </main>
 <footer>
     <div class="footer-wrappper footer-bg">
@@ -162,7 +241,8 @@
                             <div class="single-footer-caption mb-30">
                                 <!-- logo -->
                                 <div class="footer-logo mb-25">
-                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png" alt=""></a>
+                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png"
+                                                         alt=""></a>
                                 </div>
                                 <div class="footer-tittle">
                                     <div class="footer-pera">
@@ -230,9 +310,14 @@
                     <div class="row d-flex align-items-center">
                         <div class="col-xl-12 ">
                             <div class="footer-copy-right text-center">
-                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                                <p>
+                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                                    All rights reserved | This template is made with <i class="fa fa-heart"
+                                                                                        aria-hidden="true"></i> by <a
+                                        href="https://colorlib.com" target="_blank">Colorlib</a>
+                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -243,7 +328,7 @@
     </div>
 </footer>
 <!-- Scroll Up -->
-<div id="back-top" >
+<div id="back-top">
     <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
 <link rel="stylesheet" href="/ocr/css/search.css">
