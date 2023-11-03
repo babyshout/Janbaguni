@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import kopo.poly.order.dto.ImageDTO;
+import kopo.poly.order.dto.OcrDTO;
 import kopo.poly.order.persistance.mapper.IImageMapper;
 import kopo.poly.order.service.IS3UploadService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class S3UploadService implements IS3UploadService {
     }
 
     @Override
-    public int insertImageUrl(ImageDTO pDTO, boolean save) throws Exception {
+    public int insertImageUrl(OcrDTO pDTO, boolean save) throws Exception {
         log.info(this.getClass().getName() + ".insertImageUrl Start!!!");
         int res = 0;
         int success;

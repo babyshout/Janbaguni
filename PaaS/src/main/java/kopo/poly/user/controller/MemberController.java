@@ -18,18 +18,19 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/member")
+@RequestMapping(value = "/profile")
 public class MemberController {
     private final IUserInfoService userInfoService;
 
-    @GetMapping(value = "member-info")
-    public String getMemberInfo(
+    @GetMapping(value = "info")
+    public String profileInfo(
             HttpSession session,
             HttpServletRequest servletRequest,
             Model model
     ) throws Exception {
-        if (session.isNew()) {
-            session.setAttribute(SessionEnum.USER_ID.STRING, "USER01");
+        if (session.isNew() || ((String) session.getAttribute(SessionEnum.USER_ID.STRING)).equals("")) {
+//            session.setAttribute(SessionEnum.USER_ID.STRING, "USER01");
+            return "redirect:/login/login-form";
         }
         log.info(this.getClass().getName() + ".getMemberInfo() START!!!!!!!!!!!!!!");
 

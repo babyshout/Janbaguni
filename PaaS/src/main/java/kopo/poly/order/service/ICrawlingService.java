@@ -12,4 +12,8 @@ public interface ICrawlingService {
 
     List<ProductCrawlingDTO> getBabyleaf(String keyword) throws IOException; // 짱구몰
 
+    List<ProductCrawlingDTO> getFoodEn(String keyword) throws IOException; // 푸드엔
+
+    List<ProductCrawlingDTO> getMonoMart(String keyword) throws IOException;
+
 }

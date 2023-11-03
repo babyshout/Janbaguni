@@ -2,8 +2,11 @@ package kopo.poly.order.utill;
 
 import kopo.poly.order.dto.CrawlingComposite;
 import kopo.poly.order.dto.ProductCrawlingDTO;
+import kopo.poly.order.dto.SearchCrawlingComposite;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class SortUtil {
 
@@ -12,6 +15,14 @@ public class SortUtil {
         sortProductLists(composite.getGoodFoodList());
         sortProductLists(composite.getBabyLeafList());
     }
+
+    public List<ProductCrawlingDTO> sortSearchCrawlingComposite(List<ProductCrawlingDTO> list){
+        Collections.sort(list,Comparator.comparing(ProductCrawlingDTO::getPrice));
+
+        return list;
+    }
+
+
 
     private void sortProductLists(List<List<ProductCrawlingDTO>> productList) {
         for (List<ProductCrawlingDTO> list : productList) {

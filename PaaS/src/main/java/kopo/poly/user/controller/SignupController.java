@@ -138,6 +138,7 @@ public class SignupController {
 
             log.info("userId : " + userId);
             log.info("userName : " + userName);
+            log.info("nickname : " + nickname);
             log.info("password : " + password);
             log.info("email : " + email);
             log.info("addr1 : " + addr1);
@@ -161,6 +162,8 @@ public class SignupController {
             pDTO.setJob(job);
             pDTO.setUserType(userType);
 
+            log.info("pDTO : " + pDTO.toString());
+
             /*
              * 회원가입
              * */
@@ -183,7 +186,7 @@ public class SignupController {
         } catch (Exception e) {
             // 저장이 실패되면 사용자에게 보여줄 메시지
             msg = "실패하였습니다. : " + e;
-            log.info(e.toString());
+            log.error(e.toString());
             e.printStackTrace();
 
         } finally {

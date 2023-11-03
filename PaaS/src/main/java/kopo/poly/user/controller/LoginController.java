@@ -31,9 +31,9 @@ public class LoginController {
      * 로그인을 위한 입력 화면으로 이동
      * */
     @GetMapping("/login-form")
-    public String userLogin() {
-        log.info(this.getClass().getName() + "./login start!");
-        log.info(this.getClass().getName() + "./login end!");
+    public String loginForm() {
+        log.info(this.getClass().getName() + "./login-form start!");
+//        log.info(this.getClass().getName() + "./login-form end!");
 
         return "/user/sign-in_sign-up";
     }

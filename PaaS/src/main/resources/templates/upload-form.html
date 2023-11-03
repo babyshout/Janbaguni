@@ -1,96 +1,379 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function (){
-      let f = document.getElementById("f");
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-icons.css" rel="stylesheet">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let f = document.getElementById("f");
 
-      $("#btnUpload").on("click", function (){
-          imageSubmit(f);
-      })
-    })
+            $("#btnUpload").on("click", function () {
 
-    function imageSubmit(f){
-      let fileInput = f.image;
-      if(fileInput.files.length === 0){
-        alert("이미지를 선택하세요.");
-        fileInput.click();
-        return;
-      }
+                imageSubmit(f);
+            })
+        })
 
-      let formData = new FormData($("#f")[0]);
-      $.ajax({
-        url:"/uploadAndOcr",
-        type:"post",
-        // dataType:"JSON",
-        data: formData,
-        processData:false,
-        contentType:false,
-        success: function (json){
-          if(json.result === 1){
-            alert(json.msg);
-            location.href = "ocr-result";
-          }else{
-            alert(json.msg);
-          }
+        function imageSubmit(f) {
+            let fileInput = f.image;
+            if (fileInput.files.length === 0) {
+                alert("이미지를 선택하세요.");
+                fileInput.click();
+                return;
+            } else {
+                $("#body").load("/load/Loading");
+
+                let formData = new FormData($("#f")[0]);
+                $.ajax({
+                    url: "/uploadAndOcr",
+                    type: "post",
+                    // dataType:"JSON",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (json) {
+                        if (json.result === 1) {
+                            alert(json.msg);
+                            location.href = "ocr-result";
+                        } else {
+                            alert(json.msg);
+                        }
+                    }
+
+                })
+            }
+        }
+    </script>
+
+    <style>
+        /*<%--        여기밑에는 기본 색설정--%>*/
+        :root {
+            --white-color: #ffffff;
+            --primary-color: #13547a;
+            --secondary-color: #ffffff;
+            --section-bg-color: #f0f8ff;
+            --custom-btn-bg-color: #80d0c7;
+            --custom-btn-bg-hover-color: #13547a;
+            --dark-color: #000000;
+            --p-color: #717275;
+            --border-color: #7fffd4;
+            --link-hover-color: #13547a;
+
+            --body-font-family: 'Open Sans', sans-serif;
+            --title-font-family: 'Montserrat', sans-serif;
+
+            --h1-font-size: 58px;
+            --h2-font-size: 46px;
+            --h3-font-size: 32px;
+            --h4-font-size: 28px;
+            --h5-font-size: 24px;
+            --h6-font-size: 22px;
+            --p-font-size: 20px;
+            --menu-font-size: 14px;
+            --btn-font-size: 18px;
+            --copyright-font-size: 16px;
+
+            --border-radius-large: 100px;
+            --border-radius-medium: 20px;
+            --border-radius-small: 10px;
+
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
         }
 
-      })
-    }
-  </script>
-  <!-- head 부분은 여기에 추가 -->
+        body {
+            background: #A1FFCE; /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #FAFFD1, #A1FFCE); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #e2e2e2, #c9d6ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-<!--  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
-<!--  <script>-->
-<!--    $(document).ready(function () {-->
-<!--      $("#uploadForm").submit(function (event) {-->
-<!--        event.preventDefault(); // 기본 폼 제출 동작을 막음-->
-<!--        var formData = new FormData(this);-->
-<!--        formData.append("save", $("#saveCheckbox").is(":checked") ? "Y" : "N");-->
-<!--        $.ajax({-->
-<!--          type: "POST",-->
-<!--          url: "/uploadAndOcr",-->
-<!--          data: formData,-->
-<!--          processData: false,-->
-<!--          contentType: false,-->
-<!--          success: function (data) {-->
-<!--            // 서버에서 반환한 결과를 처리-->
-<!--            $("#body").html(data);-->
-<!--          },-->
-<!--          error: function () {-->
-<!--            // 에러 처리-->
-<!--            alert("알 수 없는 에러");-->
-<!--          }-->
-<!--        });-->
-<!--      });-->
-<!--    });-->
-<!--  </script>-->
+            font-family: var(--body-font-family);
+        }
 
 
-<!--</head>-->
-<!--<body id="body">-->
-<!--<h1>Image Upload and OCR</h1>-->
-<!--<form id="uploadForm" enctype="multipart/form-data">-->
-<!--  <input type="file" name="uploadOcrFile" accept=".jpg, .jpeg, .png">-->
-<!--  <input type="checkbox" id="saveCheckbox">-->
-<!--  <label for="saveCheckbox">이미지 저장하기</label>-->
-<!--  <button type="submit">Upload and OCR</button>-->
-<!--</form>-->
+        /*---------------------------------------
+          TYPOGRAPHY
+        -----------------------------------------*/
+
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: var(--dark-color);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--title-font-family);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        h1 {
+            font-size: var(--h1-font-size);
+            font-weight: var(--font-weight-bold);
+        }
+
+        h2 {
+            font-size: var(--h2-font-size);
+            font-weight: var(--font-weight-bold);
+        }
+
+        h3 {
+            font-size: var(--h3-font-size);
+        }
+
+        h4 {
+            font-size: var(--h4-font-size);
+        }
+
+        h5 {
+            font-size: var(--h5-font-size);
+        }
+
+        h6 {
+            color: var(--primary-color);
+            font-size: var(--h6-font-size);
+        }
+
+        p {
+            color: var(--p-color);
+            font-size: var(--p-font-size);
+            font-weight: var(--font-weight-normal);
+        }
+
+        ul li {
+            color: var(--p-color);
+            font-size: var(--p-font-size);
+            font-weight: var(--font-weight-normal);
+        }
+
+        a,
+        button {
+            touch-action: manipulation;
+            transition: all 0.3s;
+        }
+
+        a {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--link-hover-color);
+        }
+
+        b,
+        strong {
+            font-weight: var(--font-weight-bold);
+        }
+
+        /*<%--여기까지는 root 무조건 있어야하는거--%>*/
+        /*<%--위에 상단 바 css--%>*/
+        .navbar-expand-lg .navbar-nav .nav-link {
+            border-radius: var(--border-radius-large);
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .navbar-expand-lg .navbar-nav .nav-link {
+            padding: 0;
+        }
+
+        .navbar-expand-lg .navbar-nav .nav-link {
+            padding: 0;
+        }
+
+        .navbar-expand-lg .navbar-nav .nav-link {
+            border-radius: var(--border-radius-large);
+            margin: 10px;
+            padding: 10px;
+        }
+
+        /*이건 로고부분 css*/
+        .navbar-brand,
+        .navbar-brand:hover {
+            font-size: var(--h3-font-size);
+            font-weight: var(--font-weight-bold);
+            display: block;
+        }
+
+        .navbar-brand span {
+            font-family: var(--title-font-family);
+        }
+
+        /*여기까지 로고부분 css*/
+
+        /*<%--여기까지 상단 바 css--%>*/
 
 
-<!--</body>-->
-<!--</html>-->
+        /*여기서 부터    */
+        .fixed_headers table {
+            border-collapse: collapse;
+        }
 
+        .fixed_headers th,
+        .fixed_headers td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #000;
+        }
+
+        .fixed_headers thead {
+            background-color: #333333;
+            color: #fdfdfd;
+        }
+
+        .fixed_headers tbody {
+            display: contents;
+            overflow: auto;
+        }
+
+        .fixed_headers tbody tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+        .hero-section {
+            /*background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);*/
+            background-image: linear-gradient(15deg, #ffffff 0%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 30px;
+            padding-bottom: 50%;
+
+            /*    여기가 게시판 뒷 공간 배경 설정*/
+        }
+
+        /*    여기까지는 게시판 css*/
+
+
+        /** 모달 팝업 */
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
-<body>
-<h1>Image Upload and OCR</h1>
-<form id="f" method="post" enctype="multipart/form-data">
-  <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
-  <input type="radio" name="save" id="save" value="Y">
-  <label for="save">이미지 저장하기</label>
-  <button id="btnUpload" type="button">Upload and OCR</button>
-</form>
+<body id="body">
+<nav class="navbar navbar-expand-lg" style="background: #4AC29A;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #BDFFF3, #4AC29A);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #BDFFF3, #4AC29A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
+    <div class="container">
+        <a class="navbar-brand" href="communityList">
+            <i class="bi-back"></i>
+            <span>JangBagunI</span>
+        </a>
+
+        <div class="d-lg-none ms-auto me-4">
+            <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_1">커뮤니티게시판</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_2">Browse Topics</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_3">How it works</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_4">FAQs</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_5">Contact</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                    <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                        <li><a class="dropdown-item" href="topics-listing">Topics Listing</a></li>
+
+                        <li><a class="dropdown-item" href="contact">Contact Form</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="d-none d-lg-block">
+                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+            </div>
+        </div>
+    </div>
+</nav>
+<h2 style="text-align: center">최저가를 검색</h2>
+<div>
+    <form id="f" method="post" enctype="multipart/form-data"
+          style=" width: 750px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
+        <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
+        <input type="checkbox" name="save" id="save" value="Y">
+        <label for="save">이미지 저장하기</label>
+        <button id="btnUpload" type="button">Upload and OCR</button>
+    </form>
+    <form id="search_form" method="post" style=" width: 430px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
+        <div class="search__container">
+            <p class="search__title">
+                Go ahead, hover over search
+            </p>
+            <input class="search__input" type="...,.,text" placeholder="Search">
+        </div>
+
+        <div class="credits__container">
+            <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
+                    href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
+        </div>
+    </form>
+</div>
+<link rel="stylesheet" href="/ocr/css/search.css">
 </body>
 </html>
 <!--action="/uploadAndOcr"-->
