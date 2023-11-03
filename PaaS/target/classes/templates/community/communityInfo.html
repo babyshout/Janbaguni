@@ -1,336 +1,30 @@
-<!--<%@ page language="java" contentType="text/html; charset=UTF-8"-->
-<!--         pageEncoding="UTF-8" %>-->
-<!--<%@ page import="kopo.poly.dto.CommunityDTO" %>-->
-<!--<%@ page import="kopo.poly.util.CmmUtil" %>-->
-<!--<%@ page import="kopo.poly.dto.CommunityDTO" %>-->
-<!--<%@ page import="java.util.List" %>-->
-<!--<%-->
-<!--    //     CommunityController 함수에서 model 객체에 저장된 값 불러오기-->
-<!--CommunityDTO rDTO = (CommunityDTO) request.getAttribute("rDTO");-->
-
-<!--//    if (rDTO != null) {-->
-<!--//        out.println("rDTO 내용 출력:");-->
-<!--//        out.println("CommunitySeq: " + rDTO.getCommunitySeq());-->
-<!--//        out.println("Title: " + rDTO.getTitle());-->
-<!--//        out.println("CommunityYn: " + rDTO.getCommunityYn());-->
-<!--//        out.println("RegDt: " + rDTO.getRegDt());-->
-<!--//        out.println("ReadCnt: " + rDTO.getReadCnt());-->
-<!--//        out.println("Contents: " + rDTO.getContents());-->
-<!--//        out.println("UserId: " + rDTO.getUserId());-->
-<!--//        // 필요한 다른 속성들도 출력-->
-<!--//    } else {-->
-<!--//        out.println("rDTO가 비어있습니다.");-->
-<!--//    }-->
-
-
-<!--%>-->
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>커뮤니티 글 보기</title>
-    <link rel="stylesheet" href="/css/table.css"/>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>JangBaguNi</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
+    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-    <style>
-
-        /* 여기는 게시판 상세정보 디자인*/
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container1 {
-            max-width: 80%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            height: 600px;
-        }
-        .container2 {
-            max-width: 80%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            height: 600px;
-        }
-
-
-        h1 {
-            font-size: 24px;
-            color: #333;
-        }
-
-        .board-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .board-info {
-            color: #777;
-            font-size: 14px;
-        }
-
-        .board-content {
-            margin-top: 20px;
-            font-size: 16px;
-        }
-
-        .board-tag {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .buttons {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-        }
-
-        .button {
-            margin-right: 10px;
-            padding: 10px 20px;
-            background-color: black;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-
-
-        .button:hover {
-            background-color: gray; /* hover 시의 색상 변경 */
-
-        }
-
-
-        .comments {
-            margin-top: 30px;
-        }
-
-        .comment {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-
-        .comment-author {
-            font-weight: bold;
-        }
-
-        .comment-date {
-            color: #777;
-            font-size: 14px;
-        }
-
-        .comment-content {
-            margin-top: 10px;
-        }
-
-        .comment-input {
-            margin-top: 20px;
-        }
-
-        .comment-input textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            resize: none;
-        }
-
-        .comment-button {
-            margin-top: 10px;
-        }
-
-        .button-comment {
-            padding: 10px 20px;
-            background-color: black;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-
-        .button-comment:hover {
-            background-color: gray; /* hover 시의 색상 변경 */
-        }
-
-               /*여기밑에는 기본 색설정*/
-        :root {
-            --white-color: #ffffff;
-            --primary-color: #13547a;
-            --secondary-color: #ffffff;
-            --section-bg-color: #f0f8ff;
-            --custom-btn-bg-color: #80d0c7;
-            --custom-btn-bg-hover-color: #13547a;
-            --dark-color: #000000;
-            --p-color: #717275;
-            --border-color: #7fffd4;
-            --link-hover-color: #13547a;
-
-            --body-font-family: 'Open Sans', sans-serif;
-            --title-font-family: 'Montserrat', sans-serif;
-
-            --h1-font-size: 58px;
-            --h2-font-size: 46px;
-            --h3-font-size: 32px;
-            --h4-font-size: 28px;
-            --h5-font-size: 24px;
-            --h6-font-size: 22px;
-            --p-font-size: 20px;
-            --menu-font-size: 14px;
-            --btn-font-size: 18px;
-            --copyright-font-size: 16px;
-
-            --border-radius-large: 100px;
-            --border-radius-medium: 20px;
-            --border-radius-small: 10px;
-
-            --font-weight-normal: 400;
-            --font-weight-medium: 500;
-            --font-weight-semibold: 600;
-            --font-weight-bold: 700;
-        }
-
-
-        /*---------------------------------------
-          TYPOGRAPHY
-        -----------------------------------------*/
-
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            color: var(--dark-color);
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: var(--title-font-family);
-            font-weight: var(--font-weight-semibold);
-        }
-
-        h1 {
-            font-size: var(--h1-font-size);
-            font-weight: var(--font-weight-bold);
-        }
-
-        h2 {
-            font-size: var(--h2-font-size);
-            font-weight: var(--font-weight-bold);
-        }
-
-        h3 {
-            font-size: var(--h3-font-size);
-        }
-
-        h4 {
-            font-size: var(--h4-font-size);
-        }
-
-        h5 {
-            font-size: var(--h5-font-size);
-        }
-
-        h6 {
-            color: var(--primary-color);
-            font-size: var(--h6-font-size);
-        }
-
-        p {
-            color: var(--p-color);
-            font-size: var(--p-font-size);
-            font-weight: var(--font-weight-normal);
-        }
-
-        ul li {
-            color: var(--p-color);
-            font-size: var(--p-font-size);
-            font-weight: var(--font-weight-normal);
-        }
-
-        a,
-        button {
-            touch-action: manipulation;
-            transition: all 0.3s;
-        }
-
-        a {
-            display: inline-block;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: var(--link-hover-color);
-        }
-
-        b,
-        strong {
-            font-weight: var(--font-weight-bold);
-        }
-
-        /*여기까지는 root 무조건 있어야하는거*/
-        /*위에 상단 바 css*/
-        .navbar-expand-lg .navbar-nav .nav-link {
-            border-radius: var(--border-radius-large);
-            margin: 10px;
-            padding: 10px;
-        }
-
-        .navbar-expand-lg .navbar-nav .nav-link {
-            padding: 0;
-        }
-        .navbar-expand-lg .navbar-nav .nav-link {
-            padding: 0;
-        }
-        .navbar-expand-lg .navbar-nav .nav-link {
-            border-radius: var(--border-radius-large);
-            margin: 10px;
-            padding: 10px;
-        }
-
-        /*이건 로고부분 css*/
-        .navbar-brand,
-        .navbar-brand:hover {
-            font-size: var(--h3-font-size);
-            font-weight: var(--font-weight-bold);
-            display: block;
-        }
-
-        .navbar-brand span {
-            font-family: var(--title-font-family);
-        }
-        /*여기까지 로고부분 css*/
-        /*여기까지 상단 바 css*/
-    </style>
-
-    <!-- CSS FILES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
-
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="/community/css/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS here -->
+    <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
+    <link rel="stylesheet" href="/community/css/assets/css/flaticon.css">
+    <link rel="stylesheet" href="/community/css/assets/css/progressbar_barfiller.css">
+    <link rel="stylesheet" href="/community/css/assets/css/gijgo.css">
+    <link rel="stylesheet" href="/community/css/assets/css/animate.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/animated-headline.css">
+    <link rel="stylesheet" href="/community/css/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="/community/css/assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="/community/css/assets/css/slick.css">
+    <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
+    <link rel="stylesheet" href="/community/css/assets/css/style.css">
 
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">
@@ -438,109 +132,331 @@
 </head>
 <body>
 
-<main>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="communityList">
-                <i class="bi-back"></i>
-                <span>JangBagunI</span>
-            </a>
 
-            <div class="d-lg-none ms-auto me-4">
-                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+<!-- ? Preloader Start -->
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="preloader-circle"></div>
+            <div class="preloader-img pere-text">
+                <img src="/community/css/assets/img/logo/loder.png" alt="">
             </div>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-lg-5 me-lg-auto">
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_1">커뮤니티게시판</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_2">Browse Topics</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_3">How it works</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_4">FAQs</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_5">Contact</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-
-                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                            <li><a class="dropdown-item" href="topics-listing.html">Topics Listing</a></li>
-
-                            <li><a class="dropdown-item" href="contact.html">Contact Form</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <div class="d-none d-lg-block">
-                    <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+        </div>
+    </div>
+</div>
+<!-- Preloader Start -->
+<!-- Header Start -->
+<div class="header-area header-transparent">
+    <div class="main-header ">
+        <div class="header-bottom  header-sticky">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <!-- Logo -->
+                    <div class="col-xl-2 col-lg-2">
+                        <div class="logo">
+                            <a href="index"><img src="/community/css/assets/img/logo/logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-10">
+                        <div class="menu-wrapper d-flex align-items-center justify-content-end">
+                            <!-- Main-menu -->
+                            <div class="main-menu d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li class="active" ><a href="index">Home</a></li>
+                                        <li><a href="courses">Courses</a></li>
+                                        <li><a href="communityList">Community</a></li>
+                                        <li><a href="#">Blog</a>
+                                            <ul class="submenu">
+                                                <li><a href="blog">Blog</a></li>
+                                                <li><a href="blog_details">Blog Details</a></li>
+                                                <li><a href="elements">Element</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="contact">Contact</a></li>
+                                        <!-- Button -->
+                                        <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
+                                        <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</div>
+<!-- Header End -->
+<main>
+    <!--? slider Area Start-->
+    <section class="slider-area slider-area2">
+        <div class="slider-active">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-11 col-md-12">
+                            <div class="hero__caption hero__caption2">
+                                <h1 data-animation="bounceIn" data-delay="0.2s">Community</h1>
+                                <!-- breadcrumb Start-->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#">community</a></li>
+                                    </ol>
+                                </nav>
+                                <!-- breadcrumb End -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>공지사항</strong>
+            <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
+        </div>
+        <div class="board_view_wrap">
+            <div class="board_view">
+                <div class="title">글 제목이 들어갑니다.</div>
+                <div class="info">
+                    <dl>
+                        <dt>번호</dt>
+                        <dd>1</dd>
+                    </dl>
+                    <dl>
+                        <dt>글쓴이</dt>
+                        <dd>김아름</dd>
+                    </dl>
+                    <dl>
+                        <dt>작성일</dt>
+                        <dd>2022.12.16</dd>
+                    </dl>
+                    <dl>
+                        <dt>조회</dt>
+                        <dt>33</dt>
+                    </dl>
+                </div>
+                <div class="cont">
+                    글 내용이 들어갑니다.<br />
+                    글 내용이 들어갑니다.<br />
+                    글 내용이 들어갑니다.<br />
+                    글 내용이 들어갑니다.<br />
+                    글 내용이 들어갑니다.<br />
+                    글 내용이 들어갑니다.<br />
+                    글 내용이 들어갑니다.
+                </div>
+            </div>
+            <div class="bt_wrap">
+                <a href="list.html" class="on">목록</a>
+                <a href="edit.html">수정</a>
+            </div>
+        </div>
+    </div>
 
 </main>
-<form name="f" id="f">
-<div class="container1">
-    <h1>게시판 상세정보</h1>
-    <div class="board-title">[[${rDTO.title}]]</div>
-    <div class="board-info">
-        <span class="board-author">[[${rDTO.userId}]]</span>
-        <span class="board-date">[[${rDTO.regDt}]]</span>
+<footer>
+    <div class="footer-wrappper footer-bg">
+        <!-- Footer Start-->
+        <div class="footer-area footer-padding">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-xl-4 col-lg-5 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="single-footer-caption mb-30">
+                                <!-- logo -->
+                                <div class="footer-logo mb-25">
+                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png" alt=""></a>
+                                </div>
+                                <div class="footer-tittle">
+                                    <div class="footer-pera">
+                                        <p>The automated process starts as soon as your clothes go into the machine.</p>
+                                    </div>
+                                </div>
+                                <!-- social -->
+                                <div class="footer-social">
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Our solutions</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Support</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Company</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer-bottom area -->
+        <div class="footer-bottom-area">
+            <div class="container">
+                <div class="footer-border">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-xl-12 ">
+                            <div class="footer-copy-right text-center">
+                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
     </div>
-    <div class="board-content">
-        [[${rDTO.contents}]]
-    </div>
-    <div class="board-tag">TAG: 게시물 태그</div>
-    <div class="buttons">
-        <button class="button" type="button" id="btnEdit">수정</button>
-        <button class="button" type="button" id="btnDelete">삭제</button>
-        <button class="button" type="button" id="btnList">목록</button>
-    </div>
+</footer>
+<!-- Scroll Up -->
+<div id="back-top" >
+    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
 
-    <div style="padding: 50px">
 
-    </div>
 
-<div class="container2">
-    <!-- 이전 디자인 부분은 그대로 유지 -->
 
-    <div class="comments">
-        <h2>댓글</h2>
 
-        <div class="comment">
-            <div class="comment-author">댓글 작성자</div>
-            <div class="comment-date">댓글 작성일: 2023-10-30</div>
-            <div class="comment-content">댓글 내용이 여기에 표시됩니다.</div>
-        </div>
 
-        <!-- 다른 댓글들도 위와 같이 추가 -->
 
-        <div class="comment-input">
-            <textarea rows="3" placeholder="댓글을 입력하세요"></textarea>
-        </div>
 
-        <div class="comment-button">
-            <button class="button-comment" id="btnCommentSend">댓글 작성</button>
-        </div>
-    </div>
-</div>
-</form>
+<!--<form name="f" id="f">-->
+<!--<div class="container1">-->
+<!--    <h1>게시판 상세정보</h1>-->
+<!--    <div class="board-title">[[${rDTO.title}]]</div>-->
+<!--    <div class="board-info">-->
+<!--        <span class="board-author">[[${rDTO.userId}]]</span>-->
+<!--        <span class="board-date">[[${rDTO.regDt}]]</span>-->
+<!--    </div>-->
+<!--    <div class="board-content">-->
+<!--        [[${rDTO.contents}]]-->
+<!--    </div>-->
+<!--    <div class="board-tag">TAG: 게시물 태그</div>-->
+<!--    <div class="buttons">-->
+<!--        <button class="button" type="button" id="btnEdit">수정</button>-->
+<!--        <button class="button" type="button" id="btnDelete">삭제</button>-->
+<!--        <button class="button" type="button" id="btnList">목록</button>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--    <div style="padding: 50px">-->
+
+<!--    </div>-->
+
+<!--<div class="container2">-->
+<!--    &lt;!&ndash; 이전 디자인 부분은 그대로 유지 &ndash;&gt;-->
+
+<!--    <div class="comments">-->
+<!--        <h2>댓글</h2>-->
+
+<!--        <div class="comment">-->
+<!--            <div class="comment-author">댓글 작성자</div>-->
+<!--            <div class="comment-date">댓글 작성일: 2023-10-30</div>-->
+<!--            <div class="comment-content">댓글 내용이 여기에 표시됩니다.</div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; 다른 댓글들도 위와 같이 추가 &ndash;&gt;-->
+
+<!--        <div class="comment-input">-->
+<!--            <textarea rows="3" placeholder="댓글을 입력하세요"></textarea>-->
+<!--        </div>-->
+
+<!--        <div class="comment-button">-->
+<!--            <button class="button-comment" id="btnCommentSend">댓글 작성</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</form>-->
+
+
+<!-- JS here -->
+<script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="/community/css/assets/js/popper.min.js"></script>
+<script src="/community/css/assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="/community/css/assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="/community/css/assets/js/owl.carousel.min.js"></script>
+<script src="/community/css/assets/js/slick.min.js"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="/community/css/assets/js/wow.min.js"></script>
+<script src="/community/css/assets/js/animated.headline.js"></script>
+<script src="/community/css/assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Date Picker -->
+<script src="/community/css/assets/js/gijgo.min.js"></script>
+<!-- Nice-select, sticky -->
+<script src="/community/css/assets/js/jquery.nice-select.min.js"></script>
+<script src="/community/css/assets/js/jquery.sticky.js"></script>
+<!-- Progress -->
+<script src="/community/css/assets/js/jquery.barfiller.js"></script>
+
+<!-- counter , waypoint,Hover Direction -->
+<script src="/community/css/assets/js/jquery.counterup.min.js"></script>
+<script src="/community/css/assets/js/waypoints.min.js"></script>
+<script src="/community/css/assets/js/jquery.countdown.min.js"></script>
+<script src="/community/css/assets/js/hover-direction-snake.min.js"></script>
+
+<!-- contact js -->
+<script src="/community/css/assets/js/contact.js"></script>
+<script src="/community/css/assets/js/jquery.form.js"></script>
+<script src="/community/css/assets/js/jquery.validate.min.js"></script>
+<script src="/community/css/assets/js/mail-script.js"></script>
+<script src="/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->
+<script src="/community/css/assets/js/plugins.js"></script>
+<script src="/community/css/assets/js/main.js"></script>
+
 </body>
 </html>

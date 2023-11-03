@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -49,7 +47,7 @@ public class CommunityController {
         //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
-        List<CommunityDTO> rList = CommunityService.getCommunityList();
+//        List<CommunityDTO> rList = CommunityService.getCommunityList();
 
         //로그인된 사용자 아이디는 Session에 저장함
         // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음
@@ -73,7 +71,7 @@ public class CommunityController {
 
         //공지사항 결과를 JSP로 전달하기 위해 model 객체에 추가
         //조회된 리스트 결과값 넣어주기
-        model.addAttribute("rList", rList);
+//        model.addAttribute("rList", rList);
 
         //실행됐는지 확인하기 위해 로그 찍어주기
         log.info(this.getClass().getName() + ".CommunityList End!");
@@ -346,10 +344,10 @@ public class CommunityController {
 
         return dto;
     }
-//    @GetMapping(value = "main")
-//    public String testMain(){
-//        return "/community/main";
-//    }
+    @GetMapping(value = "about")
+    public String testMain(){
+        return "communityList";
+    }
 
 
 }

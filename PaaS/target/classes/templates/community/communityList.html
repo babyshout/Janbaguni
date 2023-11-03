@@ -1,363 +1,303 @@
-<!--<%@ page import="kopo.poly.dto.CommunityDTO" %>-->
-<!--<%@ page import="kopo.poly.util.CmmUtil" %>-->
-<!--<%@ page import="java.util.List" %>-->
-<!--<%@ page import="kopo.poly.controller.CommunityController"%>-->
-<!--<%@ page language="java" contentType="text/html; charset=UTF-8"-->
-<!--         pageEncoding="UTF-8" %>-->
-
-
-
-
-<!--    NoticeController 함수에서 model 객체에 저장된 값 불러오기-->
-<!--CommunityDTO rDTO = (CommunityDTO) request.getAttribute("rDTO");-->
-<!--    List<CommunityDTO> rList = (List<CommunityDTO>) request.getAttribute("rList");-->
-
-
-
-<!--   List<CommunityDTO> rList = (List<CommunityDTO>) request.getAttribute("rList");-->
-<!--   for (CommunityDTO community : rList) {-->
-<!--        out.println("CommunityDTO: " + community.toString());-->
-<!--    }-->
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>JangBaguNi</title>
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
+    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-    <title>장바구니 커뮤니티</title>
-    <script th:inline="javascript">
-
-        function doDetail(cSeq) {
-            location.href = "/community/communityInfo?cSeq=" + cSeq;
-        }
-
-    </script>
-
-    <!-- CSS FILES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
-
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="/community/css/bootstrap-icons.css" rel="stylesheet">
-
-
-    <style>
-       /*여기밑에는 기본 색설정*/
-:root {
-    --white-color: #ffffff;
-    --primary-color: #13547a;
-    --secondary-color: #ffffff;
-    --section-bg-color: #f0f8ff;
-    --custom-btn-bg-color: #80d0c7;
-    --custom-btn-bg-hover-color: #13547a;
-    --dark-color: #000000;
-    --p-color: #717275;
-    --border-color: #7fffd4;
-    --link-hover-color: #13547a;
-
-    --body-font-family: 'Open Sans', sans-serif;
-    --title-font-family: 'Montserrat', sans-serif;
-
-    --h1-font-size: 58px;
-    --h2-font-size: 46px;
-    --h3-font-size: 32px;
-    --h4-font-size: 28px;
-    --h5-font-size: 24px;
-    --h6-font-size: 22px;
-    --p-font-size: 20px;
-    --menu-font-size: 14px;
-    --btn-font-size: 18px;
-    --copyright-font-size: 16px;
-
-    --border-radius-large: 100px;
-    --border-radius-medium: 20px;
-    --border-radius-small: 10px;
-
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-}
-
-body {
-    background-color: var(--white-color);
-    font-family: var(--body-font-family);
-}
-
-
-/*---------------------------------------
-  TYPOGRAPHY
------------------------------------------*/
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: var(--dark-color);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: var(--title-font-family);
-    font-weight: var(--font-weight-semibold);
-}
-
-h1 {
-    font-size: var(--h1-font-size);
-    font-weight: var(--font-weight-bold);
-}
-
-h2 {
-    font-size: var(--h2-font-size);
-    font-weight: var(--font-weight-bold);
-}
-
-h3 {
-    font-size: var(--h3-font-size);
-}
-
-h4 {
-    font-size: var(--h4-font-size);
-}
-
-h5 {
-    font-size: var(--h5-font-size);
-}
-
-h6 {
-    color: var(--primary-color);
-    font-size: var(--h6-font-size);
-}
-
-p {
-    color: var(--p-color);
-    font-size: var(--p-font-size);
-    font-weight: var(--font-weight-normal);
-}
-
-ul li {
-    color: var(--p-color);
-    font-size: var(--p-font-size);
-    font-weight: var(--font-weight-normal);
-}
-
-a,
-button {
-    touch-action: manipulation;
-    transition: all 0.3s;
-}
-
-a {
-    display: inline-block;
-    color: var(--primary-color);
-    text-decoration: none;
-}
-
-a:hover {
-    color: var(--link-hover-color);
-}
-
-b,
-strong {
-    font-weight: var(--font-weight-bold);
-}
-
-/*여기까지는 root 무조건 있어야하는거*/
-/*위에 상단 바 css*/
-.navbar-expand-lg .navbar-nav .nav-link {
-    border-radius: var(--border-radius-large);
-    margin: 10px;
-    padding: 10px;
-}
-
-.navbar-expand-lg .navbar-nav .nav-link {
-    padding: 0;
-}
-.navbar-expand-lg .navbar-nav .nav-link {
-    padding: 0;
-}
-.navbar-expand-lg .navbar-nav .nav-link {
-    border-radius: var(--border-radius-large);
-    margin: 10px;
-    padding: 10px;
-}
-
-/*이건 로고부분 css*/
-.navbar-brand,
-.navbar-brand:hover {
-    font-size: var(--h3-font-size);
-    font-weight: var(--font-weight-bold);
-    display: block;
-}
-
-.navbar-brand span {
-    font-family: var(--title-font-family);
-}
-/*여기까지 로고부분 css*/
-
-/*여기까지 상단 바 css*/
-
-
-        /*여기서 부터    */
-        .fixed_headers table {
-            border-collapse: collapse;
-        }
-
-        .fixed_headers th,
-        .fixed_headers td {
-            padding: 8px;
-            text-align: center;
-            border: 1px solid #000;
-        }
-
-        .fixed_headers thead {
-            background-color: #333333;
-            color: #fdfdfd;
-        }
-
-        .fixed_headers tbody {
-
-            display: contents;
-            overflow: auto;
-        }
-
-        .fixed_headers tbody tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-
-.hero-section {
-    /*background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);*/
-    background-image: linear-gradient(15deg, #ffffff 0%, #ffffff 100%);
-    position: relative;
-    overflow: hidden;
-    padding-top: 30px;
-    padding-bottom: 50%;
-
-    /*    여기가 게시판 뒷 공간 배경 설정*/
-}
-
-/*    여기까지는 게시판 css*/
-
-    </style>
-
-
+    <!-- CSS here -->
+    <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
+    <link rel="stylesheet" href="/community/css/assets/css/flaticon.css">
+    <link rel="stylesheet" href="/community/css/assets/css/progressbar_barfiller.css">
+    <link rel="stylesheet" href="/community/css/assets/css/gijgo.css">
+    <link rel="stylesheet" href="/community/css/assets/css/animate.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/animated-headline.css">
+    <link rel="stylesheet" href="/community/css/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="/community/css/assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="/community/css/assets/css/slick.css">
+    <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
+    <link rel="stylesheet" href="/community/css/assets/css/style.css">
 </head>
 
-<body id="top">
-
-<main>
-
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="community/communityList">
-                <i class="bi-back"></i>
-                <span>JangBagunI</span>
-            </a>
-
-            <div class="d-lg-none ms-auto me-4">
-                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
-            </div>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-lg-5 me-lg-auto">
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_1">커뮤니티게시판</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_2">Browse Topics</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_3">How it works</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_4">FAQs</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_5">Contact</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-
-                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                            <li><a class="dropdown-item" href="topics-listing.html">Topics Listing</a></li>
-
-                            <li><a class="dropdown-item" href="contact.html">Contact Form</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <div class="d-none d-lg-block">
-                    <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+<body>
+    <!-- ? Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="/community/css/assets/img/logo/loder.png" alt="">
                 </div>
             </div>
         </div>
-    </nav>
-
-
-    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
-        <div class="container" >
-            <div class="row">
-                <table class="fixed_headers">
-                    <h1>회원 커뮤니티 게시판</h1>
-                    <div style="text-align: right"><a href="/community/communityReg">글쓰기</a></div>
-                    <thead>
-                    <tr>
-                        <th style="width: 100px;">순번</th>
-                        <th style="width: 500px;">제목</th>
-                        <th style="width: 150px;">조회수</th>
-                        <th style="width: 300px;">등록자</th>
-                        <th style="width: 250px;">등록일</th>
-                    </tr>
-                    </thead>
-                    <tbody th:each="dto:${rList}">
-                    <tr style="width: 100%" >
-                        <td th:if="${dto.communityYn=='Y'} ">공지</td>
-                        <td th:unless="${dto.communityYn=='Y'} ">[[${dto.communitySeq}]]</td>
-                        <td th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</td>
-                        <td>[[${dto.readCnt}]]</td>
-                        <td>[[${dto.userId}]]</td>
-                        <td>[[${dto.regDt}]]</td>
-                    </tr>
-                    </tbody>
-                </table>
+    </div>
+    <!-- Preloader Start -->
+    <!-- Header Start -->
+    <div class="header-area header-transparent">
+        <div class="main-header ">
+            <div class="header-bottom  header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo">
+                                <a href="index"><img src="/community/css/assets/img/logo/logo.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10">
+                            <div class="menu-wrapper d-flex align-items-center justify-content-end">
+                                <!-- Main-menu -->
+                                <div class="main-menu d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">                                                                                          
+                                            <li class="active" ><a href="index">Home</a></li>
+                                            <li><a href="courses">Courses</a></li>
+                                            <li><a href="communityList">Community</a></li>
+                                            <li><a href="#">Blog</a>
+                                                <ul class="submenu">
+                                                    <li><a href="blog">Blog</a></li>
+                                                    <li><a href="blog_details">Blog Details</a></li>
+                                                    <li><a href="elements">Element</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="contact">Contact</a></li>
+                                            <!-- Button -->
+                                            <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
+                                            <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div> 
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-</main>
-
-<footer class="site-footer section-padding">
-    <hr/>
-    <br/>
-    <div class="container">
-        <div class="row">
-
-
-        </div>
     </div>
-</footer>
+    <!-- Header End -->
+    <main>
+        <!--? slider Area Start-->
+        <section class="slider-area slider-area2">
+            <div class="slider-active">
+                <!-- Single Slider -->
+                <div class="single-slider slider-height2">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-8 col-lg-11 col-md-12">
+                                <div class="hero__caption hero__caption2">
+                                    <h1 data-animation="bounceIn" data-delay="0.2s">Community</h1>
+                                    <!-- breadcrumb Start-->
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="index">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="#">community</a></li>
+                                        </ol>
+                                    </nav>
+                                    <!-- breadcrumb End -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>          
+                </div>
+            </div>
+        </section>
+
+
+
+            <div class="board_wrap">
+                <div class="board_title">
+                    <strong>공지사항</strong>
+                    <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
+                </div>
+                <div class="board_list_wrap">
+                    <div class="board_list">
+                        <div class="top">
+                            <div class="num">번호</div>
+                            <div class="title">제목</div>
+                            <div class="writer">글쓴이</div>
+                            <div class="date">작성일</div>
+                            <div class="count">조회</div>
+                        </div>
+                        <div th:each="dto:${rList}">
+                            <div>
+                                <div class="num" th:unless="${dto.communityYn=='Y'}">[[${dto.communitySeq}]]</div>
+                                <div class="title">
+                                    <a th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</a>
+                                </div>
+                                <div class="writer">[[${dto.userId}]]</div>
+                                <div class="date">[[${dto.regDt}]]</div>
+                                <div class="count">[[${dto.readCnt}]]</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="board_page">
+                        <!-- Pagination links here -->
+                    </div>
+                    <div class="bt_wrap">
+                        <a href="communityReg" class="on">등록</a>
+                        <a href="#">수정</a>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- About Area End -->
+        <!--? top subjects Area Start -->
+        
+        <!-- top subjects End -->
+        <!--? About Area-3 Start -->
+        
+        <!-- Services End -->
+    </main>
+    <footer>
+     <div class="footer-wrappper footer-bg">
+        <!-- Footer Start-->
+        <div class="footer-area footer-padding">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-xl-4 col-lg-5 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="single-footer-caption mb-30">
+                                <!-- logo -->
+                                <div class="footer-logo mb-25">
+                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png" alt=""></a>
+                                </div>
+                                <div class="footer-tittle">
+                                    <div class="footer-pera">
+                                        <p>The automated process starts as soon as your clothes go into the machine.</p>
+                                    </div>
+                                </div>
+                                <!-- social -->
+                                <div class="footer-social">
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Our solutions</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Support</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Company</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer-bottom area -->
+        <div class="footer-bottom-area">
+            <div class="container">
+                <div class="footer-border">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-xl-12 ">
+                            <div class="footer-copy-right text-center">
+                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Footer End-->
+      </div>
+  </footer> 
+  <!-- Scroll Up -->
+  <div id="back-top" >
+    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+</div>
+
+<!-- JS here -->
+<script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="/community/css/assets/js/popper.min.js"></script>
+<script src="/community/css/assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="/community/css/assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="/community/css/assets/js/owl.carousel.min.js"></script>
+<script src="/community/css/assets/js/slick.min.js"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="/community/css/assets/js/wow.min.js"></script>
+<script src="/community/css/assets/js/animated.headline.js"></script>
+<script src="/community/css/assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Date Picker -->
+<script src="/community/css/assets/js/gijgo.min.js"></script>
+<!-- Nice-select, sticky -->
+<script src="/community/css/assets/js/jquery.nice-select.min.js"></script>
+<script src="/community/css/assets/js/jquery.sticky.js"></script>
+<!-- Progress -->
+<script src="/community/css/assets/js/jquery.barfiller.js"></script>
+
+<!-- counter , waypoint,Hover Direction -->
+<script src="/community/css/assets/js/jquery.counterup.min.js"></script>
+<script src="/community/css/assets/js/waypoints.min.js"></script>
+<script src="/community/css/assets/js/jquery.countdown.min.js"></script>
+<script src="/community/css/assets/js/hover-direction-snake.min.js"></script>
+
+<!-- contact js -->
+<script src="/community/css/assets/js/contact.js"></script>
+<script src="/community/css/assets/js/jquery.form.js"></script>
+<script src="/community/css/assets/js/jquery.validate.min.js"></script>
+<script src="/community/css/assets/js/mail-script.js"></script>
+<script src="/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->	
+<script src="/community/css/assets/js/plugins.js"></script>
+<script src="/community/css/assets/js/main.js"></script>
 
 </body>
-
 </html>
