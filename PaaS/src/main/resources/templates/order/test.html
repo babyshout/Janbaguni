@@ -7,24 +7,24 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
-    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/community/css/assets/img/favicon.ico">
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
     <!-- CSS here -->
-    <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
-    <link rel="stylesheet" href="/community/css/assets/css/flaticon.css">
-    <link rel="stylesheet" href="/community/css/assets/css/progressbar_barfiller.css">
-    <link rel="stylesheet" href="/community/css/assets/css/gijgo.css">
-    <link rel="stylesheet" href="/community/css/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/animated-headline.css">
-    <link rel="stylesheet" href="/community/css/assets/css/magnific-popup.css">
-    <link rel="stylesheet" href="/community/css/assets/css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/themify-icons.css">
-    <link rel="stylesheet" href="/community/css/assets/css/slick.css">
-    <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
-    <link rel="stylesheet" href="/community/css/assets/css/style.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/slicknav.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/flaticon.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/progressbar_barfiller.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/gijgo.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/animate.min.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/animated-headline.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/slick.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/nice-select.css">
+    <link rel="stylesheet" href="../../static/community/css/assets/css/style.css">
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -39,33 +39,48 @@
                 imageSubmit(f);
             })
 
+
+            // 엔터 키를 누를 때 이벤트 핸들러 추가
+            searchInput.keypress(function (event) {
+                if (event.which === 13) {
+                    event.preventDefault(); // 폼 제출 방지
+                    // 이후 로딩 페이지를 로드
+                    $("#body").load("/load/Loading");
+                }
+            });
+
             searchForm.addEventListener('submit', function (e) {
-                e.preventDefault();  // 폼의 기본 동작을 중지합니다.
 
-                // 입력된 텍스트를 가져옵니다.
-                var searchText = searchInput.value;
 
-                // AJAX 요청을 보냅니다.
-                $.ajax({
-                    url: "/searchCrawlingItem",
-                    type: "POST",
-                    data: {searchText: searchText},
-                    dataType: "json",
-                    success: function (json) {
-                        if (json.result === 1) {
-                            // 검색 결과가 성공적으로 반환될 경우, searchResult 페이지로 이동합니다.
-                            alert(json.msg);
-                            location.href = "/searchResult";
-                        } else {
-                            // 검색이 실패한 경우에 대한 처리를 여기에 추가하세요.
-                            alert(json.msg);
+                if (e.key === "Enter") {
+                    e.preventDefault();  // 폼의 기본 동작을 중지합니다.
+                    $("#body").load("/loading/Loading");
+                    // 입력된 텍스트를 가져옵니다.
+                    let searchText = searchInput.value;
+
+
+                    // AJAX 요청을 보냅니다.
+                    $.ajax({
+                        url: "/order/searchCrawlingItem",
+                        type: "POST",
+                        data: {searchText: searchText},
+                        dataType: "json",
+                        success: function (json) {
+                            if (json.result === 1) {
+                                // 검색 결과가 성공적으로 반환될 경우, searchResult 페이지로 이동합니다.
+                                alert(json.msg);
+                                location.href = "/order/searchResult";
+                            } else {
+                                // 검색이 실패한 경우에 대한 처리를 여기에 추가하세요.
+                                alert(json.msg);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // AJAX 요청이 실패한 경우에 대한 처리를 여기에 추가하세요.
+                            console.error(xhr, status, error);
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        // AJAX 요청이 실패한 경우에 대한 처리를 여기에 추가하세요.
-                        console.error(xhr, status, error);
-                    }
-                });
+                    });
+                }
             });
 
         })
@@ -77,11 +92,11 @@
                 fileInput.click();
                 return;
             } else {
-                $("#body").load("/load/Loading");
+                $("#body").load("/loading/Loading");
 
                 let formData = new FormData($("#f")[0]);
                 $.ajax({
-                    url: "/uploadAndOcr",
+                    url: "/order/uploadAndOcr",
                     type: "post",
                     // dataType:"JSON",
                     data: formData,
@@ -90,7 +105,7 @@
                     success: function (json) {
                         if (json.result === 1) {
                             alert(json.msg);
-                            location.href = "ocr-result";
+                            location.href = "/order/ocr-result";
                         } else {
                             alert(json.msg);
                         }
@@ -100,11 +115,15 @@
             }
         }
 
+        $("#file").on('change', function () {
+            var fileName = $("#file").val();
+            $("#image").val(fileName);
+        });
 
     </script>
 </head>
 
-<body>
+<body id-="body">
 <!-- ? Preloader Start -->
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
@@ -206,19 +225,26 @@
                     <input class="search__input" type="text" placeholder="Search">
                 </div>
             </form>
-            <form id="f" method="post" enctype="multipart/form-data"
-                  style=" width: 750px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
-                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
-                <input type="checkbox" name="save" id="save" value="Y">
-                <label for="save">이미지 저장하기</label>
-                <button id="btnUpload" type="button">Upload and OCR</button>
-            </form>
             <div class="credits__container">
                 <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
                         href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
             </div>
-
         </div>
+        <div class="filebox" style="display: flex; justify-content: center; align-items: center;">
+            <form id="f" method="post" enctype="multipart/form-data"
+                  style="width: 750px; font-family: 'Raleway', sans-serif;">
+                <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly
+                       style="height: 40px; padding: 0 10px; border: 1px solid #dddddd; width: 77%; color: #999999;">
+                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
+                <label for="image" class="select" style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일 찾기</label>
+                <br><br>
+                <input type="checkbox" name="save" id="save" value="Y">
+                <label for="save">이미지 저장하기</label>
+                <img id="btnUpload" src="../../static/ocr/image/free-icon-upload-2297827.png" alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘" style="cursor: pointer; width: 6%; height: 6%;">
+            </form>
+        </div>
+
+
     </div>
 
     <!-- About Area End -->
@@ -331,48 +357,48 @@
 <div id="back-top">
     <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
-<link rel="stylesheet" href="/ocr/css/search.css">
+<link rel="stylesheet" href="../../static/ocr/css/search.css">
 <!-- JS here -->
-<script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<script src="../../static/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
 <!-- Jquery, Popper, Bootstrap -->
-<script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
-<script src="/community/css/assets/js/popper.min.js"></script>
-<script src="/community/css/assets/js/bootstrap.min.js"></script>
+<script src="../../static/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="../../static/community/css/assets/js/popper.min.js"></script>
+<script src="../../static/community/css/assets/js/bootstrap.min.js"></script>
 <!-- Jquery Mobile Menu -->
-<script src="/community/css/assets/js/jquery.slicknav.min.js"></script>
+<script src="../../static/community/css/assets/js/jquery.slicknav.min.js"></script>
 
 <!-- Jquery Slick , Owl-Carousel Plugins -->
-<script src="/community/css/assets/js/owl.carousel.min.js"></script>
-<script src="/community/css/assets/js/slick.min.js"></script>
+<script src="../../static/community/css/assets/js/owl.carousel.min.js"></script>
+<script src="../../statics/community/css/assets/js/slick.min.js"></script>
 <!-- One Page, Animated-HeadLin -->
-<script src="/community/css/assets/js/wow.min.js"></script>
-<script src="/community/css/assets/js/animated.headline.js"></script>
-<script src="/community/css/assets/js/jquery.magnific-popup.js"></script>
+<script src="../../static/community/css/assets/js/wow.min.js"></script>
+<script src="../../static/community/css/assets/js/animated.headline.js"></script>
+<script src="../../static/community/css/assets/js/jquery.magnific-popup.js"></script>
 
 <!-- Date Picker -->
-<script src="/community/css/assets/js/gijgo.min.js"></script>
+<script src="../../static/community/css/assets/js/gijgo.min.js"></script>
 <!-- Nice-select, sticky -->
-<script src="/community/css/assets/js/jquery.nice-select.min.js"></script>
-<script src="/community/css/assets/js/jquery.sticky.js"></script>
+<script src="../../static/community/css/assets/js/jquery.nice-select.min.js"></script>
+<script src="../../static/community/css/assets/js/jquery.sticky.js"></script>
 <!-- Progress -->
-<script src="/community/css/assets/js/jquery.barfiller.js"></script>
+<script src="../../static/community/css/assets/js/jquery.barfiller.js"></script>
 
 <!-- counter , waypoint,Hover Direction -->
-<script src="/community/css/assets/js/jquery.counterup.min.js"></script>
-<script src="/community/css/assets/js/waypoints.min.js"></script>
-<script src="/community/css/assets/js/jquery.countdown.min.js"></script>
-<script src="/community/css/assets/js/hover-direction-snake.min.js"></script>
+<script src="../../static/community/css/assets/js/jquery.counterup.min.js"></script>
+<script src="../../static/community/css/assets/js/waypoints.min.js"></script>
+<script src="../../static/community/css/assets/js/jquery.countdown.min.js"></script>
+<script src="../../static/community/css/assets/js/hover-direction-snake.min.js"></script>
 
 <!-- contact js -->
-<script src="/community/css/assets/js/contact.js"></script>
-<script src="/community/css/assets/js/jquery.form.js"></script>
-<script src="/community/css/assets/js/jquery.validate.min.js"></script>
-<script src="/community/css/assets/js/mail-script.js"></script>
-<script src="/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
+<script src="../../static/community/css/assets/js/contact.js"></script>
+<script src="../../static/community/css/assets/js/jquery.form.js"></script>
+<script src="../../static/community/css/assets/js/jquery.validate.min.js"></script>
+<script src="../../static/community/css/assets/js/mail-script.js"></script>
+<script src="../../static/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
 
 <!-- Jquery Plugins, main Jquery -->
-<script src="/community/css/assets/js/plugins.js"></script>
-<script src="/community/css/assets/js/main.js"></script>
+<script src="../../static/community/css/assets/js/plugins.js"></script>
+<script src="../../static/community/css/assets/js/main.js"></script>
 
 </body>
 </html>

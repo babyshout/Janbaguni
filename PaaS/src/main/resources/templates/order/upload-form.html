@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>JangBaguNi</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
+    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
+    <link rel="stylesheet" href="/community/css/assets/css/flaticon.css">
+    <link rel="stylesheet" href="/community/css/assets/css/progressbar_barfiller.css">
+    <link rel="stylesheet" href="/community/css/assets/css/gijgo.css">
+    <link rel="stylesheet" href="/community/css/assets/css/animate.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/animated-headline.css">
+    <link rel="stylesheet" href="/community/css/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="/community/css/assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/community/css/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="/community/css/assets/css/slick.css">
+    <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
+    <link rel="stylesheet" href="/community/css/assets/css/style.css">
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let f = document.getElementById("f");
+            let searchForm = document.getElementById('search_form');
+            let searchInput = document.querySelector('.search__input');
+
+            let searchText = searchInput.value;
+
+            $("#btnUpload").on("click", function () {
+
+                imageSubmit(f);
+            })
+
+
+            // 엔터 키를 누를 때 이벤트 핸들러 추가
+            searchInput.keypress(function (event) {
+                if (event.which === 13) {
+                    event.preventDefault(); // 폼 제출 방지
+                    // 이후 로딩 페이지를 로드
+                    $("#body").load("/load/Loading");
+                }
+            });
+
+            searchForm.addEventListener('submit', function (e) {
+
+
+                if (e.key === "Enter") {
+                    e.preventDefault();  // 폼의 기본 동작을 중지합니다.
+                    $("#body").load("/loading/Loading");
+                    // 입력된 텍스트를 가져옵니다.
+                    let searchText = searchInput.value;
+
+
+                    // AJAX 요청을 보냅니다.
+                    $.ajax({
+                        url: "/order/searchCrawlingItem",
+                        type: "POST",
+                        data: {searchText: searchText},
+                        dataType: "json",
+                        success: function (json) {
+                            if (json.result === 1) {
+                                // 검색 결과가 성공적으로 반환될 경우, searchResult 페이지로 이동합니다.
+                                alert(json.msg);
+                                location.href = "/order/searchResult";
+                            } else {
+                                // 검색이 실패한 경우에 대한 처리를 여기에 추가하세요.
+                                alert(json.msg);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // AJAX 요청이 실패한 경우에 대한 처리를 여기에 추가하세요.
+                            console.error(xhr, status, error);
+                        }
+                    });
+                }
+            });
+
+        })
+
+        function imageSubmit(f) {
+            let fileInput = f.image;
+            if (fileInput.files.length === 0) {
+                alert("이미지를 선택하세요.");
+                fileInput.click();
+                return;
+            } else {
+                $("#body").load("/loading/Loading");
+
+                let formData = new FormData($("#f")[0]);
+                $.ajax({
+                    url: "/order/uploadAndOcr",
+                    type: "post",
+                    // dataType:"JSON",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (json) {
+                        if (json.result === 1) {
+                            alert(json.msg);
+                            location.href = "/order/ocr-result";
+                        } else {
+                            alert(json.msg);
+                        }
+                    }
+
+                })
+            }
+        }
+
+        $("#file").on('change', function () {
+            var fileName = $("#file").val();
+            $("#image").val(fileName);
+        });
+
+    </script>
+</head>
+
+<body id-="body">
+<!-- ? Preloader Start -->
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="preloader-circle"></div>
+            <div class="preloader-img pere-text">
+                <img src="/community/css/assets/img/logo/loder.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Preloader Start -->
+<!-- Header Start -->
+<div class="header-area header-transparent">
+    <div class="main-header ">
+        <div class="header-bottom  header-sticky">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <!-- Logo -->
+                    <div class="col-xl-2 col-lg-2">
+                        <div class="logo">
+                            <a href="index"><img src="/community/css/assets/img/logo/logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-10">
+                        <div class="menu-wrapper d-flex align-items-center justify-content-end">
+                            <!-- Main-menu -->
+                            <div class="main-menu d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li class="active"><a href="index">Home</a></li>
+                                        <li><a href="courses">Courses</a></li>
+                                        <li><a href="communityList">Community</a></li>
+                                        <li><a href="#">Blog</a>
+                                            <ul class="submenu">
+                                                <li><a href="blog">Blog</a></li>
+                                                <li><a href="blog_details">Blog Details</a></li>
+                                                <li><a href="elements">Element</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="contact">Contact</a></li>
+                                        <!-- Button -->
+                                        <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
+                                        <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+<main>
+    <!--? slider Area Start-->
+    <section class="slider-area slider-area2">
+        <div class="slider-active">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-11 col-md-12">
+                            <div class="hero__caption hero__caption2">
+                                <h1 data-animation="bounceIn" data-delay="0.2s">Search</h1>
+                                <!-- breadcrumb Start-->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#">community</a></li>
+                                    </ol>
+                                </nav>
+                                <!-- breadcrumb End -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>최저가 검색</strong>
+        </div>
+        <div class="board_list_wrap">
+            <form id="search_form" method="post"
+                  style=" width: 430px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
+                <div class="search__container">
+                    <p class="search__title">
+                        Go ahead, hover over search
+                    </p>
+                    <input class="search__input" type="text" placeholder="Search">
+                </div>
+            </form>
+            <div class="credits__container">
+                <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
+                        href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
+            </div>
+        </div>
+        <div class="filebox" style="display: flex; justify-content: center; align-items: center;">
+            <form id="f" method="post" enctype="multipart/form-data"
+                  style="width: 750px; font-family: 'Raleway', sans-serif;">
+                <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly
+                       style="height: 40px; padding: 0 10px; border: 1px solid #dddddd; width: 77%; color: #999999;">
+                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
+                <label for="image" class="select" style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일 찾기</label>
+                <br><br>
+                <input type="checkbox" name="save" id="save" value="Y">
+                <label for="save">이미지 저장하기</label>
+                <img id="btnUpload" src="/ocr/image/free-icon-upload-2297827.png" alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘" style="cursor: pointer; width: 6%; height: 6%;">
+            </form>
+        </div>
+
+
+    </div>
+
+    <!-- About Area End -->
+    <!--? top subjects Area Start -->
+
+    <!-- top subjects End -->
+    <!--? About Area-3 Start -->
+
+    <!-- Services End -->
+
+</main>
+<footer>
+    <div class="footer-wrappper footer-bg">
+        <!-- Footer Start-->
+        <div class="footer-area footer-padding">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-xl-4 col-lg-5 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="single-footer-caption mb-30">
+                                <!-- logo -->
+                                <div class="footer-logo mb-25">
+                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png"
+                                                         alt=""></a>
+                                </div>
+                                <div class="footer-tittle">
+                                    <div class="footer-pera">
+                                        <p>The automated process starts as soon as your clothes go into the machine.</p>
+                                    </div>
+                                </div>
+                                <!-- social -->
+                                <div class="footer-social">
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Our solutions</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Support</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Company</h4>
+                                <ul>
+                                    <li><a href="#">Design & creatives</a></li>
+                                    <li><a href="#">Telecommunication</a></li>
+                                    <li><a href="#">Restaurant</a></li>
+                                    <li><a href="#">Programing</a></li>
+                                    <li><a href="#">Architecture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer-bottom area -->
+        <div class="footer-bottom-area">
+            <div class="container">
+                <div class="footer-border">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-xl-12 ">
+                            <div class="footer-copy-right text-center">
+                                <p>
+                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                                    All rights reserved | This template is made with <i class="fa fa-heart"
+                                                                                        aria-hidden="true"></i> by <a
+                                        href="https://colorlib.com" target="_blank">Colorlib</a>
+                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
+    </div>
+</footer>
+<!-- Scroll Up -->
+<div id="back-top">
+    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+</div>
+<link rel="stylesheet" href="/ocr/css/search.css">
+<!-- JS here -->
+<script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="/community/css/assets/js/popper.min.js"></script>
+<script src="/community/css/assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="/community/css/assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="/community/css/assets/js/owl.carousel.min.js"></script>
+<script src="/community/css/assets/js/slick.min.js"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="/community/css/assets/js/wow.min.js"></script>
+<script src="/community/css/assets/js/animated.headline.js"></script>
+<script src="/community/css/assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Date Picker -->
+<script src="/community/css/assets/js/gijgo.min.js"></script>
+<!-- Nice-select, sticky -->
+<script src="/community/css/assets/js/jquery.nice-select.min.js"></script>
+<script src="/community/css/assets/js/jquery.sticky.js"></script>
+<!-- Progress -->
+<script src="/community/css/assets/js/jquery.barfiller.js"></script>
+
+<!-- counter , waypoint,Hover Direction -->
+<script src="/community/css/assets/js/jquery.counterup.min.js"></script>
+<script src="/community/css/assets/js/waypoints.min.js"></script>
+<script src="/community/css/assets/js/jquery.countdown.min.js"></script>
+<script src="/community/css/assets/js/hover-direction-snake.min.js"></script>
+
+<!-- contact js -->
+<script src="/community/css/assets/js/contact.js"></script>
+<script src="/community/css/assets/js/jquery.form.js"></script>
+<script src="/community/css/assets/js/jquery.validate.min.js"></script>
+<script src="/community/css/assets/js/mail-script.js"></script>
+<script src="/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->
+<script src="/community/css/assets/js/plugins.js"></script>
+<script src="/community/css/assets/js/main.js"></script>
+
+</body>
+</html>

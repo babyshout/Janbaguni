@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/order")
 public class OcrController {
 //    @Value("${naver.service.template.secretKey}")
 //    private String secretKey;
@@ -29,7 +31,7 @@ public class OcrController {
         if(userId == null || userId.equals("")){
             return"user/sign-in_sign-up";
         }else{
-            return "/upload-form"; // Return the name of the HTML template (upload-form.html)
+            return "/order/upload-form"; // Return the name of the HTML template (upload-form.html)
         }
     }
 
@@ -44,7 +46,7 @@ public class OcrController {
         session.removeAttribute("SS_OCR_RESULT");
 
         log.info(this.getClass().getName() + ".ocrResult End!");
-        return "ocr-result";
+        return "/order/ocr-result";
     }
 
 
