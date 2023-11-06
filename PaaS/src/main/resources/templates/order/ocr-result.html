@@ -149,6 +149,18 @@
             border: none;
             cursor: pointer;
         }
+
+        #aceListContainer a {
+            color: black;
+        }
+
+        #aceListContainer button {
+
+        }
+
+        #aceListContainer a:hover {
+            background-color: rgba(256, 256, 256, 0.5);
+        }
     </style>
 </head>
 
@@ -244,45 +256,62 @@
 
     <div class="board_wrap">
         <div class="board_title">
-            <strong>공지사항</strong>
-            <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
+            <strong>검색결과</strong>
+            <!--            <p></p>-->
         </div>
         <div class="board_list_wrap">
             <div class="board_list">
                 <div class="top">
-                    <div class="num">상품명</div>
-                    <div class="title">단위</div>
+                    <div class="num" style="width: 600px;">상품명</div>
+                    <div class="title" style="width: 100px;">단위</div>
                     <div class="writer">개수</div>
                     <div class="date">단가</div>
                 </div>
-                <div th:each="i : ${#numbers.sequence(0, result.getOcrComposite().nameList.size() - 1)}">
-                    <div>
-                        <div class="num" th:text="${result.getOcrComposite().nameList[i]}">
-                        </div>
-                        <div class="title" th:text="${result.getOcrComposite().unitList[i]}">
-                        </div>
-                        <div class="writer" th:text="${result.getOcrComposite().counstList[i]}">
-                        </div>
-                        <div class="date" th:text="${result.getOcrComposite().priceList[i]}">
-                        </div>
+                <div class="board_list"
+                     th:each="i : ${#numbers.sequence(0, result.getOcrComposite().nameList.size() - 1)}">
+
+                    <div class="num" style="width: 600px;" th:text="${result.getOcrComposite().nameList[i]}">
                     </div>
+
+                    <div class="title" style="width: 100px;" th:text="${result.getOcrComposite().unitList[i]}">
+                    </div>
+
+                    <div class="writer" th:text="${result.getOcrComposite().counstList[i]}">
+                    </div>
+
+                    <div class="date" th:text="${result.getOcrComposite().priceList[i]}">
+                    </div>
+
                 </div>
             </div>
         </div>
-        <div class="board_page">
-            <!-- Pagination links here -->
-            <div class="row" id="aceListContainer">
-                <h1 style="text-align: center;">Crawling Result</h1>
-                <button id="bestButton">최저가</button>
-                <button id="aceButton">에이스 식자재</button>
-                <button id="goodFoodButton">굿푸드몰</button>
-                <button id="babyLeafButton">짱구몰</button>
-                <button id="foodEnButton">푸드엔</button>
-                <button id="monoMartButton">모노마트</button>
-                <table class="fixed_headers" id="resultTable">
-
-                </table>
+        <div class="row" id="aceListContainer">
+            <div class="button-list">
+                <button class="reverse dark">에이스 식자재</button>
+                <button class="reverse dark">굿푸드몰</button>
+                <button class="reverse dark">짱구몰</button>
+                <button class="reverse dark">푸드엔</button>
+                <button class="reverse dark">모노마트</button>
+                <table class="fixed_headers" id="resultTable"></table>
             </div>
+
+            <!-- dribbble -->
+            <a class="dribbble" href="https://dribbble.com/shots/7441241-Button-Hover-Effects" target="_blank"><img
+                    src="https://cdn.dribbble.com/assets/dribbble-ball-mark-2bd45f09c2fb58dbbfb44766d5d1d07c5a12972d602ef8b32204d28fa3dda554.svg"
+                    alt=""></a>
+            <!-- Pagination links here -->
+<!--            <div class="row" id="aceListContainer" style="">-->
+<!--                <h1 style="text-align: center; color:black;">Crawling Result</h1>-->
+<!--                <button id="bestButton">최저가</button>-->
+<!--                <button id="aceButton">에이스 식자재</button>-->
+<!--                <button id="goodFoodButton">굿푸드몰</button>-->
+<!--                <button id="babyLeafButton">짱구몰</button>-->
+<!--                <button id="foodEnButton">푸드엔</button>-->
+<!--                <button id="monoMartButton">모노마트</button>-->
+<!--                <table class="fixed_headers" id="resultTable">-->
+
+<!--                </table>-->
+<!--            </div>-->
 
         </div>
     </div>
@@ -301,56 +330,56 @@
     </div>
 </main>
 
-<section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
-    <!--    <div class="container">-->
-    <!--        <div class="row">-->
-    <!--            <h1 style="text-align: center;">OCR Result</h1>-->
-    <!--            <table class="fixed_headers">-->
-    <!--                <thead>-->
-    <!--                <tr>-->
-    <!--                    <th style="width: 500px;">상품명</th>-->
-    <!--                    <th style="width: 150px;">단위</th>-->
-    <!--                    <th style="width: 150px;">개수</th>-->
-    <!--                    <th style="width: 250px;">단가</th>-->
-    <!--                </tr>-->
-    <!--                </thead>-->
-    <!--                <tbody>-->
+<!--<section class="hero-section d-flex justify-content-center align-items-center" id="section_1">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <h1 style="text-align: center;">OCR Result</h1>-->
+<!--                <table class="fixed_headers">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th style="width: 500px;">상품명</th>-->
+<!--                        <th style="width: 150px;">단위</th>-->
+<!--                        <th style="width: 150px;">개수</th>-->
+<!--                        <th style="width: 250px;">단가</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
 
-    <!--                <tr style="width: 100%"-->
-    <!--                    th:each="i : ${#numbers.sequence(0, result.getOcrComposite().nameList.size() - 1)}">-->
-    <!--                    <td th:text="${result.getOcrComposite().nameList[i]}"></td>-->
-    <!--                    <td th:text="${result.getOcrComposite().unitList[i]}"></td>-->
-    <!--                    <td th:text="${result.getOcrComposite().counstList[i]}"></td>-->
-    <!--                    <td th:text="${result.getOcrComposite().priceList[i]}"></td>-->
-    <!--                </tr>-->
+<!--                    <tr style="width: 100%"-->
+<!--                        th:each="i : ${#numbers.sequence(0, result.getOcrComposite().nameList.size() - 1)}">-->
+<!--                        <td th:text="${result.getOcrComposite().nameList[i]}"></td>-->
+<!--                        <td th:text="${result.getOcrComposite().unitList[i]}"></td>-->
+<!--                        <td th:text="${result.getOcrComposite().counstList[i]}"></td>-->
+<!--                        <td th:text="${result.getOcrComposite().priceList[i]}"></td>-->
+<!--                    </tr>-->
 
-    <!--                </tbody>-->
-    <!--            </table>-->
-    <!--        </div>-->
-    <!--        <div class="row" id="aceListContainer">-->
-    <!--            <h1 style="text-align: center;">Crawling Result</h1>-->
-    <!--            <button id="bestButton">최저가</button>-->
-    <!--            <button id="aceButton">에이스 식자재</button>-->
-    <!--            <button id="goodFoodButton">굿푸드몰</button>-->
-    <!--            <button id="babyLeafButton">짱구몰</button>-->
-    <!--            <button id="foodEnButton">푸드엔</button>-->
-    <!--            <button id="monoMartButton">모노마트</button>-->
-    <!--            <table class="fixed_headers" id="resultTable">-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--            <div class="row" id="aceListContainer">-->
+<!--                <h1 style="text-align: center;">Crawling Result</h1>-->
+<!--                <button id="bestButton">최저가</button>-->
+<!--                <button id="aceButton">에이스 식자재</button>-->
+<!--                <button id="goodFoodButton">굿푸드몰</button>-->
+<!--                <button id="babyLeafButton">짱구몰</button>-->
+<!--                <button id="foodEnButton">푸드엔</button>-->
+<!--                <button id="monoMartButton">모노마트</button>-->
+<!--                <table class="fixed_headers" id="resultTable">-->
 
-    <!--            </table>-->
-    <!--        </div>-->
-    <!--        <div>-->
-    <!--            <button id="showImageBtn">이미지 확인하기</button>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <button id="showImageBtn">이미지 확인하기</button>-->
 
-    <!--            <div id="imageModal" class="modal">-->
-    <!--                <div class="modal-content">-->
-    <!--                    <span id="closeModal" class="close">&times;</span>-->
-    <!--                    <img id="modalImage" th:src="${result.getOrderDTO().url}" alt="Image">-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-</section>
+<!--                <div id="imageModal" class="modal">-->
+<!--                    <div class="modal-content">-->
+<!--                        <span id="closeModal" class="close">&times;</span>-->
+<!--                        <img id="modalImage" th:src="${result.getOrderDTO().url}" alt="Image">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--</section>-->
 
 
 </main>
