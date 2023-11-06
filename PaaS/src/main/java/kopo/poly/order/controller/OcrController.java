@@ -15,16 +15,6 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 @RequestMapping("/order")
 public class OcrController {
-//    @Value("${naver.service.template.secretKey}")
-//    private String secretKey;
-
-//    private final IOcrService ocrService;
-//
-//    private final ICrawlingService crawilingService;
-//
-//    private final IS3UploadService s3UploadService;
-
-
     @GetMapping("/upload-form")
     public String uploadForm(HttpSession session) throws Exception {
         String userId = (String) session.getAttribute("SS_USER_ID");
@@ -41,6 +31,10 @@ public class OcrController {
         log.info(this.getClass().getName() + ".ocrResult Start!");
 
         OcrResultComposite result = (OcrResultComposite) session.getAttribute("SS_OCR_RESULT");
+        String userId = (String)session.getAttribute("SS_USER_ID");
+        if(userId == null || userId.equals("")){
+            return"user/sign-in_sign-up";
+        }
         model.addAttribute("result", result);
 
         session.removeAttribute("SS_OCR_RESULT");

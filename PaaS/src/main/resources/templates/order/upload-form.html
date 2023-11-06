@@ -6,7 +6,7 @@
     <title>JangBaguNi</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
+    <!--    <link rel="manifest" href="site.webmanifest"> 이거  때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
     <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
@@ -34,6 +34,17 @@
 
             let searchText = searchInput.value;
 
+
+            // 파일 입력 필드에 파일 선택 이벤트 리스너 추가
+            document.getElementById('image').addEventListener('change', function () {
+                // 선택된 파일의 이름 가져오기
+                const fileName = this.files[0].name;
+
+                // 파일 이름을 표시할 엘리먼트 업데이트
+                const uploadName = document.querySelector('.upload-name');
+                uploadName.value = fileName;
+            });
+
             $("#btnUpload").on("click", function () {
 
                 imageSubmit(f);
@@ -54,7 +65,7 @@
 
                 if (e.key === "Enter") {
                     e.preventDefault();  // 폼의 기본 동작을 중지합니다.
-                    $("#body").load("/loading/Loading");
+                    $("#loadBody").load("/loading/Loading");
                     // 입력된 텍스트를 가져옵니다.
                     let searchText = searchInput.value;
 
@@ -92,7 +103,7 @@
                 fileInput.click();
                 return;
             } else {
-                $("#body").load("/loading/Loading");
+                $("#loadBody").load("/loading/Loading");
 
                 let formData = new FormData($("#f")[0]);
                 $.ajax({
@@ -113,17 +124,14 @@
 
                 })
             }
+
         }
 
-        $("#file").on('change', function () {
-            var fileName = $("#file").val();
-            $("#image").val(fileName);
-        });
 
     </script>
 </head>
 
-<body id-="body">
+<body id="loadBody">
 <!-- ? Preloader Start -->
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
@@ -236,11 +244,15 @@
                 <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly
                        style="height: 40px; padding: 0 10px; border: 1px solid #dddddd; width: 77%; color: #999999;">
                 <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
-                <label for="image" class="select" style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일 찾기</label>
+                <label for="image" class="select"
+                       style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일
+                    찾기</label>
                 <br><br>
                 <input type="checkbox" name="save" id="save" value="Y">
                 <label for="save">이미지 저장하기</label>
-                <img id="btnUpload" src="/ocr/image/free-icon-upload-2297827.png" alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘" style="cursor: pointer; width: 6%; height: 6%;">
+                <img id="btnUpload" src="/ocr/image/free-icon-upload-2297827.png"
+                     alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘"
+                     style="cursor: pointer; width: 6%; height: 6%;">
             </form>
         </div>
 
