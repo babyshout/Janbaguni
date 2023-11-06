@@ -27,7 +27,5 @@ public interface IUserInfoService {
     // 임시 비밀번호 생성 후 메일 전송
     int pwCode(UserInfoDTO pDTO) throws Exception;
 
-
-
     UserInfoDTO getUserInfo(UserInfoDTO pDTO) throws Exception;
 }

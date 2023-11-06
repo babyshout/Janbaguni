@@ -4,6 +4,8 @@ import kopo.poly.dto.MsgDTO;
 import kopo.poly.community.dto.CommunityDTO;
 import kopo.poly.community.service.ICommunityService;
 import kopo.poly.community.util.CmmUtil;
+import kopo.poly.user.enumx.SessionEnum;
+import kopo.poly.user.service.IUserInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
-
+import java.util.ArrayList;
 
 /*
  * controller를 선언해야만 Spring 프레임워크에서 Controller인지 인식이 가능하다
@@ -34,7 +37,8 @@ import java.util.Optional;
 @ToString
 public class CommunityController {
     // @RequiredArgsConstructor를 통해 메모리에 올라간 서비스 객체를 Controller에서 사용할 수 있게 주입시켜줌
-    private final ICommunityService CommunityService;
+    private final ICommunityService communityService;
+
 
     /**
      * 게시판 리스트 보여주기
@@ -47,7 +51,9 @@ public class CommunityController {
         //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
-//        List<CommunityDTO> rList = CommunityService.getCommunityList();
+        List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
+
+
 
         //로그인된 사용자 아이디는 Session에 저장함
         // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음
@@ -63,15 +69,15 @@ public class CommunityController {
 
 
 //        리스트 값 찍어보기
-//        log.info("rList Size : "+Integer.toString(rList.size()));
-//        for (CommunityDTO dto : rList) {
-//            log.info("dto : " + dto.toString());
-//        }
+        log.info("rList Size : " + Integer.toString(rList.size()));
+        for (CommunityDTO dto : rList) {
+            log.info("dto : " + dto.toString());
+        }
 
 
         //공지사항 결과를 JSP로 전달하기 위해 model 객체에 추가
         //조회된 리스트 결과값 넣어주기
-//        model.addAttribute("rList", rList);
+        model.addAttribute("rList", rList);
 
         //실행됐는지 확인하기 위해 로그 찍어주기
         log.info(this.getClass().getName() + ".CommunityList End!");
@@ -89,13 +95,26 @@ public class CommunityController {
      * GetMapping(value = "notice/noticeReg") => GET방식을 통해 접속되는 URL이 notice/noticeReg 경우에 아래 함수를 실행함
      */
     @GetMapping(value = "communityReg")
-    public String communityReg() {
+    public String communityReg(HttpSession session) {
         log.info(this.getClass().getName() + ".CommunityReg Start!");
+
+        String msg = "";
+
+
+
+        //로그인된 사용자만 글 등록할 수 있게 설정
+        //로그인 세션 받아오기
+        String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
+
+        if (userId == null) {
+            // 로그인되지 않은 사용자에게는 접근 권한이 없으므로 다른 페이지로 리다이렉트 또는 에러 메시지 반환
+            return "redirect:/login/login-form"; // 로그인 페이지로 리다이렉트
+        }
 
         log.info(this.getClass().getName() + ".CommunityReg End!");
 
         //함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/communityReg.html
+        // community/communityReg.html
         return "/community/communityReg";
     }
 
@@ -116,8 +135,7 @@ public class CommunityController {
 
         try {
             //로그인된 사용자 아이디 가져오기
-            //로그인을 아직 구현 x 이기 때문에, 공지사항 리스트에서 로그인 한 것처럼 Session 값을 저장
-            String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID")); //아이디
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
             String title = CmmUtil.nvl(request.getParameter("title")); //제목
             String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); //공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); //내용
@@ -143,13 +161,13 @@ public class CommunityController {
              * 게시글을 등록하기 위한 비지니스 로직을 호출 ( 서비스에 작성한 로직 )
              *
              */
-            CommunityService.insertCommunityInfo(pDTO); // INoticeService 함수를 호출함
+            communityService.insertCommunityInfo(pDTO); // INoticeService 함수를 호출함
 
             //저장이 완료되면 사용자에게 보여줄 메시지 작성
-            msg = "등록되었습니다."; // 서비스 호출이 정상적으로 작동하면 "등록되었습니다." 메세지를 전달하기 위해 문자열 저장하기
+            msg = userId+"님의 글이 등록되었습니다."; // 서비스 호출이 정상적으로 작동하면 "등록되었습니다." 메세지를 전달하기 위해 문자열 저장하기
         } catch (Exception e) { //catch 구문은 서비스 호출 중 오류가 발생되면 실행되기 때문에 "실패하였습니다." 문자열 저장
             //저장이 실패되면 사용자에게 보여줄 메세지
-            msg = "실패하였습니다. : " + e.getMessage();
+            msg = "글 등록에 실패하였습니다. : " + e.getMessage();
             log.info(e.toString());
             e.printStackTrace();
         } finally { //메세지 문자열을 JSON 구조로 변경하기 위해 MsgDTO 객체를 생성 후, 메세지 저장하기
@@ -172,13 +190,15 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".communityInfo Start!");
 
 
-        //로그인이 구현되지 않아 USER01이라는 값을 만들어줌
-        if (session.isNew()) {
-            session.setAttribute("SESSION_USER_ID", "USER01");
-        }
 
+//        //로그인이 구현되지 않아 USER01이라는 값을 만들어줌
+//        if (session.isNew()) {
+//            session.setAttribute("SESSION_USER_ID", "USER01");
+//        }
+
+        //로그인 정보 가져오기
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         String cSeq = CmmUtil.nvl(request.getParameter("cSeq")); // 커뮤니티글번호 pk
-        String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID"));
         String title = CmmUtil.nvl((String) session.getAttribute("title"));
         String communityYn = CmmUtil.nvl((String) session.getAttribute("communityYn"));
         String contents = CmmUtil.nvl((String) session.getAttribute("contents"));
@@ -201,13 +221,14 @@ public class CommunityController {
 
         //커뮤니티 상세정보 가져오기
         CommunityDTO rDTO = Optional.ofNullable(
-                CommunityService.getCommunityInfo(pDTO, true)
+                communityService.getCommunityInfo(pDTO, true)
         ).orElseGet(CommunityDTO::new);
 
         //조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
+        model.addAttribute("userId", session.getAttribute("SS_USER_ID"));
 //        log.info("SESSION_USER_ID" + session.getAttribute("SESSION_USER_ID"));
-        model.addAttribute("SS_USER_ID",session.getAttribute("SESSION_USER_ID"));
+//        model.addAttribute("SS_USER_ID",session.getAttribute("SESSION_USER_ID"));
 
 //        log.info("rDTO : "+ rDTO);
 
@@ -238,7 +259,7 @@ public class CommunityController {
         pDTO.setTitle(title);
 
         CommunityDTO rDTO = Optional.ofNullable(
-                CommunityService.getCommunityInfo(pDTO, false)
+                communityService.getCommunityInfo(pDTO, false)
         ).orElseGet(CommunityDTO::new);
 
         log.info("pDTO : " + pDTO.toString());
@@ -290,7 +311,7 @@ public class CommunityController {
             pDTO.setContents(contents);
 
             //게시글 수정하기 DB
-            CommunityService.updateCommunityInfo(pDTO);
+            communityService.updateCommunityInfo(pDTO);
 
             msg = "수정되었습니다.";
         } catch (Exception e) {
@@ -328,7 +349,7 @@ public class CommunityController {
             pDTO.setCommunitySeq(cSeq);
 
             //DB에서 게시글 삭제하기
-            CommunityService.deleteCommunityInfo(pDTO); //전달 받은 값을 DTO에 저장했으니 INoticeService안에 있는 delete함수를 호출해 값을 처리한다.
+            communityService.deleteCommunityInfo(pDTO); //전달 받은 값을 DTO에 저장했으니 INoticeService안에 있는 delete함수를 호출해 값을 처리한다.
 
             msg = "삭제되었습니다.";
         } catch (Exception e) {
