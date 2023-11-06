@@ -26,6 +26,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/order")
 public class RestCrawlingController {
     @Value("${naver.service.template.secretKey}")
     private String secretKey;
@@ -247,6 +248,7 @@ public class RestCrawlingController {
             session.setAttribute( "SS_SEARCH_CRAWLING",searchCrawlingComposite);
             msg = "찾으시는 물품의 최저가를 찾아봤어요!";
             res = 1;
+            dto = new MsgDTO();
             dto.setMsg(msg);
             dto.setResult(res);
             return dto;

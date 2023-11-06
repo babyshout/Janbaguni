@@ -6,30 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/order")
 public class OcrController {
-//    @Value("${naver.service.template.secretKey}")
-//    private String secretKey;
-
-//    private final IOcrService ocrService;
-//
-//    private final ICrawlingService crawilingService;
-//
-//    private final IS3UploadService s3UploadService;
-
-
     @GetMapping("/upload-form")
     public String uploadForm(HttpSession session) throws Exception {
         String userId = (String) session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
             return"user/sign-in_sign-up";
         }else{
-            return "/upload-form"; // Return the name of the HTML template (upload-form.html)
+            return "/order/upload-form"; // Return the name of the HTML template (upload-form.html)
         }
     }
 
@@ -39,12 +31,16 @@ public class OcrController {
         log.info(this.getClass().getName() + ".ocrResult Start!");
 
         OcrResultComposite result = (OcrResultComposite) session.getAttribute("SS_OCR_RESULT");
+        String userId = (String)session.getAttribute("SS_USER_ID");
+        if(userId == null || userId.equals("")){
+            return"user/sign-in_sign-up";
+        }
         model.addAttribute("result", result);
 
         session.removeAttribute("SS_OCR_RESULT");
 
         log.info(this.getClass().getName() + ".ocrResult End!");
-        return "ocr-result";
+        return "/order/ocr-result";
     }
 
 

@@ -36,7 +36,8 @@
 
                             if (json.result === 1) { // 로그인 성공
                                 alert(json.msg); // 메시지 띄우기
-                                location.href = "/upload-form"; // 로그인 성공 후 메인 페이지로 이동
+                                /**준수가 경로 바꿨음 ( /order 추가함 )**/
+                                location.href = "/order/upload-form"; // 로그인 성공 후 메인 페이지로 이동
 
                             } else { // 로그인 실패
                                 alert(json.msg); // 메시지 띄우기
