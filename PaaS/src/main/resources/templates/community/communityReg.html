@@ -34,6 +34,10 @@
             $("#btnSend").on("click", function () {
                 doSubmit(); // 공지사항 등록하기 실행
             })
+
+            // $("#btnBack").on("click", function () {
+            //     location.href = "/community/communityList"; // 공지사항 리스트 이동
+            // })
         })
 
         //글자 길이 바이트 단위로 체크하기(바이트값 전달)
@@ -101,6 +105,19 @@
                     success: function (json) { // /community/communityInsert 호출이 성공했다면..
                         alert(json.msg); // 메시지 띄우기
                         location.href = "/community/communityList"; // 공지사항 리스트 이동
+                    }
+                }
+            )
+
+            // Ajax 호출해서 글 등록하기
+            $.ajax({
+                    url: "/community/communityReg",
+                    type: "post", // 전송방식은 Post
+                    // contentType: "application/json",
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success: function (json) { // /community/communityInsert 호출이 성공했다면..
+                        alert(json.msg); // 메시지 띄우기
                     }
                 }
             )
@@ -183,7 +200,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#">community</a></li>
+                                        <li class="breadcrumb-item"><a href="communityList">community</a></li>
                                     </ol>
                                 </nav>
                                 <!-- breadcrumb End -->
@@ -195,7 +212,7 @@
         </div>
     </section>
 
-
+    <form name="f" id="f">
     <div class="board_wrap">
         <div class="board_title">
             <strong>공지사항</strong>
@@ -206,8 +223,16 @@
                 <div class="title">
                     <dl>
                         <dt>제목</dt>
-                        <dd><input type="text" placeholder="제목 입력" /></dd>
+                        <dd><input type="text" name="title" placeholder="제목 입력" /></dd>
                     </dl>
+                    <dl>
+                        <dt>공지글 여부</dt>
+                        <dd>
+                            <input type="radio" name="communityYn" value="Y"> 예
+                            <input type="radio" name="communityYn" value="N"> 아니오
+                        </dd>
+                    </dl>
+
                 </div>
                 <div class="info">
                     <dl>
@@ -220,15 +245,16 @@
                     </dl>
                 </div>
                 <div class="cont">
-                    <textarea placeholder="내용 입력"></textarea>
+                    <textarea name="contents"placeholder="내용 입력"></textarea>
                 </div>
             </div>
         </div>
         <div class="bt_wrap">
-            <a href="write.html" class="on">등록</a>
-            <a href="#">취소</a>
+            <button id="btnSend" type="button" class="custom-button">등록</button>
+            <button type="reset" class="custom-button cancel-button">취소</button>
         </div>
     </div>
+    </form>
 
 
 

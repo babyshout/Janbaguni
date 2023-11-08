@@ -22,4 +22,6 @@ public class CommunityDTO {
 
     private String userName; //등록자명
 
+//    private String totalCnt; //게시글 수
+
 }
