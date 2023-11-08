@@ -38,11 +38,12 @@ public class RestCrawlingController {
     private final IS3UploadService s3UploadService;
     OcrComposite result;
 
+
     @PostMapping("/crawlingResult")
-    @ResponseBody
     public List<List<ProductCrawlingDTO>> crawlingResult(@RequestBody Map<String, String> requestBody, HttpSession session) {
         CrawlingComposite tmp = (CrawlingComposite) session.getAttribute("SS_CRAWLING_RESULT");
         List<List<ProductCrawlingDTO>> resultList = new ArrayList<>();
+
 
         log.info(this.getClass().getName() + ".crawlingResult Start!");
 
@@ -53,8 +54,8 @@ public class RestCrawlingController {
             case "ace":
                 for (List<ProductCrawlingDTO> data : tmp.getAceList()) {
                     resultList.add(data);
-                }
 
+                }
                 break;
             case "goodFood":
                 for (List<ProductCrawlingDTO> data : tmp.getGoodFoodList()) {
@@ -70,12 +71,49 @@ public class RestCrawlingController {
                 for (List<ProductCrawlingDTO> data : tmp.getFoodEnList()) {
                     resultList.add(data);
                 }
+                break;
             case "monoMart":
-                for (List<ProductCrawlingDTO> data : tmp.getMonoMartList()){
+                for (List<ProductCrawlingDTO> data : tmp.getMonoMartList()) {
                     resultList.add(data);
                 }
+                break;
+            case "best":
+                resultList.add(tmp.getBestList());
+
         }
         session.setMaxInactiveInterval(1800);
+        return resultList;
+    }
+
+    @PostMapping("/searchCrawlingResult")
+    @ResponseBody
+    public List<ProductCrawlingDTO> searchResult(@RequestBody Map<String, String> requestBody, HttpSession session) {
+        log.info(this.getClass().getName() + ".searchResult Start!!");
+        SearchCrawlingComposite crawlingComposite = (SearchCrawlingComposite) session.getAttribute("SS_SEARCH_CRAWLING");
+        log.info("포스트다~~~~" + crawlingComposite.getSearchAce().get(0).getPrice());
+        List<ProductCrawlingDTO> resultList = new ArrayList<>();
+        String source = requestBody.get("source");
+
+        switch (source) {
+            case "ace":
+                resultList = crawlingComposite.getSearchAce();
+                log.info("리절트 리스트~~~" + resultList.get(0).getPrice());
+                break;
+            case "goodFood":
+                resultList = crawlingComposite.getSearchGoodFood();
+                break;
+            case "babyLeaf":
+                resultList = crawlingComposite.getSearchBabyLeaf();
+                break;
+            case "foodEn":
+                resultList = crawlingComposite.getSearchFoodEn();
+                break;
+            case "monoMart":
+                resultList = crawlingComposite.getSearchMonoMart();
+                break;
+
+        }
+        log.info(this.getClass().getName() + ".searchResult End!!");
         return resultList;
     }
 
@@ -89,7 +127,6 @@ public class RestCrawlingController {
      * @throws IOException
      */
     @PostMapping("/uploadAndOcr")
-    @ResponseBody
     public MsgDTO uploadAndOcr(@RequestParam("image") MultipartFile uploadOcrFile,
                                @RequestParam(value = "save", required = false, defaultValue = "N") String save, HttpSession session
     ) throws IOException {
@@ -216,19 +253,19 @@ public class RestCrawlingController {
 
         /**세션에 최종값 넣음**/
         session.setAttribute("SS_OCR_RESULT", resultComposite);
-
         log.info(this.getClass().getName() + ".uploadAndOcr End!!!!!!!!!!!!!!!!");
         return dto;
     }
 
-    @PostMapping("searchCrawlingItem")
-    @ResponseBody
-    public MsgDTO searchCrawlingItem(@RequestParam String searchText, HttpSession session){
+
+    @PostMapping("/searchCrawlingItem")
+    public MsgDTO searchCrawlingItem(@RequestParam String searchText, HttpSession session) {
+        log.info(this.getClass().getName() + ".searchCrawlingItem Start!!");
         MsgDTO dto = null;
         String msg = "";
         int res = 0;
 
-        if(searchText.equals("")){
+        if (searchText.equals("")) {
             msg = "찾으시는 물품을 입력해주세요.";
             res = 2;
             dto = new MsgDTO();
@@ -242,15 +279,17 @@ public class RestCrawlingController {
             dto.setResult(res);
             dto.setMsg(msg);
             return dto;
-        }else{
+        } else {
             SearchCrawlingComposite searchCrawlingComposite = searchCrawling(searchText);
-        
-            session.setAttribute( "SS_SEARCH_CRAWLING",searchCrawlingComposite);
+            log.info("서치크롤링컴파짓:" + searchCrawlingComposite.toString());
             msg = "찾으시는 물품의 최저가를 찾아봤어요!";
             res = 1;
             dto = new MsgDTO();
             dto.setMsg(msg);
             dto.setResult(res);
+            session.setAttribute("SS_SEARCH_CRAWLING", searchCrawlingComposite);
+            SearchCrawlingComposite tmp = (SearchCrawlingComposite) session.getAttribute("SS_SEARCH_CRAWLING");
+            log.info(tmp.getSearchAce().get(0).getPrice());
             return dto;
         }
     }
@@ -262,31 +301,71 @@ public class RestCrawlingController {
         List<List<ProductCrawlingDTO>> babyLeafList = new ArrayList<>();
         List<List<ProductCrawlingDTO>> foodEnList = new ArrayList<>();
         List<List<ProductCrawlingDTO>> monoMartList = new ArrayList<>();
+        List<List<ProductCrawlingDTO>> bestList = new ArrayList<>();
 
+        List<ProductCrawlingDTO> bestResultList = new ArrayList<>();
+
+        List<ProductCrawlingDTO> aceTemp = new ArrayList<>();
+        List<ProductCrawlingDTO> goodFoodTemp = new ArrayList<>();
+        List<ProductCrawlingDTO> babyleafTemp = new ArrayList<>();
+        List<ProductCrawlingDTO> foodEnTemp = new ArrayList<>();
+        List<ProductCrawlingDTO> monoMartTemp = new ArrayList<>();
 
         /**ocr 데이터 크롤링**/
         SortUtil sortUtil = new SortUtil();
         if (result.getDate() != null && !result.getDate().equals("")) { //OCR 데이터 유효성 검사
+
             for (int i = 0; i < result.getNameList().size(); i++) {
                 if (crawlingService.getAceData(result.getNameList().get(i)) != null) {
-                    acePriceList.add(crawlingService.getAceData(result.getNameList().get(i)));
+                    aceTemp = crawlingService.getAceData(result.getNameList().get(i));
+                    acePriceList.add(aceTemp);
+                    bestResultList.add(sortUtil.sortProductList(aceTemp).get(0));
                 }
                 if (crawlingService.getGoodFood(result.getNameList().get(i)) != null) {
-                    goodFoodList.add(crawlingService.getGoodFood(result.getNameList().get(i)));
+                    goodFoodTemp = crawlingService.getGoodFood(result.getNameList().get(i));
+                    goodFoodList.add(goodFoodTemp);
+                    bestResultList.add(sortUtil.sortProductList(goodFoodTemp).get(0));
                 }
                 if (crawlingService.getBabyleaf(result.getNameList().get(i)) != null) {
-                    babyLeafList.add(crawlingService.getBabyleaf(result.getNameList().get(i)));
+                    babyleafTemp = crawlingService.getBabyleaf(result.getNameList().get(i));
+                    babyLeafList.add(babyleafTemp);
+                    bestResultList.add(sortUtil.sortProductList(babyleafTemp).get(0));
                 }
                 if (crawlingService.getFoodEn(result.getNameList().get(i)) != null) {
-                    foodEnList.add(crawlingService.getFoodEn(result.getNameList().get(i)));
+                    foodEnTemp = crawlingService.getFoodEn(result.getNameList().get(i));
+                    foodEnList.add(foodEnTemp);
+                    bestList.add(foodEnTemp);
                 }
                 if (crawlingService.getMonoMart(result.getNameList().get(i)) != null) {
-                    monoMartList.add(crawlingService.getMonoMart(result.getNameList().get(i)));
+                    monoMartTemp = crawlingService.getMonoMart(result.getNameList().get(i));
+                    monoMartList.add(monoMartTemp);
+                    bestList.add(monoMartTemp);
                 }
-            }
-        }
 
-        CrawlingComposite crawlingComposite = new CrawlingComposite(acePriceList, goodFoodList, babyLeafList, foodEnList, monoMartList);
+                if (bestList != null && !bestList.isEmpty()) {
+
+                    for (List<ProductCrawlingDTO> list : bestList) {
+
+                        if (list != null && !list.isEmpty()) {
+
+                            for (ProductCrawlingDTO dto : list) {
+
+                                if (dto != null) {
+                                    bestResultList.add(dto);
+                                    bestList = null;
+                                    bestList = new ArrayList<>();
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+        }
+        CrawlingComposite crawlingComposite = new CrawlingComposite(acePriceList, goodFoodList, babyLeafList, foodEnList, monoMartList, bestResultList);
+
         // getPrice 기준으로 정렬
         sortUtil.sortCrawlingComposite(crawlingComposite);
         acePriceList = null;
@@ -294,11 +373,20 @@ public class RestCrawlingController {
         babyLeafList = null;
         foodEnList = null;
         monoMartList = null;
+
         sortUtil = null;
+
+        bestResultList = null;
+        bestList = null;
+        aceTemp = null;
+        goodFoodTemp = null;
+        babyleafTemp = null;
+        foodEnTemp = null;
+        monoMartTemp = null;
         return crawlingComposite;
     }
 
-    private SearchCrawlingComposite searchCrawling(String keyWord){
+    private SearchCrawlingComposite searchCrawling(String keyWord) {
         SearchCrawlingComposite searchCrawlingComposite = null;
         SortUtil sortUtil = new SortUtil();
         List<ProductCrawlingDTO> searchAce = new ArrayList<>();
@@ -306,39 +394,40 @@ public class RestCrawlingController {
         List<ProductCrawlingDTO> searchBabyLeaf = new ArrayList<>();
         List<ProductCrawlingDTO> searchFoodEn = new ArrayList<>();
         List<ProductCrawlingDTO> searchMonoMart = new ArrayList<>();
-        try{
-            if(crawlingService.getAceData(keyWord) != null){
-                searchAce = crawlingService.getAceData(keyWord);
+        try {
+            if (crawlingService.getAceData(keyWord) != null) {
+                searchAce = sortUtil.sortProductList(crawlingService.getAceData(keyWord));
             }
-            if(crawlingService.getGoodFood(keyWord) != null){
-                searchGoodFood = crawlingService.getGoodFood(keyWord);
+            if (crawlingService.getGoodFood(keyWord) != null) {
+                searchGoodFood = sortUtil.sortProductList(crawlingService.getGoodFood(keyWord));
             }
-            if(crawlingService.getGoodFood(keyWord) != null){
-                searchBabyLeaf = crawlingService.getBabyleaf(keyWord);
+            if (crawlingService.getGoodFood(keyWord) != null) {
+                searchBabyLeaf = sortUtil.sortProductList(crawlingService.getBabyleaf(keyWord));
             }
-            if(crawlingService.getFoodEn(keyWord) != null){
-                searchFoodEn = crawlingService.getFoodEn(keyWord);
+            if (crawlingService.getFoodEn(keyWord) != null) {
+                searchFoodEn = sortUtil.sortProductList(crawlingService.getFoodEn(keyWord));
             }
-            if(crawlingService.getMonoMart(keyWord) != null){
-                searchMonoMart = crawlingService.getMonoMart(keyWord);
+            if (crawlingService.getMonoMart(keyWord) != null) {
+                searchMonoMart = sortUtil.sortProductList(crawlingService.getMonoMart(keyWord));
             }
 
-            searchAce = sortUtil.sortSearchCrawlingComposite(searchAce);
-            searchGoodFood = sortUtil.sortSearchCrawlingComposite(searchGoodFood);
-            searchBabyLeaf = sortUtil.sortSearchCrawlingComposite(searchBabyLeaf);
-            searchFoodEn = sortUtil.sortSearchCrawlingComposite(searchFoodEn);
-            searchMonoMart = sortUtil.sortSearchCrawlingComposite(searchMonoMart);
+
+            for (int i = 0; i < searchAce.size(); i++) {
+                log.info(i + "번째 : " + searchAce.get(i).getPrice());
+            }
             searchCrawlingComposite = new SearchCrawlingComposite(searchAce, searchGoodFood, searchBabyLeaf, searchFoodEn, searchMonoMart);
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("써치크롤링~~");
-        }finally {
+            e.printStackTrace();
+        } finally {
             searchAce = null;
             searchGoodFood = null;
             searchBabyLeaf = null;
             searchFoodEn = null;
             searchMonoMart = null;
+            log.info("리턴시키기 전에 확인해봄~~:" + searchCrawlingComposite.getSearchAce().get(0).getPrice());
             return searchCrawlingComposite;
         }
 

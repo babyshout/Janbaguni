@@ -1,8 +1,10 @@
 package kopo.poly.order.service.impl;
 
+import kopo.poly.order.dto.CrawlingComposite;
 import kopo.poly.order.dto.ProductCrawlingDTO;
 import kopo.poly.order.service.ICrawlingService;
 import kopo.poly.order.utill.CmmUtil;
+import kopo.poly.order.utill.SortUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,7 +55,6 @@ public class CrawlingService implements ICrawlingService {
                 pDTO.setShop(shop);
                 Element tmp = content.select(getUrl).first();
                 String resultUrl = linkUrl + tmp.attr("href");
-                log.info("url : " + resultUrl);
                 pDTO.setUrl(resultUrl);
 
                 productList.add(pDTO);
@@ -146,6 +147,17 @@ public class CrawlingService implements ICrawlingService {
         String cUrl = "https://www.monomart.co.kr/goods/goods_search.php?Cd=&keyword=" + keyword + "&key=all&sort=price_asc#;";
         return getCrawlingData(cUrl, ".item_cont",".item_price span", ".item_tit_box a .item_name","모노마트","https://www.monomart.co.kr/", ".item_tit_box a");
     }
+
+//    @Override
+//    public List<ProductCrawlingDTO> getCheapestProduct(List<List<ProductCrawlingDTO>> aceList, List<List<ProductCrawlingDTO>> goodFoodList,
+//                                                 List<List<ProductCrawlingDTO>> babyleafList, List<List<ProductCrawlingDTO>> foodEnList,
+//                                                 List<List<ProductCrawlingDTO>> monoMartList) throws IOException {
+//        SortUtil sortUtil = new SortUtil();
+//
+//        List<ProductCrawlingDTO> result = sortUtil.sortCheapestProudct(aceList,aceList,aceList,aceList,aceList);
+//        log.info("크롤링 서비스~~ : "  + result.get(0).getPrice());
+//        return result;
+//    }
 
 
 }

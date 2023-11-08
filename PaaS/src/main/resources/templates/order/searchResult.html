@@ -2,14 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>JangBaguNi</title>
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
-    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <title>장바구니 커뮤니티</title>
+
+    <!-- CSS FILES -->
     <!-- CSS here -->
     <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
@@ -25,9 +23,113 @@
     <link rel="stylesheet" href="/community/css/assets/css/slick.css">
     <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
     <link rel="stylesheet" href="/community/css/assets/css/style.css">
+
+    <script type="text/javascript">// 버튼을 클릭하면 모달 팝업을 엽니다.
+    $(document).ready(function () {
+        $("#aceBt").click();
+
+
+        $("#aceBt").click(function () {
+            fetchDataFromServer("ace");
+        })
+
+        $("#goodFoodBt").on("click", function () {
+            fetchDataFromServer("goodFood");
+        })
+
+        $("#babyLeafBt").on("click", function () {
+            fetchDataFromServer("babyLeaf");
+        })
+        $("#foodEnBt").on("click", function () {
+            fetchDataFromServer("foodEn");
+        })
+
+        $("#monoMartBt").on("click", function () {
+            fetchDataFromServer("monoMart");
+        })
+
+
+    })
+    function fetchDataFromServer(source) {
+        $.ajax({
+            type: "POST",
+            url: "/order/searchCrawlingResult",
+            data: JSON.stringify({source: source}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                updateTable(data);
+            },
+            error: function (xhr, status, error) {
+                console.error("요청 실패 :", status + " - ", error);
+            },
+
+        })
+    }
+    function updateTable(data) {
+        // OCR 결과 업데이트
+        let table = $("#resultTable");
+        table.empty();
+        let tableHeader = $("<tr>");
+        tableHeader.append($("<th style='width: 650px;'>").text("상품명"));
+        tableHeader.append($("<th style='width: 250px;'>").text("가격"));
+        tableHeader.append($("<th style='width: 150px;'>").text("발주처"));
+        table.append(tableHeader);
+
+        // 여기서 searchAce를 사용
+        $.each(data, function (index, item) {
+            let productRow = $("<tr>");
+            let productLink = $("<a>").attr("href", item.url).attr("target", "_blank").text(item.productName);
+            let productCell = $("<td>").css("width", "650px").append(productLink);
+            productRow.append(productCell);
+            let priceCell = $("<td>").css("width", "250px").text(item.price);
+            productRow.append(priceCell);
+            let shopCell = $("<td>").css("width", "150px").text(item.shop);
+            productRow.append(shopCell);
+            table.append(productRow);
+        });
+    }
+    </script>
+    <style>
+        #aceListContainer {
+            display: flex;
+        }
+
+        #aceListContainer a {
+            color: black;
+        }
+
+        #aceListContainer button {
+            display: inline-block;
+            padding: 12px 24px;
+            /*background-image: linear-gradient(top, #c054ff 0%, #5274ff 100%);*/
+            background: linear-gradient(135deg, #80d0c7 0%, #198754 100%);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+            flex: 1; /* 컨테이너 내에서 동일한 너비를 가지도록 설정합니다. */
+            margin: 0 5px; /* 버튼 간의 간격을 조절합니다. */
+        }
+
+        #aceListContainer button:hover {
+            background: linear-gradient(135deg, #80d0c7 0%, #198754 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #aceListContainer a:hover {
+            color: #c054ff;
+        }
+    </style>
 </head>
 
-<body>
+<body id="top">
 <!-- ? Preloader Start -->
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
@@ -97,12 +199,14 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-11 col-md-12">
                             <div class="hero__caption hero__caption2">
-                                <h1 data-animation="bounceIn" data-delay="0.2s">Search</h1>
+                                <h1 data-animation="bounceIn" data-delay="0.2s">Community</h1>
                                 <!-- breadcrumb Start-->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#">community</a></li>
+                                        <li class="breadcrumb-item"><a href="index">Home</a>
+                                        </li>
+                                        <li class="breadcrumb-item"><a href="#">community</a>
+                                        </li>
                                     </ol>
                                 </nav>
                                 <!-- breadcrumb End -->
@@ -117,27 +221,23 @@
 
     <div class="board_wrap">
         <div class="board_title">
-            <strong>최저가 검색 결과</strong>
+            <strong>검색결과</strong>
+            <!--            <p></p>-->
         </div>
-        <div class="board_list_wrap">
-
-
-
-            <div class="credits__container">
-                <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
-                        href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
-            </div>
-
+        <!--             Pagination links here-->
+        <div class="row" id="aceListContainer" style="">
+            <button id="bestBt">최저가</button>
+            <button id="aceBt">에이스 식자재</button>
+            <button id="goodFoodBt">굿푸드몰</button>
+            <button id="babyLeafBt">짱구몰</button>
+            <button id="foodEnBt">푸드엔</button>
+            <button id="monoMartBt">모노마트</button>
+            <table class="fixed_headers" id="resultTable">
+            </table>
         </div>
+
     </div>
-
-    <!-- About Area End -->
-    <!--? top subjects Area Start -->
-
-    <!-- top subjects End -->
-    <!--? About Area-3 Start -->
-
-    <!-- Services End -->
+</main>
 
 </main>
 <footer>
@@ -241,8 +341,9 @@
 <div id="back-top">
     <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
-<link rel="stylesheet" href="/ocr/css/search.css">
+
 <!-- JS here -->
+<script src="/ocr/js/button.js"></script>
 <script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
 <!-- Jquery, Popper, Bootstrap -->
 <script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
@@ -285,4 +386,5 @@
 <script src="/community/css/assets/js/main.js"></script>
 
 </body>
+
 </html>

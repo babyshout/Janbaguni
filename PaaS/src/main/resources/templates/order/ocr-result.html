@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/community/css/assets/css/slick.css">
     <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
     <link rel="stylesheet" href="/community/css/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../../static/ocr/css/button.scss">
 
     <script type="text/javascript">// 버튼을 클릭하면 모달 팝업을 엽니다.
     $(document).ready(function () {
@@ -38,7 +39,9 @@
             modal.style.display = "none";
         });
 
-
+        $("#bestButton").click(function (){
+            fetchDataFromServer("best");
+        })
         $("#aceButton").click(function () {
             fetchDataFromServer("ace")
         })
@@ -150,16 +153,39 @@
             cursor: pointer;
         }
 
+        #aceListContainer{
+            display: flex;
+        }
+
         #aceListContainer a {
             color: black;
         }
 
         #aceListContainer button {
+            display: inline-block;
+            padding: 12px 24px;
+            /*background-image: linear-gradient(top, #c054ff 0%, #5274ff 100%);*/
+            background: linear-gradient(135deg, #80d0c7 0%,#198754 100%);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+            flex: 1; /* 컨테이너 내에서 동일한 너비를 가지도록 설정합니다. */
+            margin: 0 5px; /* 버튼 간의 간격을 조절합니다. */
+        }
 
+        #aceListContainer button:hover {
+            background: linear-gradient(135deg, #80d0c7 0%,#198754 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
 
         #aceListContainer a:hover {
-            background-color: rgba(256, 256, 256, 0.5);
+            color: rgba(256, 256, 256, 0.7);
         }
     </style>
 </head>
@@ -285,35 +311,20 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="aceListContainer">
-            <div class="button-list">
-                <button class="reverse dark">에이스 식자재</button>
-                <button class="reverse dark">굿푸드몰</button>
-                <button class="reverse dark">짱구몰</button>
-                <button class="reverse dark">푸드엔</button>
-                <button class="reverse dark">모노마트</button>
-                <table class="fixed_headers" id="resultTable"></table>
-            </div>
+        <!--             Pagination links here-->
+        <div class="row" id="aceListContainer" style="">
+            <button id="bestButton">최저가</button>
+            <button id="aceButton">에이스 식자재</button>
+            <button id="goodFoodButton">굿푸드몰</button>
+            <button id="babyLeafButton">짱구몰</button>
+            <button id="foodEnButton">푸드엔</button>
+            <button id="monoMartButton">모노마트</button>
+            <table class="fixed_headers" id="resultTable">
 
-            <!-- dribbble -->
-            <a class="dribbble" href="https://dribbble.com/shots/7441241-Button-Hover-Effects" target="_blank"><img
-                    src="https://cdn.dribbble.com/assets/dribbble-ball-mark-2bd45f09c2fb58dbbfb44766d5d1d07c5a12972d602ef8b32204d28fa3dda554.svg"
-                    alt=""></a>
-            <!-- Pagination links here -->
-<!--            <div class="row" id="aceListContainer" style="">-->
-<!--                <h1 style="text-align: center; color:black;">Crawling Result</h1>-->
-<!--                <button id="bestButton">최저가</button>-->
-<!--                <button id="aceButton">에이스 식자재</button>-->
-<!--                <button id="goodFoodButton">굿푸드몰</button>-->
-<!--                <button id="babyLeafButton">짱구몰</button>-->
-<!--                <button id="foodEnButton">푸드엔</button>-->
-<!--                <button id="monoMartButton">모노마트</button>-->
-<!--                <table class="fixed_headers" id="resultTable">-->
-
-<!--                </table>-->
-<!--            </div>-->
-
+            </table>
         </div>
+
+    </div>
     </div>
     <div>
         <div>
@@ -329,58 +340,6 @@
         </div>
     </div>
 </main>
-
-<!--<section class="hero-section d-flex justify-content-center align-items-center" id="section_1">-->
-<!--        <div class="container">-->
-<!--            <div class="row">-->
-<!--                <h1 style="text-align: center;">OCR Result</h1>-->
-<!--                <table class="fixed_headers">-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th style="width: 500px;">상품명</th>-->
-<!--                        <th style="width: 150px;">단위</th>-->
-<!--                        <th style="width: 150px;">개수</th>-->
-<!--                        <th style="width: 250px;">단가</th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-
-<!--                    <tr style="width: 100%"-->
-<!--                        th:each="i : ${#numbers.sequence(0, result.getOcrComposite().nameList.size() - 1)}">-->
-<!--                        <td th:text="${result.getOcrComposite().nameList[i]}"></td>-->
-<!--                        <td th:text="${result.getOcrComposite().unitList[i]}"></td>-->
-<!--                        <td th:text="${result.getOcrComposite().counstList[i]}"></td>-->
-<!--                        <td th:text="${result.getOcrComposite().priceList[i]}"></td>-->
-<!--                    </tr>-->
-
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--            <div class="row" id="aceListContainer">-->
-<!--                <h1 style="text-align: center;">Crawling Result</h1>-->
-<!--                <button id="bestButton">최저가</button>-->
-<!--                <button id="aceButton">에이스 식자재</button>-->
-<!--                <button id="goodFoodButton">굿푸드몰</button>-->
-<!--                <button id="babyLeafButton">짱구몰</button>-->
-<!--                <button id="foodEnButton">푸드엔</button>-->
-<!--                <button id="monoMartButton">모노마트</button>-->
-<!--                <table class="fixed_headers" id="resultTable">-->
-
-<!--                </table>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <button id="showImageBtn">이미지 확인하기</button>-->
-
-<!--                <div id="imageModal" class="modal">-->
-<!--                    <div class="modal-content">-->
-<!--                        <span id="closeModal" class="close">&times;</span>-->
-<!--                        <img id="modalImage" th:src="${result.getOrderDTO().url}" alt="Image">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--</section>-->
-
 
 </main>
 <footer>
@@ -486,6 +445,7 @@
 </div>
 
 <!-- JS here -->
+<script src="/ocr/js/button.js"></script>
 <script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
 <!-- Jquery, Popper, Bootstrap -->
 <script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
