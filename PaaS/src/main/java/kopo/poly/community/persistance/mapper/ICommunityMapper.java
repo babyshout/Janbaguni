@@ -25,4 +25,5 @@ public interface ICommunityMapper {
 
     //게시판 글 삭제
     void deleteCommunityInfo(CommunityDTO pDTO) throws Exception;
+
 }

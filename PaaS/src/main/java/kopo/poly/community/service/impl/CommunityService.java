@@ -42,6 +42,7 @@ public class CommunityService implements ICommunityService {
         return communityMapper.getCommunityInfo(pDTO); // -> Mapper 호출(SQL문 호출함)
     }
 
+
     @Transactional
     @Override
     public void insertCommunityInfo(CommunityDTO pDTO) throws Exception {

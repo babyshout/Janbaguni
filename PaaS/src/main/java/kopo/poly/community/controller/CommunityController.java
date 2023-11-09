@@ -4,6 +4,7 @@ import kopo.poly.dto.MsgDTO;
 import kopo.poly.community.dto.CommunityDTO;
 import kopo.poly.community.service.ICommunityService;
 import kopo.poly.community.util.CmmUtil;
+import kopo.poly.user.dto.UserInfoDTO;
 import kopo.poly.user.enumx.SessionEnum;
 import kopo.poly.user.service.IUserInfoService;
 import lombok.RequiredArgsConstructor;
@@ -135,7 +136,7 @@ public class CommunityController {
 
         try {
             //로그인된 사용자 아이디 가져오기
-            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            String userId = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
             String title = CmmUtil.nvl(request.getParameter("title")); //제목
             String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); //공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); //내용
@@ -190,51 +191,32 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".communityInfo Start!");
 
 
-
-//        //로그인이 구현되지 않아 USER01이라는 값을 만들어줌
-//        if (session.isNew()) {
-//            session.setAttribute("SESSION_USER_ID", "USER01");
-//        }
-
         //로그인 정보 가져오기
-        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-        String cSeq = CmmUtil.nvl(request.getParameter("cSeq")); // 커뮤니티글번호 pk
-        String title = CmmUtil.nvl((String) session.getAttribute("title"));
-        String communityYn = CmmUtil.nvl((String) session.getAttribute("communityYn"));
-        String contents = CmmUtil.nvl((String) session.getAttribute("contents"));
+        String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
+        String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq")); // 커뮤니티글번호 pk
 
+        log.info("userId : " + session.getAttribute(SessionEnum.USER_ID.STRING));
         /*
          * 로그 확인하기
          * */
-        log.info("cSeq : " + cSeq);
+        log.info("communitySeq : " + communitySeq);
 
 
         /*값 전달을 반드시 DTO 객체를 이용해서 처리할 전달 받은 값을 DTO 객체에 넣는다.*/
         CommunityDTO pDTO = new CommunityDTO();
-        pDTO.setCommunitySeq(cSeq);
+        pDTO.setCommunitySeq(communitySeq);
         pDTO.setUserId(userId);
-        pDTO.setTitle(title);
-        pDTO.setCommunityYn(communityYn);
-        pDTO.setContents(contents);
 
-        log.info("pDTO : " + pDTO.toString());
+
 
         //커뮤니티 상세정보 가져오기
         CommunityDTO rDTO = Optional.ofNullable(
                 communityService.getCommunityInfo(pDTO, true)
         ).orElseGet(CommunityDTO::new);
 
+        log.info("rDTO : " + rDTO.toString());
         //조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
-        model.addAttribute("userId", session.getAttribute("SS_USER_ID"));
-//        log.info("SESSION_USER_ID" + session.getAttribute("SESSION_USER_ID"));
-//        model.addAttribute("SS_USER_ID",session.getAttribute("SESSION_USER_ID"));
-
-//        log.info("rDTO : "+ rDTO);
-
-        //모델에 세션 아이디 담아서 보내주기
-
-
         log.info(this.getClass().getName() + ".communityInfo End!");
 
         return "community/communityInfo";
@@ -242,21 +224,31 @@ public class CommunityController {
 
     /*게시판 수정하기
      * */
+
     @GetMapping(value = "communityEditInfo")
-    public String communityEditInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String communityEditInfo(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + ".communityEditInfo Start!");
 
-        String cSeq = CmmUtil.nvl(request.getParameter("cSeq")); //공지글번호(PK)
+
+
+        String userId = CmmUtil.nvl((String) session.getAttribute(SessionEnum.USER_ID.STRING));
+        String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq")); // 커뮤니티글번호 pk
         String title = CmmUtil.nvl(request.getParameter("title")); //제목
+        String contents = CmmUtil.nvl(request.getParameter("contents")); // 글 내용
+
 
         //로그 꼭 찍어주기
-        log.info("cSeq : " + cSeq);
+        log.info("userId : " + userId);
+        log.info("communitySeq : " + communitySeq);
         log.info("title: "+ title);
+
 
         //DTO 객체를 이용해 전달 받은 값을 DTO 객체에 넣어주기
         CommunityDTO pDTO = new CommunityDTO();
-        pDTO.setCommunitySeq(cSeq);
+        pDTO.setUserId(userId);
+        pDTO.setCommunitySeq(communitySeq);
         pDTO.setTitle(title);
+        pDTO.setContents(contents);
 
         CommunityDTO rDTO = Optional.ofNullable(
                 communityService.getCommunityInfo(pDTO, false)
@@ -286,7 +278,7 @@ public class CommunityController {
             //로그인된 사용자 아이디 가져오기
             //로그인을 아직 구현 x 이기 때문에, 공지사항 리스트에서 로그인 한 것처럼 Session 값을 저장
             String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID")); //아이디
-            String cSeq = CmmUtil.nvl(request.getParameter("cSeq")); //글번호 PK
+            String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq")); //글번호 PK
             String title = CmmUtil.nvl(request.getParameter("title")); //제목
             String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); //공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); //내용
@@ -296,7 +288,7 @@ public class CommunityController {
              * 반드시, 값을 받았으면, 꼭 로그를 찍어서 제대로 들어오는지 파악해야함 반드시 작성하기!!
              * */
 
-            log.info("cSeq : " + cSeq );
+            log.info("communitySeq : " + communitySeq );
             log.info("session user_id : " + userId);
             log.info("title : " + title);
             log.info("communityYn : " + communityYn);
@@ -305,7 +297,7 @@ public class CommunityController {
             //데이터를 저장하기 위해 DTO에 값 넣어주기
             CommunityDTO pDTO = new CommunityDTO(); // 값을 넣어주기 위해 pDTO 생성
             pDTO.setUserId(userId);
-            pDTO.setCommunitySeq(cSeq);
+            pDTO.setCommunitySeq(communitySeq);
             pDTO.setTitle(title);
             pDTO.setCommunityYn(communityYn);
             pDTO.setContents(contents);

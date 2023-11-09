@@ -91,7 +91,7 @@
                 return;
             }
 
-            // Ajax 호출해서 글 등록하기
+            // Ajax 호출해서 글 수정하기
             $.ajax({
                     url: "/community/communityUpdate",
                     type: "post", // 전송방식은 Post
@@ -217,7 +217,7 @@
                             <input
                                     type="text"
                                     placeholder="제목 입력"
-                                    value="글 제목이 들어갑니다."
+                                    th:value="${rDTO.title}"
                             />
                         </dd>
                     </dl>
@@ -255,8 +255,8 @@
                 </div>
             </div>
             <div class="bt_wrap">
-                <a href="view.html" class="on">수정</a>
-                <a href="list.html">취소</a>
+                <a class="on" id="editButton">수정</a>
+                <a href="communityList">취소</a>
             </div>
         </div>
     </div>
