@@ -78,36 +78,22 @@
             text-align: left;
         }
 
-        .page {
-            text-align: center;
-            padding: 20px;
-        }
 
-        .button {
+
+        .button-write {
             float: right;
-            text-align: center;
+            display: inline-block;
+            background-color: black; /* 배경색 */
+            color: #fff; /* 글자색 */
+            padding: 10px 20px; /* 패딩 */
+            border-radius: 5px; /* 둥근 테두리 */
+            text-decoration: none; /* 링크 밑줄 제거 */
+            font-weight: bold; /* 글꼴 굵게 */
+            transition: background-color 0.3s; /* 배경색 변화 시 부드럽게 */
         }
 
-        .button-gray {
-            border: 0px;
-            border-radius: 5px;
-            background-color: gray;
-            color: white;
-            font: 12px 굴림;
-            font-weight: bold;
-            width: 60px;
-            height: 30px;
-        }
-
-        .button-black {
-            border: 0px;
-            border-radius: 5px;
-            background-color: rgb(46, 46, 46);
-            color: white;
-            font: 12px 굴림;
-            font-weight: bold;
-            width: 70px;
-            height: 30px;
+        .button-write:hover {
+            background-color: gray; /* 마우스 호버 시 배경색 변경 */
         }
         /*여기까지 내가 가져온 게시판 css*/
     </style>
@@ -130,8 +116,8 @@
 
     <script type="text/javascript">
 
-        function doDetail(cSeq) {
-            location.href = "/community/communityInfo?cSeq=" + cSeq;
+        function doDetail(communitySeq) {
+            location.href = "/community/communityInfo?communitySeq=" + communitySeq;
         }
 
     </script>
@@ -225,7 +211,7 @@
             </div>
         </section>
 
-        <article>
+        <article style="padding-bottom: 100px; padding-top: 100px">
             <div class="container">
                 <h2>게시판</h2>
 
@@ -260,31 +246,25 @@
                         <th>조회수</th>
                     </tr>
                     </thead>
-
-                    <tbody th:each="dto:${rList}">
+                    <tbody th:each="dto : ${rList}">
                     <tr>
-                        <td th:unless="${dto.communityYn=='Y'}">[[${dto.communitySeq}]]</td>
-                        <td th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.communitySeq}]]</td>
+                        <td th:if="${dto.communityYn == 'Y'}">
+                            <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">공지</span>
+                        </td>
+                        <td th:unless="${dto.communityYn == 'Y'}">
+                            <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.communitySeq}]]</span>
+                        </td>
                         <td>[[${dto.title}]]</td>
                         <td>[[${dto.userId}]]</td>
                         <td>[[${dto.regDt}]]</td>
                         <td>[[${dto.readCnt}]]</td>
-
                     </tr>
                     </tbody>
-
-
                 </table>
-
-                <div class="page">
-                    <span><a href="#!">◀ 이전</a></span>
-                    <span><a href="#!">1</a></span>
-                    <span><a href="#!">다음 ▶</a></span>
-                </div>
-
                 <div class="button">
-                    <span><input type="button" class="button-gray" value="목록"></span>
-                    <span><a href="communityReg">글쓰기</a></span>
+                    <span>
+                        <a href="communityReg" class="button-write">글쓰기</a>
+                    </span>
                 </div>
             </div>
         </article>

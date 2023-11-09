@@ -31,14 +31,13 @@
 <!--    C.COMMUNITY_SEQ = #{communitySeq} getCommunityInfo에서 잠깐 뺐음 -->
 <!--    &#45;&#45;              AND C.USER_ID = #{userId}-->
     <!--게시판 상세보기 쿼리문-->
-    <select id="getCommunityInfo" resultType="CommunityDTO">
+    <select id="getCommunityInfo" resultType="CommunityDTO" parameterType="CommunityDTO">
         SELECT C.COMMUNITY_SEQ, C.TITLE, C.COMMUNITY_YN, C.READ_CNT, C.USER_ID, C.CONTENTS,
                DATE_FORMAT(C.REG_DT, 'YYYY-MM-DD') AS REG_DT
-          FROM COMMUNITY C
-         WHERE
-            C.COMMUNITY_SEQ = #{communitySeq}
-
+        FROM COMMUNITY C
+        WHERE C.COMMUNITY_SEQ = #{communitySeq}
     </select>
+
 
     <!--조회수 증가 쿼리문-->
     <update id="updateCommunityReadCnt" parameterType="CommunityDTO">
@@ -58,7 +57,6 @@
             CHG_DT = SYSDATE()
         WHERE
             COMMUNITY_SEQ = #{communitySeq}
-        WHERE USER_INFO = #{userId}
 
     </update>
 

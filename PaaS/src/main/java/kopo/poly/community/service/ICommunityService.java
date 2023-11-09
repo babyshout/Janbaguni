@@ -23,6 +23,7 @@ public interface ICommunityService {
      */
     CommunityDTO getCommunityInfo(CommunityDTO pDTO, boolean type) throws Exception;
 
+
     /**
      * 공지사항 등록
      *
