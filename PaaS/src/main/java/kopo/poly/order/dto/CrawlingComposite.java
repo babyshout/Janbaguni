@@ -14,16 +14,17 @@ public class CrawlingComposite {
 
     private List<List<ProductCrawlingDTO>> monoMartList;
 
-
+    private List<ProductCrawlingDTO> bestList;
 
     public CrawlingComposite(List<List<ProductCrawlingDTO>> aceList, List<List<ProductCrawlingDTO>> goodFoodList,
                              List<List<ProductCrawlingDTO>> babyLeafList, List<List<ProductCrawlingDTO>> foodEnList,
-                             List<List<ProductCrawlingDTO>> monoMartList){
+                             List<List<ProductCrawlingDTO>> monoMartList, List<ProductCrawlingDTO> bestList){
         this.aceList = aceList;
         this.babyLeafList = babyLeafList;
         this.goodFoodList = goodFoodList;
         this.foodEnList = foodEnList;
         this.monoMartList = monoMartList;
+        this.bestList = bestList;
     }
 
 }

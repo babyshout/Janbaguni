@@ -3,39 +3,82 @@ package kopo.poly.order.utill;
 import kopo.poly.order.dto.CrawlingComposite;
 import kopo.poly.order.dto.ProductCrawlingDTO;
 import kopo.poly.order.dto.SearchCrawlingComposite;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Slf4j
 public class SortUtil {
 
-    public void sortCrawlingComposite(CrawlingComposite composite) {
-        sortProductLists(composite.getAceList());
-        sortProductLists(composite.getGoodFoodList());
-        sortProductLists(composite.getBabyLeafList());
-    }
+    public List<ProductCrawlingDTO> sortProductList(List<ProductCrawlingDTO> list) {
+        // 정렬할 때 쉼표를 제거하고 숫자로 비교
+        Collections.sort(list, (p1, p2) -> {
+            // 쉼표(,)를 제거하고 숫자로 변환
+            int price1 = Integer.parseInt(p1.getPrice().replaceAll("[^0-9]", ""));
+            int price2 = Integer.parseInt(p2.getPrice().replaceAll("[^0-9]", ""));
+            return Integer.compare(price1, price2);
+        });
 
-    public List<ProductCrawlingDTO> sortSearchCrawlingComposite(List<ProductCrawlingDTO> list){
-        Collections.sort(list,Comparator.comparing(ProductCrawlingDTO::getPrice));
+        for (int i = 0; i < list.size(); i++) {
+            log.info("sortProductList : " + list.get(i).getPrice());
+        }
 
         return list;
     }
 
+    // 다중 목록을 정렬하는 메서드
+    public void sortCrawlingComposite(CrawlingComposite composite) {
+        sortProductLists(composite.getAceList());
+        sortProductLists(composite.getGoodFoodList());
+        sortProductLists(composite.getBabyLeafList());
+        sortProductLists(composite.getFoodEnList());
+        sortProductLists(composite.getMonoMartList());
+        // 다른 목록도 필요에 따라 추가 정렬
+    }
 
+//    public List<ProductCrawlingDTO> sortCheapestProudct(List<ProductCrawlingDTO> aceList, List<ProductCrawlingDTO>  goodFoodList,
+//                                                        List<ProductCrawlingDTO> babyleafList, List<ProductCrawlingDTO>  foodEnList,
+//                                                        List<ProductCrawlingDTO> monoMartList){
+//
+//        List<ProductCrawlingDTO> result = new ArrayList<>();
+//
+//
+//
+//
+//
+//        return sortProductList(result);
+//    }
 
-    private void sortProductLists(List<List<ProductCrawlingDTO>> productList) {
+    // 다중 목록을 정렬하는 메서드
+    public void sortProductLists(List<List<ProductCrawlingDTO>> productList) {
         for (List<ProductCrawlingDTO> list : productList) {
-            Collections.sort(list, new Comparator<ProductCrawlingDTO>() {
-                @Override
-                public int compare(ProductCrawlingDTO p1, ProductCrawlingDTO p2) {
-                    // price를 기준으로 오름차순 정렬
-                    return p1.getPrice().compareTo(p2.getPrice());
-                }
-            });
+            sortProductList(list);
         }
     }
 
+
+    // 단일 목록을 정렬하는 메서드
+//    public List<ProductCrawlingDTO> sortProductList(List<ProductCrawlingDTO> list) {
+//        Collections.sort(list, Comparator.comparing(ProductCrawlingDTO::getPrice));
+//        return list;
+//    }
+//
+//    // 다중 목록을 정렬하는 메서드
+//    public void sortCrawlingComposite(CrawlingComposite composite) {
+//        sortProductLists(composite.getAceList());
+//        sortProductLists(composite.getGoodFoodList());
+//        sortProductLists(composite.getBabyLeafList());
+//        // 다른 목록도 필요에 따라 추가 정렬
+//    }
+//
+//    // 다중 목록을 정렬하는 메서드
+//    private void sortProductLists(List<List<ProductCrawlingDTO>> productList) {
+//        for (List<ProductCrawlingDTO> list : productList) {
+//            Collections.sort(list, Comparator.comparing(ProductCrawlingDTO::getPrice));
+//        }
+//    }
 
     public void sort(int[] a) {
         l_pivot_sort(a, 0, a.length - 1);

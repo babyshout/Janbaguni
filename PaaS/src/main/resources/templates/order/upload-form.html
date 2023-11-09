@@ -25,14 +25,13 @@
     <link rel="stylesheet" href="/community/css/assets/css/slick.css">
     <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
     <link rel="stylesheet" href="/community/css/assets/css/style.css">
-
     <script type="text/javascript">
         $(document).ready(function () {
             let f = document.getElementById("f");
-            let searchForm = document.getElementById('search_form');
-            let searchInput = document.querySelector('.search__input');
-
-            let searchText = searchInput.value;
+            // let searchForm = document.getElementById('search_form');
+            // let searchInput = document.querySelector('.search__input');
+            //
+            // let searchText = searchInput.value;
 
 
             // 파일 입력 필드에 파일 선택 이벤트 리스너 추가
@@ -45,90 +44,177 @@
                 uploadName.value = fileName;
             });
 
+            $("#search-button").on("click", function (){
+                searchCrawling(searchForm);
+            })
+
             $("#btnUpload").on("click", function () {
 
                 imageSubmit(f);
             })
 
-
-            // 엔터 키를 누를 때 이벤트 핸들러 추가
-            searchInput.keypress(function (event) {
-                if (event.which === 13) {
-                    event.preventDefault(); // 폼 제출 방지
-                    // 이후 로딩 페이지를 로드
-                    $("#body").load("/load/Loading");
-                }
-            });
-
-            searchForm.addEventListener('submit', function (e) {
-
-
-                if (e.key === "Enter") {
-                    e.preventDefault();  // 폼의 기본 동작을 중지합니다.
+            function imageSubmit(f) {
+                let fileInput = f.image;
+                if (fileInput.files.length === 0) {
+                    alert("이미지를 선택하세요.");
+                    fileInput.click();
+                    return;
+                } else {
                     $("#loadBody").load("/loading/Loading");
-                    // 입력된 텍스트를 가져옵니다.
-                    let searchText = searchInput.value;
 
-
-                    // AJAX 요청을 보냅니다.
+                    let formData = new FormData($("#f")[0]);
                     $.ajax({
-                        url: "/order/searchCrawlingItem",
-                        type: "POST",
-                        data: {searchText: searchText},
-                        dataType: "json",
+                        url: "/order/uploadAndOcr",
+                        type: "post",
+                        // dataType:"JSON",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
                         success: function (json) {
                             if (json.result === 1) {
-                                // 검색 결과가 성공적으로 반환될 경우, searchResult 페이지로 이동합니다.
                                 alert(json.msg);
-                                location.href = "/order/searchResult";
+                                location.href = "/order/ocr-result";
                             } else {
-                                // 검색이 실패한 경우에 대한 처리를 여기에 추가하세요.
                                 alert(json.msg);
                             }
+                        }
+                    })
+                }
+            }
+
+            $(document).ready(function() {
+                // 폼 제출 이벤트를 처리
+                $("#search_form").submit(function(event) {
+                    event.preventDefault(); // 기본 폼 제출 동작 방지
+
+                    // 검색어 가져오기
+                    let searchText = $("#search_input").val();
+                    $("#loadBody").load("/loading/Loading");
+
+                    // AJAX 요청 보내기
+                    $.ajax({
+                        type: "POST",
+                        url: "/order/searchCrawlingItem",
+                        data: { searchText: searchText },
+                        success: function(json) {
+                            // 서버 응답 처리
+
+                            alert(json.msg);
+                            location.href="/order/searchResult";
+
+                            // 원하는 동작 수행 (예: 결과 표시, 페이지 리디렉션)
                         },
-                        error: function (xhr, status, error) {
-                            // AJAX 요청이 실패한 경우에 대한 처리를 여기에 추가하세요.
-                            console.error(xhr, status, error);
+                        error: function(error) {
+                            // 오류 처리
+                            console.error(error);
                         }
                     });
-                }
+                });
             });
 
         })
+    </script>
+    <style>
+        .search_form {
+            width: 430px;
+            margin: 0 auto;
+            font-family: 'Raleway', sans-serif;
+        }
 
-        function imageSubmit(f) {
-            let fileInput = f.image;
-            if (fileInput.files.length === 0) {
-                alert("이미지를 선택하세요.");
-                fileInput.click();
-                return;
-            } else {
-                $("#loadBody").load("/loading/Loading");
+        .search__container {
+            padding-top: 64px;
+        }
 
-                let formData = new FormData($("#f")[0]);
-                $.ajax({
-                    url: "/order/uploadAndOcr",
-                    type: "post",
-                    // dataType:"JSON",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (json) {
-                        if (json.result === 1) {
-                            alert(json.msg);
-                            location.href = "/order/ocr-result";
-                        } else {
-                            alert(json.msg);
-                        }
-                    }
+        .search_container{
+            display: flex;
+            align-items: center;
+        }
 
-                })
-            }
+        .search__title {
+            font-size: 22px;
+            font-weight: 900;
+            text-align: center;
+            color: #ff8b88;
+        }
 
+        .search__input {
+            width: 100%;
+            padding: 12px 24px;
+            background-color: transparent;
+            transition: transform 250ms ease-in-out;
+            font-size: 14px;
+            line-height: 18px;
+            color: #575756;
+            background-color: transparent;
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: 18px 18px;
+            background-position: 95% center;
+            border-radius: 50px;
+            border: 1px solid #575756;
+            transition: all 250ms ease-in-out;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            flex: 1;
+            align-items: center;;
+        }
+        .search__input::placeholder {
+            color: rgba(87, 87, 86, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .search__input:hover,
+        .search__input:focus {
+            padding: 12px 0;
+            outline: 0;
+            border: 1px solid transparent;
+            border-bottom: 1px solid #575756;
+            border-radius: 0;
+            background-position: 100% center;
+        }
+
+        .credits__container {
+            margin-top: 24px;
+        }
+
+        .credits__text {
+            text-align: center;
+            font-size: 13px;
+            line-height: 18px;
+        }
+
+        .credits__link {
+            color: #ff8b88;
+            text-decoration: none;
+            transition: color 250ms ease-in;
+        }
+
+        .credits__link:hover,
+        .credits__link:focus {
+            color: rgba(255, 139, 136, 0.75);
         }
 
 
-    </script>
+
+        .filebox .upload-name {
+            display: inline-block;
+            height: 40px;
+            padding: 0 10px;
+            vertical-align: middle;
+            border: 1px solid #dddddd;
+            width: 78%;
+            color: #999999;
+        }
+        .filebox input[type="file"] {
+            position: absolute;
+            width: 0;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0;
+        }
+    </style>
 </head>
 
 <body id="loadBody">
@@ -231,7 +317,9 @@
                     <p class="search__title">
                         Go ahead, hover over search
                     </p>
-                    <input class="search__input" type="text" placeholder="Search">
+                    <div class="search_container">
+                        <input class="search__input" id="search_input" type="text" placeholder="Search">
+                    </div>
                 </div>
             </form>
             <div class="credits__container">
@@ -259,15 +347,6 @@
 
 
     </div>
-
-    <!-- About Area End -->
-    <!--? top subjects Area Start -->
-
-    <!-- top subjects End -->
-    <!--? About Area-3 Start -->
-
-    <!-- Services End -->
-
 </main>
 <footer>
     <div class="footer-wrappper footer-bg">

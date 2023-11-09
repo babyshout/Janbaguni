@@ -222,7 +222,10 @@
                     <p class="search__title">
                         Go ahead, hover over search
                     </p>
-                    <input class="search__input" type="text" placeholder="Search">
+                    <div class="search_container">
+                        <input class="search__input" id="search_input" type="text" placeholder="Search">
+                        <img src="../../static/ocr/image/reading_glasses.png" style="width: 4%; height: 4%;" id="search-button" class="search-button"></img>
+                    </div>
                 </div>
             </form>
             <div class="credits__container">
@@ -236,11 +239,15 @@
                 <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly
                        style="height: 40px; padding: 0 10px; border: 1px solid #dddddd; width: 77%; color: #999999;">
                 <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
-                <label for="image" class="select" style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일 찾기</label>
+                <label for="image" class="select"
+                       style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일
+                    찾기</label>
                 <br><br>
                 <input type="checkbox" name="save" id="save" value="Y">
                 <label for="save">이미지 저장하기</label>
-                <img id="btnUpload" src="../../static/ocr/image/free-icon-upload-2297827.png" alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘" style="cursor: pointer; width: 6%; height: 6%;">
+                <img id="btnUpload" src="/ocr/image/free-icon-upload-2297827.png"
+                     alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘"
+                     style="cursor: pointer; width: 6%; height: 6%;">
             </form>
         </div>
 
