@@ -26,10 +26,12 @@
 
     <script type="text/javascript">// 버튼을 클릭하면 모달 팝업을 엽니다.
     $(document).ready(function () {
-        $("#aceBt").click();
+        let aceButton = document.getElementById("aceBt");
 
 
-        $("#aceBt").click(function () {
+
+
+        $("#aceBt").on("click", function () {
             fetchDataFromServer("ace");
         })
 
@@ -48,7 +50,7 @@
             fetchDataFromServer("monoMart");
         })
 
-
+        aceButton.click();
     })
     function fetchDataFromServer(source) {
         $.ajax({
@@ -226,7 +228,6 @@
         </div>
         <!--             Pagination links here-->
         <div class="row" id="aceListContainer" style="">
-            <button id="bestBt">최저가</button>
             <button id="aceBt">에이스 식자재</button>
             <button id="goodFoodBt">굿푸드몰</button>
             <button id="babyLeafBt">짱구몰</button>
