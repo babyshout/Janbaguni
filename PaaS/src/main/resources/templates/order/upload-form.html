@@ -132,10 +132,11 @@
         }
 
         .search__title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             text-align: center;
-            color: #ff8b88;
+            /*color: #ff8b88;*/
+            color: #3f7f7f;
         }
 
         .search__input {
@@ -316,7 +317,7 @@
                   style=" width: 430px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
                 <div class="search__container">
                     <p class="search__title">
-                        Go ahead, hover over search
+                        거래명세서(사진) 혹은 텍스트를 입력해주세요
                     </p>
                     <div class="search_container">
                         <input class="search__input" id="search_input" type="text" placeholder="Search">
@@ -324,14 +325,14 @@
                 </div>
             </form>
             <div class="credits__container">
-                <p class="credits__text">Background color: Pantone Color of the Year 2016 <a
-                        href="https://www.pantone.com/color-of-the-year-2016" class="credits__link">Rose Quartz</a></p>
+                <p class="credits__text">이미지 저장 동의 여부를 꼭 확인해 주세요.</p>
+                <p class="credits__text" style="text-decoration: underline; ">이미지 저장 동의 시 거래명세서 이미지가 DB에 저장됩니다.</p>
             </div>
         </div>
         <div class="filebox" style="display: flex; justify-content: center; align-items: center;">
             <form id="f" method="post" enctype="multipart/form-data"
                   style="width: 750px; font-family: 'Raleway', sans-serif;">
-                <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly
+                <input class="upload-name" value="첨부파일(.jpg .jpeg .png 지원)" placeholder="첨부파일" readonly
                        style="height: 40px; padding: 0 10px; border: 1px solid #dddddd; width: 77%; color: #999999;">
                 <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
                 <label for="image" class="select"
