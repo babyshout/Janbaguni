@@ -23,13 +23,16 @@
     <link rel="stylesheet" href="/community/css/assets/css/slick.css">
     <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
     <link rel="stylesheet" href="/community/css/assets/css/style.css">
+    <link rel="stylesheet" href="/community/css/assets/css/style2.css">
 
     <script type="text/javascript">// 버튼을 클릭하면 모달 팝업을 엽니다.
     $(document).ready(function () {
-        $("#aceBt").click();
+        let aceButton = document.getElementById("aceBt");
 
 
-        $("#aceBt").click(function () {
+
+
+        $("#aceBt").on("click", function () {
             fetchDataFromServer("ace");
         })
 
@@ -48,7 +51,7 @@
             fetchDataFromServer("monoMart");
         })
 
-
+        aceButton.click();
     })
     function fetchDataFromServer(source) {
         $.ajax({
@@ -162,7 +165,7 @@
                                     <ul id="navigation">
                                         <li class="active"><a href="index">Home</a></li>
                                         <li><a href="courses">Courses</a></li>
-                                        <li><a href="communityList">Community</a></li>
+                                        <li><a href="/community/communityList">Community</a></li>
                                         <li><a href="#">Blog</a>
                                             <ul class="submenu">
                                                 <li><a href="blog">Blog</a></li>
@@ -226,7 +229,6 @@
         </div>
         <!--             Pagination links here-->
         <div class="row" id="aceListContainer" style="">
-            <button id="bestBt">최저가</button>
             <button id="aceBt">에이스 식자재</button>
             <button id="goodFoodBt">굿푸드몰</button>
             <button id="babyLeafBt">짱구몰</button>

@@ -15,7 +15,6 @@ public class SortUtil {
     public List<ProductCrawlingDTO> sortProductList(List<ProductCrawlingDTO> list) {
         // 정렬할 때 쉼표를 제거하고 숫자로 비교
         Collections.sort(list, (p1, p2) -> {
-            // 쉼표(,)를 제거하고 숫자로 변환
             int price1 = Integer.parseInt(p1.getPrice().replaceAll("[^0-9]", ""));
             int price2 = Integer.parseInt(p2.getPrice().replaceAll("[^0-9]", ""));
             return Integer.compare(price1, price2);

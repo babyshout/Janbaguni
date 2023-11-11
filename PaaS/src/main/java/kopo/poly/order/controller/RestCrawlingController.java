@@ -301,6 +301,7 @@ public class RestCrawlingController {
         List<List<ProductCrawlingDTO>> babyLeafList = new ArrayList<>();
         List<List<ProductCrawlingDTO>> foodEnList = new ArrayList<>();
         List<List<ProductCrawlingDTO>> monoMartList = new ArrayList<>();
+
         List<List<ProductCrawlingDTO>> bestList = new ArrayList<>();
 
         List<ProductCrawlingDTO> bestResultList = new ArrayList<>();
@@ -319,17 +320,17 @@ public class RestCrawlingController {
                 if (crawlingService.getAceData(result.getNameList().get(i)) != null) {
                     aceTemp = crawlingService.getAceData(result.getNameList().get(i));
                     acePriceList.add(aceTemp);
-                    bestResultList.add(sortUtil.sortProductList(aceTemp).get(0));
+                    bestList.add(aceTemp);
                 }
                 if (crawlingService.getGoodFood(result.getNameList().get(i)) != null) {
                     goodFoodTemp = crawlingService.getGoodFood(result.getNameList().get(i));
                     goodFoodList.add(goodFoodTemp);
-                    bestResultList.add(sortUtil.sortProductList(goodFoodTemp).get(0));
+                    bestList.add(goodFoodTemp);
                 }
                 if (crawlingService.getBabyleaf(result.getNameList().get(i)) != null) {
                     babyleafTemp = crawlingService.getBabyleaf(result.getNameList().get(i));
                     babyLeafList.add(babyleafTemp);
-                    bestResultList.add(sortUtil.sortProductList(babyleafTemp).get(0));
+                    bestList.add(babyleafTemp);
                 }
                 if (crawlingService.getFoodEn(result.getNameList().get(i)) != null) {
                     foodEnTemp = crawlingService.getFoodEn(result.getNameList().get(i));
@@ -341,28 +342,15 @@ public class RestCrawlingController {
                     monoMartList.add(monoMartTemp);
                     bestList.add(monoMartTemp);
                 }
-
-                if (bestList != null && !bestList.isEmpty()) {
-
-                    for (List<ProductCrawlingDTO> list : bestList) {
-
-                        if (list != null && !list.isEmpty()) {
-
-                            for (ProductCrawlingDTO dto : list) {
-
-                                if (dto != null) {
-                                    bestResultList.add(dto);
-                                    bestList = null;
-                                    bestList = new ArrayList<>();
-                                }
-                            }
-
-                        }
-                    }
-                }
+                sortUtil.sortProductLists(bestList);
 
             }
 
+
+            for(int i = 0; i < bestList.size(); i++){
+                if(bestList.get(i).size() > 0 && bestList.get(i).get(0) != null)
+                    bestResultList.add(bestList.get(i).get(0));
+            }
         }
         CrawlingComposite crawlingComposite = new CrawlingComposite(acePriceList, goodFoodList, babyLeafList, foodEnList, monoMartList, bestResultList);
 
