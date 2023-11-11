@@ -28,82 +28,82 @@
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">
 
-        // HTML로딩이 완료되고, 실행됨
-        $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnSend").on("click", function () {
-                doSubmit(); // 공지사항 수정하기 실행
-            })
-        })
+         // HTML로딩이 완료되고, 실행됨
+              $(document).ready(function () {
+                  // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                  $("#btnSend").on("click", function () {
+                      doSubmit(); // 공지사항 수정하기 실행
+                  })
+              })
 
-        //글자 길이 바이트 단위로 체크하기(바이트값 전달)
-        function calBytes(str) {
-            let tcount = 0;
-            let tmpStr = String(str);
-            let strCnt = tmpStr.length;
-            let onechar;
-            for (let i = 0; i < strCnt; i++) {
-                onechar = tmpStr.charAt(i);
-                if (escape(onechar).length > 4) {
-                    tcount += 2;
-                } else {
-                    tcount += 1;
-                }
-            }
-            return tcount;
-        }
+              //글자 길이 바이트 단위로 체크하기(바이트값 전달)  varchar(바이트 크기) ex) varchar(4000) 4000 바이트까지
+              function calBytes(str) {
+                  let tcount = 0;
+                  let tmpStr = String(str);
+                  let strCnt = tmpStr.length;
+                  let onechar;
+                  for (let i = 0; i < strCnt; i++) {
+                      onechar = tmpStr.charAt(i);
+                      if (escape(onechar).length > 4) {
+                          tcount += 2;
+                      } else {
+                          tcount += 1;
+                      }
+                  }
+                  return tcount;
+              }
 
-        // 공지사항 저장하기
-        function doSubmit() {
+              // 공지사항 저장하기
+              function doSubmit() {
 
-            let f = document.getElementById("f"); // form 태그
+                  let f = document.getElementById("f"); // form 태그
 
-            if (f.title.value === "") {
-                alert("제목을 입력하시기 바랍니다.");
-                f.title.focus();
-                return;
-            }
-            if (calBytes(f.title.value) > 200) {
-                alert("최대 200Bytes까지 입력 가능합니다.");
-                f.title.focus();
-                return;
-            }
-            let communityCheck = false; //체크 여부 확인 변수
-            for (let i = 0; i < f.communityYn.length; i++) {
-                if (f.communityYn[i].checked) {
-                    communityCheck = true;
-                    break;
-                }
-            }
-            if (communityCheck === false) {
-                alert("공지글 여부를 선택하시기 바랍니다.");
-                f.communityYn[0].focus();
-                return;
-            }
-            if (f.contents.value === "") {
-                alert("내용을 입력하시기 바랍니다.");
-                f.contents.focus();
-                return;
-            }
-            if (calBytes(f.contents.value) > 4000) {
-                alert("최대 4000Bytes까지 입력 가능합니다.");
-                f.contents.focus();
-                return;
-            }
+                  if (f.title.value === "") {
+                      alert("제목을 입력하시기 바랍니다.");
+                      f.title.focus();
+                      return;
+                  }
+                  if (calBytes(f.title.value) > 200) {
+                      alert("최대 200Bytes까지 입력 가능합니다.");
+                      f.title.focus();
+                      return;
+                  }
+                  let communityCheck = false; //체크 여부 확인 변수
+                  for (let i = 0; i < f.communityYn.length; i++) {
+                      if (f.communityYn[i].checked) {
+                          communityCheck = true;
+                          break;
+                      }
+                  }
+                  if (communityCheck === false) {
+                      alert("공지글 여부를 선택하시기 바랍니다.");
+                      f.communityYn[0].focus();
+                      return;
+                  }
+                  if (f.contents.value === "") {
+                      alert("내용을 입력하시기 바랍니다.");
+                      f.contents.focus();
+                      return;
+                  }
+                  if (calBytes(f.contents.value) > 4000) {
+                      alert("최대 4000Bytes까지 입력 가능합니다.");
+                      f.contents.focus();
+                      return;
+                  }
 
-            // Ajax 호출해서 글 수정하기
-            $.ajax({
-                    url: "/community/communityUpdate",
-                    type: "post", // 전송방식은 Post
-                    dataType: "JSON", // 전송 결과는 JSON으로 받기
-                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                    success: function (json) { // communityList 호출이 성공했다면..
-                        alert(json.msg); // 메시지 띄우기
-                        location.href = "/community/communityList"; // 공지사항 리스트 이동
-                    }
-                }
-            )
-        }
+                  // Ajax 호출해서 글 등록하기
+                  $.ajax({
+                          url: "/community/communityUpdate",
+                          type: "post", // 전송방식은 Post
+                          dataType: "JSON", // 전송 결과는 JSON으로 받기
+                          data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                          success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
+                              alert(json.msg); // 메시지 띄우기
+                              location.href = "/community/communityList"; // 공지사항 리스트 이동
+                          }
+                      }
+                  )
+              }
     </script>
 
     <style>
@@ -203,63 +203,49 @@
         </div>
     </section>
 
-    <div class="board_wrap">
-        <div class="board_title">
-            <strong>공지사항</strong>
-            <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
-        </div>
-        <div class="board_write_wrap">
-            <div class="board_write">
-                <div class="title">
-                    <dl>
-                        <dt>제목</dt>
-                        <dd>
-                            <input
-                                    type="text"
-                                    placeholder="제목 입력"
-                                    th:value="${rDTO.title}"
-                            />
-                        </dd>
-                    </dl>
-                </div>
-                <div class="info">
-                    <dl>
-                        <dt>글쓴이</dt>
-                        <dd>
-                            <input
-                                    type="text"
-                                    placeholder="글쓴이 입력"
-                                    value="김아름"
-                            />
-                        </dd>
-                    </dl>
-                    <!-- 🟠공간이 없으면 가운데로 들어가는데,
-                    한 줄이 개행이 되면서 띄어쓰기 하나만큼의 공간이 생긴다.
-                    따라서 이 띄어쓰기를 0으로 바꿔줄 필요성이 있다 :
-                    style.css파일에서 부모에서 띄어쓰기를 0으로 바꿈
-                    : .board_write .info {font-size : 0}에 해당 되는 부분의 설명.-->
-                    <dl>
-                        <dt>비밀번호</dt>
-                        <dd>
-                            <input
-                                    type="password"
-                                    placeholder="비밀번호 입력"
-                                    value="1234"
-                            />
-                        </dd>
-                    </dl>
-                </div>
-                <div class="cont">
-                    <textarea placeholder="내용 입력"></textarea>
-                    <!-- ㄴ🟡textarea 에서는 여백과 br 태그 다 인식 하기 때문에 다 지워 주어야 한다. -->
+    <form name="f" id="f">
+        <div class="board_wrap">
+            <div class="board_title">
+                <strong>공지사항</strong>
+                <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
+            </div>
+            <div class="board_write_wrap">
+                <div class="board_write">
+                    <div class="title">
+                        <dl>
+                            <dt>제목</dt>
+                            <dd><input type="text" name="title" placeholder="제목 입력" /></dd>
+                        </dl>
+                        <dl>
+                            <dt>공지글 여부</dt>
+                            <dd>
+                                <input type="radio" name="communityYn" value="Y"> 예
+                                <input type="radio" name="communityYn" value="N"> 아니오
+                            </dd>
+                        </dl>
+
+                    </div>
+                    <div class="info">
+                        <dl>
+                            <dt>글쓴이</dt>
+                            <dd><input type="text" placeholder="글쓴이 입력" /></dd>
+                        </dl>
+                        <dl>
+                            <dt>비밀번호</dt>
+                            <dd><input type="password" placeholder="비밀번호 입력" /></dd>
+                        </dl>
+                    </div>
+                    <div class="cont">
+                        <textarea name="contents" placeholder="내용 입력"></textarea>
+                    </div>
                 </div>
             </div>
             <div class="bt_wrap">
-                <a class="on" id="editButton">수정</a>
-                <a href="communityList">취소</a>
+                <button id="btnSend" type="button" class="custom-button">수정</button>
+                <button type="reset" class="custom-button cancel-button">취소</button>
             </div>
         </div>
-    </div>
+    </form>
 </main>
 <footer>
     <div class="footer-wrappper footer-bg">
@@ -272,7 +258,7 @@
                             <div class="single-footer-caption mb-30">
                                 <!-- logo -->
                                 <div class="footer-logo mb-25">
-                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png" alt=""></a>
+                                    <a href="index"><img src="/community/cs  s/assets/img/logo/logo2_footer.png" alt=""></a>
                                 </div>
                                 <div class="footer-tittle">
                                     <div class="footer-pera">

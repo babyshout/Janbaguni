@@ -33,7 +33,7 @@
     <!--게시판 상세보기 쿼리문-->
     <select id="getCommunityInfo" resultType="CommunityDTO" parameterType="CommunityDTO">
         SELECT C.COMMUNITY_SEQ, C.TITLE, C.COMMUNITY_YN, C.READ_CNT, C.USER_ID, C.CONTENTS,
-               DATE_FORMAT(C.REG_DT, 'YYYY-MM-DD') AS REG_DT
+               DATE_FORMAT(C.REG_DT, '%Y-%m-%d') AS REG_DT
         FROM COMMUNITY C
         WHERE C.COMMUNITY_SEQ = #{communitySeq}
     </select>
