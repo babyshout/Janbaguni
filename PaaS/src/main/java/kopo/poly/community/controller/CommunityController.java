@@ -243,6 +243,7 @@ public class CommunityController {
         log.info("userId : " + userId);
         log.info("communitySeq : " + communitySeq);
         log.info("title: "+ title);
+        log.info("contents : " + contents);
 
 
         //DTO 객체를 이용해 전달 받은 값을 DTO 객체에 넣어주기
@@ -296,6 +297,7 @@ public class CommunityController {
             log.info("communityYn : " + communityYn);
             log.info("contents : " + contents);
 
+
             //데이터를 저장하기 위해 DTO에 값 넣어주기
             CommunityDTO pDTO = new CommunityDTO(); // 값을 넣어주기 위해 pDTO 생성
             pDTO.setUserId(userId);
@@ -326,21 +328,26 @@ public class CommunityController {
      * 게시판 글 삭제하기*/
     @ResponseBody //클라이언트가 보낸 데이터를 읽어들임 값을 파라미터로 전달받아 NoticeService에 전달해줌
     @PostMapping(value = "communityDelete")
-    public MsgDTO communityDelete(HttpServletRequest request) {
+    public MsgDTO communityDelete(HttpServletRequest request, HttpSession session) {
         log.info(this.getClass().getName() + ".communityDelete Start!");
 
         String msg = ""; //메세지 내용
         MsgDTO dto = null; //결과 메세지 구조
 
         try {
-            String cSeq = CmmUtil.nvl(request.getParameter("cSeq")); //글번호 (PK)
+
+            String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq")); //글번호 (PK)
+            String userId = CmmUtil.nvl((String) session.getAttribute(SessionEnum.USER_ID.STRING));
+
 
             //로그 찍어주기
-            log.info("cSeq : " + cSeq);
+            log.info("cSeq : " + communitySeq);
+            log.info("userId : " + userId);
 
             // 값 전달은 DTO 객체를 이용해 처리할 전달 받은 값을 DTO 객체에 넣음
             CommunityDTO pDTO = new CommunityDTO();
-            pDTO.setCommunitySeq(cSeq);
+            pDTO.setCommunitySeq(communitySeq);
+            pDTO.setUserId(userId);
 
             //DB에서 게시글 삭제하기
             communityService.deleteCommunityInfo(pDTO); //전달 받은 값을 DTO에 저장했으니 INoticeService안에 있는 delete함수를 호출해 값을 처리한다.

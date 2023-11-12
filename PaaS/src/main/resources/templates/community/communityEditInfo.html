@@ -28,6 +28,16 @@
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">
 
+        // Controller에서 받은 세션에 저장된 값
+        // const session_user_id = [[${SS_USER_ID}]];
+        const session_user_id = [[${#httpServletRequest.getSession().getAttribute('SS_USER_ID')}]]; //null;
+        // 공지사항 게시글 작성자 아이디
+        const user_id = [[${rDTO.userId}]];
+
+        // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+        const communitySeq = [[${rDTO.communitySeq}]];
+
+
          // HTML로딩이 완료되고, 실행됨
               $(document).ready(function () {
                   // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
@@ -69,6 +79,7 @@
                       return;
                   }
                   let communityCheck = false; //체크 여부 확인 변수
+
                   for (let i = 0; i < f.communityYn.length; i++) {
                       if (f.communityYn[i].checked) {
                           communityCheck = true;
@@ -91,7 +102,7 @@
                       return;
                   }
 
-                  // Ajax 호출해서 글 등록하기
+                  // Ajax 호출해서 글 수정하기
                   $.ajax({
                           url: "/community/communityUpdate",
                           type: "post", // 전송방식은 Post
@@ -106,15 +117,9 @@
               }
     </script>
 
-    <style>
-
-    </style>
 </head>
 
 <body>
-
-
-
 
 <!-- ? Preloader Start -->
 <div id="preloader-active">
@@ -212,6 +217,7 @@
             <div class="board_write_wrap">
                 <div class="board_write">
                     <div class="title">
+                        <input type="hidden" name="communitySeq" th:value="${#request.getParameter('communitySeq')}" />
                         <dl>
                             <dt>제목</dt>
                             <dd><input type="text" name="title" placeholder="제목 입력" /></dd>
@@ -240,9 +246,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bt_wrap">
-                <button id="btnSend" type="button" class="custom-button">수정</button>
-                <button type="reset" class="custom-button cancel-button">취소</button>
+            <div>
+                <button id="btnSend" type="button">수정</button>
             </div>
         </div>
     </form>

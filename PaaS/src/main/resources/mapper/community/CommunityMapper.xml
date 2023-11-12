@@ -57,6 +57,8 @@
             CHG_DT = SYSDATE()
         WHERE
             COMMUNITY_SEQ = #{communitySeq}
+        AND
+            USER_ID = #{userId}
 
     </update>
 
@@ -64,7 +66,7 @@
     <delete id="deleteCommunityInfo" parameterType="CommunityDTO">
         DELETE FROM COMMUNITY
         WHERE COMMUNITY_SEQ = #{communitySeq}
---         WHERE USER_INFO = #{userId} USER_INFO Table에서 userId를 비교해서 본인 게시물만 삭제 가능하게.
+        AND USER_ID = #{userId}
     </delete>
 
 
