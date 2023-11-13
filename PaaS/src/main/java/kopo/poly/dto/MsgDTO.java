@@ -1,8 +1,11 @@
 package kopo.poly.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import kopo.poly.community.dto.CommunityDTO;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -10,4 +13,7 @@ import lombok.Setter;
 public class MsgDTO {
     private int result;
     private String msg;
+
+    private String searchResult;
+
 }

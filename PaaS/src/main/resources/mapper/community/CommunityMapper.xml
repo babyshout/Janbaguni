@@ -70,5 +70,27 @@
     </delete>
 
 
+    <select id="getSearchKeyWord" parameterType="CommunityDTO" resultType="CommunityDTO">
+        SELECT
+            C.COMMUNITY_SEQ,
+            C.TITLE,
+            C.COMMUNITY_YN,
+            C.READ_CNT,
+            C.USER_ID,
+            DATE_FORMAT(C.REG_DT, '%Y-%m-%d') AS REG_DT
+        FROM
+            COMMUNITY C
+        WHERE
+            C.TITLE LIKE CONCAT('%', #{keyWord}, '%') OR
+            C.CONTENTS LIKE CONCAT('%', #{keyWord}, '%')
+    </select>
+
+
+
+
+
+
+
+
 
 </mapper>

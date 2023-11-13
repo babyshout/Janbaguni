@@ -46,4 +46,9 @@ public interface ICommunityService {
     void deleteCommunityInfo(CommunityDTO pDTO) throws Exception;
 
 
+    List<CommunityDTO> getSearchKeyWord(CommunityDTO pDTO) throws Exception;
+
+
+
+
 }

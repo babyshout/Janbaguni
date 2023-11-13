@@ -174,7 +174,7 @@
                                         <li><a href="contact">Contact</a></li>
                                         <!-- Button -->
                                         <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
-                                        <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
+                                        <li class="button-header"><a href="login/login-form" class="btn btn3">Log in</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -246,10 +246,10 @@
                 </div>
                 <div class="cont" th:utext="${rDTO.contents}"></div>
             </div>
-            <div class="bt_wrap">
-                <button id="btnEdit" type="button">수정</button>
-                <button id="btnDelete" type="button">삭제</button>
-                <button id="btnList" type="button">목록</button>
+            <div class="bt_list">
+                <button id="btnEdit" class="custom-button" type="button">수정</button>
+                <button id="btnDelete" class="custom-button" type="button">삭제</button>
+                <button id="btnList" class="custom-button" type="button">목록</button>
             </div>
         </div>
     </div>

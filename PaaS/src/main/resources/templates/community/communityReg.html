@@ -35,9 +35,9 @@
                 doSubmit(); // 공지사항 등록하기 실행
             })
 
-            // $("#btnBack").on("click", function () {
-            //     location.href = "/community/communityList"; // 공지사항 리스트 이동
-            // })
+            $("#btnBack").on("click", function () {
+                location.href = "/community/communityList"; // 공지사항 리스트 이동
+            })
         })
 
         //글자 길이 바이트 단위로 체크하기(바이트값 전달)
@@ -122,6 +122,7 @@
                 }
             )
         }
+
     </script>
 </head>
 <body>
@@ -251,13 +252,14 @@
         </div>
         <div class="bt_wrap">
             <button id="btnSend" type="button" class="custom-button">등록</button>
-            <button type="reset" class="custom-button cancel-button">취소</button>
+            <button id="btnBack" type="reset" class="custom-button cancel-button">취소</button>
         </div>
     </div>
     </form>
+</main>
 
 
-
+<!--footer부분-->
 <footer>
     <div class="footer-wrappper footer-bg">
         <!-- Footer Start-->

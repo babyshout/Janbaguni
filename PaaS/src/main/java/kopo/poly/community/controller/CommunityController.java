@@ -4,18 +4,13 @@ import kopo.poly.dto.MsgDTO;
 import kopo.poly.community.dto.CommunityDTO;
 import kopo.poly.community.service.ICommunityService;
 import kopo.poly.community.util.CmmUtil;
-import kopo.poly.user.dto.UserInfoDTO;
 import kopo.poly.user.enumx.SessionEnum;
-import kopo.poly.user.service.IUserInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -68,7 +63,6 @@ public class CommunityController {
 //        for (CommunityDTO dto : rList) {
 //            log.info("dto : " + dto.toString());
 //        }
-
 
         //공지사항 결과를 JSP로 전달하기 위해 model 객체에 추가
         //조회된 리스트 결과값 넣어주기
@@ -366,6 +360,41 @@ public class CommunityController {
 
         return dto;
     }
+    @ResponseBody
+    @GetMapping(value = "/communitySearch")
+    public MsgDTO searchList(HttpServletRequest request, ModelMap model) {
+        log.info(this.getClass().getName() + "communitySearch Start!");
+
+        String msg = "";
+        MsgDTO dto = new MsgDTO(); // 결과 메세지 구조
+
+        try {
+            String keyWord = CmmUtil.nvl(request.getParameter("keyWord"));
+
+            log.info("keyWord : " + keyWord);
+
+            CommunityDTO pDTO = new CommunityDTO();
+            pDTO.setKeyWord(keyWord);
+
+//             communityService.getSearchKeyWord 메소드를 호출하여 검색 결과를 가져오기
+            communityService.getSearchKeyWord(pDTO);
+
+
+            msg = "검색되었습니다.";
+
+        } catch (Exception e) {
+            msg = "에러가 발생하였습니다." + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+        } finally {
+            // MsgDTO에 메시지 설정
+            dto.setMsg(msg);
+            log.info(this.getClass().getName() + ".communitySearch End!");
+        }
+
+        return dto;
+    }
+
 //    @GetMapping(value = "about")
 //    public String testMain(){
 //        return "communityList";

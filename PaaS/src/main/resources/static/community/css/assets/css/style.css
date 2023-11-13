@@ -1,7 +1,107 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap");
 
 
-/*여기서 부터 저 아래 표시까지 내가 가져온 게시판 css*/
+/*/*여기서 부터 저 아래 표시까지 내가 가져온 게시판 css*/
+
+
+/* 리스트 상세보기 버튼 */
+.bt_list {
+    text-align: center;
+    margin: 20px;
+}
+
+.custom-button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+}
+
+#btnEdit {
+    background-color: #000; /* Black */
+}
+
+#btnDelete {
+    background-color: #000; /* Black */
+}
+
+#btnSend {
+    background-color: #000; /* Black */
+}
+
+#btnList {
+    background-color: #000; /* Black */
+}
+/* 리스트 상세보기 버튼 */
+
+h2 {
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.aside {
+    width: 300px;
+    float: left;
+    padding-bottom: 20px;
+    /* background-color: greenyellow; */
+}
+
+.select-grup {
+    width: auto;
+    float: right;
+    text-align: right;
+    /* background-color: gray; */
+}
+
+.select-text {
+    color: gray;
+    font-size: 120%;
+    font-weight: bolder;
+    padding: 10px;
+}
+
+.select-dropbox {
+    height: 32px;
+    font-size: 16px;
+}
+
+.select-textbox {
+    height: 20px;
+}
+
+table.board-table {
+    text-align: center;
+    width: 100%;
+    border-spacing: 0;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.board-table th {
+    background: #eee;
+    border-top: 2px solid gray;
+    padding: 5px;
+}
+
+.board-table td {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+
+.board-table td {
+    text-align: center;
+}
+
+.board-table td:nth-child(2) {
+    text-align: left;
+}
+
 .board_item {
     /* 원하는 스타일을 여기에 추가하세요 */
     border-top: 2px solid #000;
@@ -57,49 +157,6 @@
 .board_item .count {
     width: 10%;
 }
-
-.write-button {
-    background-color : #c2e59c;
-    background-image: linear-gradient(45deg, #64b3f4,transparent);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-.write-button:hover {
-    background-color: #0056b3;
-}
-
-.custom-button {
-    background-color : #c2e59c;
-    background-image: linear-gradient(45deg, #64b3f4,transparent);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-right: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-.custom-button:hover {
-    background-color: #0056b3;
-}
-
-.cancel-button {
-    background-color: #dc3545;
-}
-
-.cancel-button:hover {
-    background-color: #c82333;
-}
 * {
     margin: 0;
     padding: 0;
@@ -136,29 +193,29 @@ a {
     margin-top: 5px;
     font-size: 1.4rem;
 }
-/*.bt_wrap {*/
-/*    margin-top: 30px;*/
-/*    text-align: center;*/
-/*    font-size: 0;*/
-/*    text-align: center;*/
-/*}*/
-/*.bt_wrap a{*/
-/*    display: inline-block;*/
-/*    min-width: 80px;*/
-/*    margin-left: 10px;*/
-/*    padding: 10px;*/
-/*    border: 1px solid #000;*/
-/*    border-radius: 2px;*/
-/*    font-size: 1.4rem;*/
-/*}*/
-/*.bt_wrap a:first-child{*/
-/*    margin-left: 0;*/
-/*}*/
+.bt_wrap {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0;
+    text-align: center;
+}
+.bt_wrap a{
+    display: inline-block;
+    min-width: 80px;
+    margin-left: 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 2px;
+    font-size: 1.4rem;
+}
+.bt_wrap a:first-child{
+    margin-left: 0;
+}
 
-/*.bt_wrap a.on {*/
-/*    background: #000;*/
-/*    color: #fff;*/
-/*}*/
+.bt_wrap a.on {
+    background: #000;
+    color: #fff;
+}
 
 
 .board_list {
@@ -381,6 +438,8 @@ a {
     border: 0;
     resize: vertical;
 }
+
+
 /*여기까지 내가 가져온 게시판 css*/
 
 
@@ -523,14 +582,14 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-    font-family: "Josefin Sans", sans-serif;
-    color: #4255A4;
-    margin-top: 0px;
-    font-style: normal;
-    font-weight: 400;
-    text-transform: normal
-}
+/*h6 {*/
+/*    font-family: "Josefin Sans", sans-serif;*/
+/*    color: #4255A4;*/
+/*    margin-top: 0px;*/
+/*    font-style: normal;*/
+/*    font-weight: 400;*/
+/*    text-transform: normal*/
+/*}*/
 
 p {
     font-family: "Mulish", sans-serif;
@@ -749,31 +808,31 @@ hr {
     background: #ff3500
 }
 
-.btn {
-    background: #FF9F67;
-    font-family: "Josefin Sans", sans-serif;
-    text-transform: capitalize;
-    padding: 25px 38px !important;
-    color: #fff;
-    cursor: pointer;
-    display: inline-blockc !important;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 5px;
-    line-height: 1;
-    -moz-user-select: none;
-    letter-spacing: 1px;
-    line-height: 0;
-    margin-bottom: 0;
-    cursor: pointer;
-    transition: color 0.4s linear;
-    position: relative;
-    z-index: 1;
-    border: 0;
-    overflow: hidden;
-    margin: 0;
-    display: inline-block !important
-}
+/*.btn {*/
+/*    background: #FF9F67;*/
+/*    font-family: "Josefin Sans", sans-serif;*/
+/*    text-transform: capitalize;*/
+/*    padding: 25px 38px !important;*/
+/*    color: #fff;*/
+/*    cursor: pointer;*/
+/*    display: inline-blockc !important;*/
+/*    font-size: 16px;*/
+/*    font-weight: 600;*/
+/*    border-radius: 5px;*/
+/*    line-height: 1;*/
+/*    -moz-user-select: none;*/
+/*    letter-spacing: 1px;*/
+/*    line-height: 0;*/
+/*    margin-bottom: 0;*/
+/*    cursor: pointer;*/
+/*    transition: color 0.4s linear;*/
+/*    position: relative;*/
+/*    z-index: 1;*/
+/*    border: 0;*/
+/*    overflow: hidden;*/
+/*    margin: 0;*/
+/*    display: inline-block !important*/
+/*}*/
 
 .btn::before {
     content: "";
@@ -3381,7 +3440,7 @@ hr {
     background-size: cover;
     background-color : #c2e59c;
     background-image: linear-gradient(45deg, #64b3f4,transparent);
-        
+
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -4699,18 +4758,18 @@ hr {
     text-align: center
 }
 
-.topic-area .single-topic .topic-content-box .topic-content h3 a {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 20px;
-    margin-bottom: 0px;
-    text-transform: uppercase;
-    text-decoration: underline #fff transparent;
-    -webkit-transition: .4s;
-    -moz-transition: .4s;
-    -o-transition: .4s;
-    transition: .4s
-}
+/*.topic-area .single-topic .topic-content-box .topic-content h3 a {*/
+/*    color: #ffffff;*/
+/*    font-weight: 700;*/
+/*    font-size: 20px;*/
+/*    margin-bottom: 0px;*/
+/*    text-transform: uppercase;*/
+/*    text-decoration: underline #fff transparent;*/
+/*    -webkit-transition: .4s;*/
+/*    -moz-transition: .4s;*/
+/*    -o-transition: .4s;*/
+/*    transition: .4s*/
+/*}*/
 
 .topic-area .single-topic .topic-content-box .topic-content h3 a:hover {
     text-decoration: underline
@@ -5056,13 +5115,13 @@ hr {
     position: relative
 }
 
-.home-blog-area .home-blog-single .blog-img-cap .blog-img img {
-    width: 100%;
-    -webkit-transform: scale 1;
-    -ms-transform: scale 1;
-    transform: scale 1;
-    transition: all 0.3s ease-out 0s
-}
+/*.home-blog-area .home-blog-single .blog-img-cap .blog-img img {*/
+/*    width: 100%;*/
+/*    -webkit-transform: scale 1;*/
+/*    -ms-transform: scale 1;*/
+/*    transform: scale 1;*/
+/*    transition: all 0.3s ease-out 0s*/
+/*}*/
 
 .home-blog-area .home-blog-single .blog-img-cap .blog-img .blog-date {
     background: #09cc7f;
@@ -5227,11 +5286,11 @@ hr {
     margin-bottom: 70px
 }
 
-.blog_area a {
-    color: "Josefin Sans", sans-serif !important;
-    text-decoration: none;
-    transition: .4s
-}
+/*.blog_area a {*/
+/*    color: "Josefin Sans", sans-serif !important;*/
+/*    text-decoration: none;*/
+/*    transition: .4s*/
+/*}*/
 
 .blog_area a:hover,
 .blog_area a :hover {
@@ -6709,14 +6768,14 @@ del {
     border-radius: 20px
 }
 
-.genric-btn.arrow {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center
-}
+/*.genric-btn.arrow {*/
+/*    display: -webkit-inline-box;*/
+/*    display: -ms-inline-flexbox;*/
+/*    display: inline-flex;*/
+/*    -webkit-box-align: center;*/
+/*    -ms-flex-align: center;*/
+/*    align-items: center*/
+/*}*/
 
 .genric-btn.arrow span {
     margin-left: 10px
@@ -6890,12 +6949,12 @@ del {
     border: 1px solid transparent
 }
 
-.genric-btn.disable {
-    color: #222, 0.3;
-    background: #f9f9ff;
-    border: 1px solid transparent;
-    cursor: not-allowed
-}
+/*.genric-btn.disable {*/
+/*    color: #222, 0.3;*/
+/*    background: #f9f9ff;*/
+/*    border: 1px solid transparent;*/
+/*    cursor: not-allowed*/
+/*}*/
 
 .generic-blockquote {
     padding: 30px 50px 30px 30px;

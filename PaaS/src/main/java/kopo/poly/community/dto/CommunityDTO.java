@@ -20,8 +20,9 @@ public class CommunityDTO {
     private String chgId; //수정자 아이디
     private String chgDt; //글 수정 날짜
 
-    private String userName; //등록자명
+    //게시글 검색 DTO
+    private String keyWord; // 검색 키워드
+    private String searchResult; //검색결과
 
-//    private String totalCnt; //게시글 수
 
 }

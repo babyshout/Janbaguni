@@ -19,6 +19,7 @@ public class CommunityService implements ICommunityService {
     // noticeMapper 변수에 이미 메모리에 올라간 INoticeMapper 객체를 넣어줌
     // 예전에는 autowired 어노테이션을 통해 생성자를 설정했지만, 이제는 생성자를 통해 객체를 주입시킴
     private final ICommunityMapper communityMapper;
+
     @Override
     public List<CommunityDTO> getCommunityList() throws Exception {
 
@@ -28,7 +29,7 @@ public class CommunityService implements ICommunityService {
     }
 
     @Transactional // -> 데이터의 변화(등록,수정,삭제)가 발생하는 함수는 반드시 트랜잭션 처리가 필요함
-                    // 트랜잭션 설정으로 ACID를 적용시켜야함 Transactional 어노테이션으로 Commit과 rollback을 지원
+    // 트랜잭션 설정으로 ACID를 적용시켜야함 Transactional 어노테이션으로 Commit과 rollback을 지원
     @Override
     public CommunityDTO getCommunityInfo(CommunityDTO pDTO, boolean type) throws Exception {
 
@@ -70,5 +71,12 @@ public class CommunityService implements ICommunityService {
 
         communityMapper.deleteCommunityInfo(pDTO);
 
+    }
+
+    @Override
+    public List<CommunityDTO> getSearchKeyWord(CommunityDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".getSearchKeyWord Start!");
+
+        return communityMapper.getSearchKeyWord();
     }
 }

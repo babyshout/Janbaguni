@@ -78,8 +78,6 @@
                 location.href = "/community/communityList"; // 공지사항 리스트 이동
                 alert("본인이 작성한 글만 수정 가능합니다.");
 
-
-
             }
         }
 
@@ -176,7 +174,7 @@
                                         <li><a href="contact">Contact</a></li>
                                         <!-- Button -->
                                         <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
-                                        <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
+                                        <li class="button-header"><a href="login/login-form" class="btn btn3">Log in</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -248,9 +246,10 @@
                 </div>
                 <div class="cont" th:utext="${rDTO.contents}"></div>
             </div>
-            <div class="bt_wrap">
-                <a href="communityList" class="on">목록</a>
-                <a href="communityEditInfo" class="on" id="btnEdit">수정</a>
+            <div class="bt_list">
+                <button id="btnEdit" class="custom-button" type="button">수정</button>
+                <button id="btnDelete" class="custom-button" type="button">삭제</button>
+                <button id="btnList" class="custom-button" type="button">목록</button>
             </div>
         </div>
     </div>
