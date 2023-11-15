@@ -98,7 +98,7 @@ public class UserInfoService implements IUserInfoService {
 
         log.info("pDTO : " + pDTO.toString());
 
-        res = userInfoMapper.insertUserInfo(pDTO);
+        res = userInfoMapper.insertBizUserInfo(pDTO);
 
         log.info("res : " + res);
 
@@ -239,7 +239,40 @@ public class UserInfoService implements IUserInfoService {
 
         log.info("rDTO : " + rDTO.toString());
 
-        log.info(this.getClass().getName() + ".getUserInfo() START!!!!!!!");
+        log.info(this.getClass().getName() + ".getUserInfo() END!!!!!!!");
         return rDTO;
+    }
+
+    /**
+     * USER_TYPE 이 biz 면,
+     * pDTO로, USER_ID 랑, 기타 정보를 가지고와서,
+     * 해당 ROW를 pDTO 에 담긴 내용으로 전부 바꿈
+     * @param pDTO
+     * 바꿀 USER_ID 에 대한 정보와, 업데이트 할 정보가 있어야함
+     * @throws Exception
+     */
+    @Override
+    public int updateBizUserInfo(UserInfoDTO pDTO) throws Exception {
+        log.info(this.getClass().getName()
+                + ".updateBizUserInfo() START!!!!!!!!!");
+
+        log.info(this.getClass().getName()
+                + ".updateBizUserInfo() END!!!!!!!!!");
+        return userInfoMapper.updateBizUserInfo(pDTO);
+    }
+
+    /**
+     * USER_TYPE 이 newbiz 면,
+     * pDTO로, USER_ID 랑, 기타 정보를 가지고와서,
+     * 해당 ROW를 pDTO 에 담긴 내용으로 전부 바꿈
+     *
+     * @param pDTO 바꿀 USER_ID 에 대한 정보와, 업데이트 할 정보가 있어야함
+     * @throws Exception
+     */
+    @Override
+    public int updateNewbizUserInfo(UserInfoDTO pDTO) throws Exception {
+        log.info(this.getClass().getName()
+                + ".updateNewbizUserInfo() START!!!!!!!!!!!!");
+        return userInfoMapper.updateNewbizUserInfo(pDTO);
     }
 }

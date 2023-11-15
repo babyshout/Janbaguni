@@ -5,33 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/user/profile/style.css">
   <title>회원 정보 확인</title>
-  <script th:inline="javascript">
-    console.log("rDTO : " + [[${rDTO}]]);
+  <script th:inline="javascript">function submitUpdateForm(event) {
+      console.log("event" + event);
+      console.log("event.target" + event.target);
+      let updateForm = document.getElementById("biz-update-form");
+      updateForm.preventDefault();
+  }
+
+  console.log("rDTO : " + [[${rDTO}]]);
   </script>
 </head>
 <body>
 <div class="container">
   <h1>회원 정보</h1>
+  <form id="biz-update-form" name="bizUpdateForm"
+        action="/profile/update-procedure" method="post">
+
   <div class="member-info">
 
     <div class="info-row">
       <span class="label">아이디:</span>
-      <span class="value" th:text="${rDTO.userId}" th:></span>
+      <span class="value" th:text="${rDTO.userId}"></span>
+    </div>
+
+<!--    <div class="info-row">-->
+<!--      <span class="label">Nickname:</span>-->
+<!--      <span class="value" th:text="${rDTO.nickname}"></span>-->
+<!--    </div>-->
+
+    <div class="info-row">
+      <label for="userName" class="label">Username:</label>
+      <input name="userName" id="userName" class="value" th:value="${rDTO.userName}"
+             required></input>
     </div>
 
     <div class="info-row">
-      <span class="label">Username:</span>
-      <span class="value" th:text="${rDTO.userName}"></span>
+      <label for="nickname" class="label">Nickname:</label>
+      <input name="nickname" id="nickname" class="value" th:value="${rDTO.nickname}"
+             required></input>
     </div>
 
     <div class="info-row">
-      <span class="label">Nickname:</span>
-      <span class="value" th:text="${rDTO.nickname}"></span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Email:</span>
-      <span class="value" th:text="${rDTO.email}"></span>
+      <label for="email" class="label">Email:</label>
+      <input type="email" name="email" id="email" class="value" th:value="${rDTO.email}"
+             required></input>
     </div>
 
 <!--    <div class="info-row">-->
@@ -77,9 +94,8 @@
 <!--    </div>-->
     <!-- 원하는 다른 회원 정보 항목 추가 -->
   </div>
-  <a href="/profile/check-password-form">
-    <button type="button" id="check-password">회원 정보 수정</button>
-  </a>
+    <button type="submit" id="submit-button" onclick="submitUpdateForm(this)">회원 정보 수정</button>
+  </form>
 </div>
 </body>
 </html>
