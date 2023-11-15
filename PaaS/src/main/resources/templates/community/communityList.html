@@ -62,6 +62,9 @@
                 success: function (json) {
                     if (json !== null && json.length > 0) {
                         updateTable(json);
+                    } else {
+                        alert("검색된 결과가 없습니다.");
+                        location.href= "communityList";
                     }
                 }
             });
@@ -74,8 +77,8 @@
 
                 // Add Table Header
                 let tableHeader = $("<tr>");
-                tableHeader.append($("<th>").text("제목"));
                 tableHeader.append($("<th>").text("번호"));
+                tableHeader.append($("<th>").text("제목"));
                 tableHeader.append($("<th>").text("글쓴이"));
                 tableHeader.append($("<th>").text("일시"));
                 tableHeader.append($("<th>").text("조회수"));
@@ -83,7 +86,9 @@
 
                 // Add Data Rows
                 $.each(data, function (index, item) {
-                    let row = $("<tr>");
+                    let row = $("<tr>").on("click", function () { // 순번 눌렀을 때 상세보기 페이지로 이동하기
+                        doDetail(item.communitySeq);
+                    });
                     row.append($("<td>").text(item.communitySeq));
                     row.append($("<td>").text(item.title));
                     row.append($("<td>").text(item.userId));

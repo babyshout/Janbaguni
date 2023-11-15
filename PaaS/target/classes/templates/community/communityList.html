@@ -13,6 +13,7 @@
 
     <style>
 
+
     </style>
 
     <!-- CSS here -->
@@ -32,6 +33,13 @@
     <link rel="stylesheet" href="/community/css/assets/css/style.css">
 
     <script type="text/javascript">
+
+        //상세보기 이동
+        function doDetail(communitySeq) {
+            location.href = "/community/communityInfo?communitySeq=" + communitySeq;
+        }
+
+
         $(document).ready(function () {
             // 검색 버튼 클릭 이벤트 처리
             $("#btnSearch").on("click", function () {
@@ -39,51 +47,55 @@
             });
         });
 
-        function searchKeyWord() {
-            // 검색어 및 선택된 옵션 가져오기
-            let keyWord = $("#search").val();
-            let selectedOption = $("#search-option").val();
-
-            // Ajax 호출
-            $.ajax({
-                url: "/community/communitySearch",
-                type: "GET",
-                dataType: "json",
-                data: {keyWord: keyWord, selectedOption: selectedOption},
-                success: function (response) {
-                    // 검색 결과가 성공적으로 돌아왔을 때 실행되는 부분
-                    if (response.msg === "검색되었습니다.") {
-                        // 서버에서 받은 데이터를 이용하여 테이블 갱신
-                        updateTable(response.data);
-                    } else {
-                        alert("검색 결과가 없습니다.");
-                    }
-                },
-                error: function (error) {
-                    console.log(error);
-                    alert("검색 중 오류가 발생했습니다.");
-                }
-            });
-        }
 
         // 테이블 갱신 함수
-        function updateTable(data) {
-            // 기존 테이블 내용 지우기
-            $("#board-table tbody").empty();
+        function searchKeyWord() {
+            let f = document.getElementById("search-form");
 
-            // 받아온 데이터를 이용하여 테이블에 행 추가
-            for (let i = 0; i < data.length; i++) {
-                let row = $("<tr>");
+            console.log(f.keyWord.value);
 
-                // 행에 셀 추가 및 데이터 삽입
-                row.append($("<td>").text(data[i].communitySeq));
-                row.append($("<td>").text(data[i].title));
-                row.append($("<td>").text(data[i].userId));
-                row.append($("<td>").text(data[i].regDt));
-                row.append($("<td>").text(data[i].readCnt));
+            $.ajax({
+                url: "/community/communitySearch",
+                type: "get",
+                dataType: "json",
+                data: $("#search-form").serialize(),
+                success: function (json) {
+                    if (json !== null && json.length > 0) {
+                        updateTable(json);
+                    } else {
+                        alert("검색된 결과가 없습니다.");
+                        location.href= "communityList";
+                    }
+                }
+            });
 
-                // 테이블에 행 추가
-                $("#board-table tbody").append(row);
+            function updateTable(data) {
+                let table = $("#listTable");
+
+                // Clear Table
+                table.empty();
+
+                // Add Table Header
+                let tableHeader = $("<tr>");
+                tableHeader.append($("<th>").text("번호"));
+                tableHeader.append($("<th>").text("제목"));
+                tableHeader.append($("<th>").text("글쓴이"));
+                tableHeader.append($("<th>").text("일시"));
+                tableHeader.append($("<th>").text("조회수"));
+                table.append(tableHeader);
+
+                // Add Data Rows
+                $.each(data, function (index, item) {
+                    let row = $("<tr>").on("click", function () { // 순번 눌렀을 때 상세보기 페이지로 이동하기
+                        doDetail(item.communitySeq);
+                    });
+                    row.append($("<td>").text(item.communitySeq));
+                    row.append($("<td>").text(item.title));
+                    row.append($("<td>").text(item.userId));
+                    row.append($("<td>").text(item.regDt));
+                    row.append($("<td>").text(item.readCnt));
+                    table.append(row);
+                });
             }
         }
     </script>
@@ -183,7 +195,7 @@
     </section>
 
     <article style="padding-bottom: 300px; padding-top: 150px">
-        <div class="container">
+        <div class="container" style="height: 450px;">
             <h2>게시판</h2>
 
             <div class="aside">
@@ -192,7 +204,7 @@
 
 
             <div class="select-grup">
-                <form id="search-form">
+                <form id="search-form" >
                     <span class="select-text">SELECT</span>
                     <span>
             <select id="search-option" class="select-dropbox">
@@ -200,59 +212,57 @@
                 <option value="s-writer">글쓴이</option>
                 <option value="s-date">일시</option>
             </select>
-        </span>
+                    </span>
                     <span>
-            <input type="text" id="search" name="search" class="select-textbox">
-            <input type="button" id="btnSearch" class="button-black" value="검색"/>
-        </span>
+                    <input type="text" id="search" name="keyWord" class="select-textbox">
+                    <input type="button" id="btnSearch" class="button-black" value="검색"/>
+                    </span>
                 </form>
             </div>
 
-            <table class="board-table">
-                <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>글쓴이</th>
-                    <th>일시</th>
-                    <th>조회수</th>
-                </tr>
-                </thead>
-                <tbody th:each="dto : ${rList}">
-                <tr>
-                    <td th:if="${dto.communityYn == 'Y'}">
-                        <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">공지</span>
-                    </td>
-                    <td th:unless="${dto.communityYn == 'Y'}">
-                        <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.communitySeq}]]</span>
-                    </td>
-                    <td>[[${dto.title}]]</td>
-                    <td>[[${dto.userId}]]</td>
-                    <td>[[${dto.regDt}]]</td>
-                    <td>[[${dto.readCnt}]]</td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="board-table" id="listTable">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>글쓴이</th>
+                        <th>일시</th>
+                        <th>조회수</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="dto : ${rList}">
+                    <tr>
+                        <td th:if="${dto.communityYn == 'Y'}">
+                            <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">공지</span>
+                        </td>
+                        <td th:unless="${dto.communityYn == 'Y'}">
+                            <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.communitySeq}]]</span>
+                        </td>
+                        <td>[[${dto.title}]]</td>
+                        <td>[[${dto.userId}]]</td>
+                        <td>[[${dto.regDt}]]</td>
+                        <td>[[${dto.readCnt}]]</td>
+                    </tr>
+                    </tbody>
+                </table>
+        </div>
 
-            <div class="board_page">
-                <a href="#" class="bt first">&lt;&lt;</a>
-                <a href="#" class="bt prev">&lt;</a>
-                <a href="#" class="num on">1</a>
-                <a href="#" class="num">2</a>
-                <a href="#" class="num">3</a>
-                <a href="#" class="num">4</a>
-                <a href="#" class="num">5</a>
-                <a href="#" class="bt next">&gt;</a>
-                <a href="#" class="bt last">&gt;&gt;</a>
-            </div>
-            <div class="bt_wrap">
-                <a href="communityReg" class="on">등록</a>
-                <!-- <a href="#">수정</a> -->
-            </div>
+        <!--            <div class="board_page">-->
+        <!--                <a href="#" class="bt first">&lt;&lt;</a>-->
+        <!--                <a href="#" class="bt prev">&lt;</a>-->
+        <!--                <a href="#" class="num on">1</a>-->
+        <!--                <a href="#" class="num">2</a>-->
+        <!--                <a href="#" class="num">3</a>-->
+        <!--                <a href="#" class="num">4</a>-->
+        <!--                <a href="#" class="num">5</a>-->
+        <!--                <a href="#" class="bt next">&gt;</a>-->
+        <!--                <a href="#" class="bt last">&gt;&gt;</a>-->
+        <!--            </div>-->
+        <div class="bt_wrap">
+            <a href="communityReg" class="on">등록</a>
+            <!-- <a href="#">수정</a> -->
         </div>
     </article>
-
-
 </main>
 
 
