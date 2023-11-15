@@ -70,11 +70,14 @@
     </delete>
 
 
+
+    <!--검색 기능 쿼리-->
     <select id="getSearchKeyWord" parameterType="CommunityDTO" resultType="CommunityDTO">
         SELECT
             C.COMMUNITY_SEQ,
             C.TITLE,
             C.COMMUNITY_YN,
+            C.CONTENTS,
             C.READ_CNT,
             C.USER_ID,
             DATE_FORMAT(C.REG_DT, '%Y-%m-%d') AS REG_DT

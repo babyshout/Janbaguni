@@ -1,6 +1,58 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap");
 
 
+/*댓글 css*/
+.container2 {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-date {
+    color: #888;
+}
+
+.comment-input textarea {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.comment-button {
+    text-align: right;
+}
+
+.button-comment {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-comment:hover {
+    background-color: #45a049;
+}
+
+/*여기까지 댓글 css*/
+
+
+
 /*/*여기서 부터 저 아래 표시까지 내가 가져온 게시판 css*/
 
 

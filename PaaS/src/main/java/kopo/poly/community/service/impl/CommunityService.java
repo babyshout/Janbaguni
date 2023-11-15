@@ -63,6 +63,15 @@ public class CommunityService implements ICommunityService {
         communityMapper.updateCommunityInfo(pDTO);
     }
 
+
+    @Override
+    public List<CommunityDTO> getSearchKeyWord(CommunityDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName()+ " getSearchKeyWord Start!");
+
+        return communityMapper.getSearchKeyWord(pDTO);
+    }
+
     @Transactional
     @Override
     public void deleteCommunityInfo(CommunityDTO pDTO) throws Exception {
@@ -73,10 +82,5 @@ public class CommunityService implements ICommunityService {
 
     }
 
-    @Override
-    public List<CommunityDTO> getSearchKeyWord(CommunityDTO pDTO) throws Exception {
-        log.info(this.getClass().getName() + ".getSearchKeyWord Start!");
 
-        return communityMapper.getSearchKeyWord();
-    }
 }

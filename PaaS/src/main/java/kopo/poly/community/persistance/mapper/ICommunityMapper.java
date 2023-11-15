@@ -27,7 +27,7 @@ public interface ICommunityMapper {
     void deleteCommunityInfo(CommunityDTO pDTO) throws Exception;
 
     //게시판 글 검색
-    List<CommunityDTO> getSearchKeyWord() throws Exception;
+    List<CommunityDTO> getSearchKeyWord(CommunityDTO pDTO) throws Exception;
 
 
 }

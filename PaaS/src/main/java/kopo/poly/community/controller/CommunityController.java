@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 
-/*
+/**
  * controller를 선언해야만 Spring 프레임워크에서 Controller인지 인식이 가능하다
  * 자바 서블릿 역할 수행
  *
@@ -88,8 +88,6 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".CommunityReg Start!");
 
         String msg = "";
-
-
 
         //로그인된 사용자만 글 등록할 수 있게 설정
         //로그인 세션 받아오기
@@ -360,15 +358,30 @@ public class CommunityController {
 
         return dto;
     }
+
+    /**
+     * 일반적으로 GetMapping이나 PostMapping 같은 경우엔 페이지를 리턴해주면
+     * 템플릿 엔진을 사용하여 저장한 값을 페이지로 넘겨준다. 그렇게 되면 페이지에서 던져준 값을 활용하여 값을 사용? 할 수 있게된다.
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     * ResponseBody를 사용하면 템플릿 엔진을 사용하지 않고 순수 데이터 그대로 보내주는 것이기 때문에 페이지를 리턴했을 때 오류가 나지는 않으나,
+     * 던져준 값을 받지 못한다. 그러므로 페이지에서 데이터를 전달받을 수 없다?
+     *
+     * @param request
+     * @param model
+     * @return
+     * @throws Exception
+     * @auth 민규 수민
+     */
     @ResponseBody
     @GetMapping(value = "/communitySearch")
-    public MsgDTO searchList(HttpServletRequest request, ModelMap model) {
-        log.info(this.getClass().getName() + "communitySearch Start!");
+    public List<CommunityDTO> searchKeyWord(HttpServletRequest request, ModelMap model) throws Exception {
+        //String 문자열로 던져주면 Json형식으로 변환을 하지 않기 때문에 List로 던져줘야함 List<CommunityDTO>
 
-        String msg = "";
-        MsgDTO dto = new MsgDTO(); // 결과 메세지 구조
+            log.info(this.getClass().getName() + "communitySearch Start!");
 
-        try {
             String keyWord = CmmUtil.nvl(request.getParameter("keyWord"));
 
             log.info("keyWord : " + keyWord);
@@ -376,29 +389,21 @@ public class CommunityController {
             CommunityDTO pDTO = new CommunityDTO();
             pDTO.setKeyWord(keyWord);
 
-//             communityService.getSearchKeyWord 메소드를 호출하여 검색 결과를 가져오기
-            communityService.getSearchKeyWord(pDTO);
+            // communityService.getSearchKeyWord 메소드를 호출하여 검색 결과를 가져오기
+            List<CommunityDTO> rList = Optional.ofNullable(
+                    communityService.getSearchKeyWord(pDTO)
+            ).orElseGet(ArrayList::new);
 
+            log.info("rList.size() : " + rList.size());
+            // TODO toString() 이 뭐하는 함수인지 확인하기!
+            log.info("rList.toString() : " + rList.toString());
+            log.info("rList : " + rList);
+            rList.stream().forEach(communityDTO -> {
+                log.info("List's dto : " + communityDTO.toString());
+            });
 
-            msg = "검색되었습니다.";
+            model.addAttribute("keyWord", keyWord );
 
-        } catch (Exception e) {
-            msg = "에러가 발생하였습니다." + e.getMessage();
-            log.info(e.toString());
-            e.printStackTrace();
-        } finally {
-            // MsgDTO에 메시지 설정
-            dto.setMsg(msg);
-            log.info(this.getClass().getName() + ".communitySearch End!");
-        }
-
-        return dto;
+            return rList;
     }
-
-//    @GetMapping(value = "about")
-//    public String testMain(){
-//        return "communityList";
-//    }
-
-
 }
