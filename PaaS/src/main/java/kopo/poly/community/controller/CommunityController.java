@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Optional;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * controller를 선언해야만 Spring 프레임워크에서 Controller인지 인식이 가능하다
@@ -48,7 +46,6 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
-
 
         //공지사항 리스트 조회하기
         // java8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
@@ -84,13 +81,10 @@ public class CommunityController {
      * GetMapping(value = "notice/noticeReg") => GET방식을 통해 접속되는 URL이 notice/noticeReg 경우에 아래 함수를 실행함
      */
     @GetMapping(value = "communityReg")
-    public String communityReg(HttpSession session) {
+    public String communityReg(HttpSession session, ModelMap model, HttpServletRequest request) {
         log.info(this.getClass().getName() + ".CommunityReg Start!");
 
-        String msg = "";
-
-        //로그인된 사용자만 글 등록할 수 있게 설정
-        //로그인 세션 받아오기
+        // 로그인된 사용자만 글 등록할 수 있게 설정
         String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
 
         if (userId == null) {
@@ -98,10 +92,13 @@ public class CommunityController {
             return "redirect:/login/login-form"; // 로그인 페이지로 리다이렉트
         }
 
+        // 사용자가 어드민이면 isAdmin을 true로 설정
+        boolean isAdmin = "admin".equals(userId);
+        model.addAttribute("isAdmin", isAdmin);
+
         log.info(this.getClass().getName() + ".CommunityReg End!");
 
-        //함수 처리가 끝나고 보여줄 JSP 파일명
-        // community/communityReg.html
+        // 함수 처리가 끝나고 보여줄 JSP 파일명
         return "/community/communityReg";
     }
 
