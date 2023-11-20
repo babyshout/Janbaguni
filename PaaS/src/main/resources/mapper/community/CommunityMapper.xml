@@ -10,7 +10,7 @@
                DATE_FORMAT(C.REG_DT, '%Y-%m-%d') AS REG_DT
         FROM COMMUNITY C, USER_INFO U
         WHERE C.USER_ID = U.USER_ID
-        ORDER BY C.COMMUNITY_YN, C.REG_DT DESC
+        ORDER BY C.COMMUNITY_YN, C.REG_DT ASC
     </select>
 
     <!--게시판 등록 쿼리문-->
