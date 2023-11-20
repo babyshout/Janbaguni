@@ -1,6 +1,7 @@
 package kopo.poly.user.controller;
 
 import kopo.poly.user.dto.UserInfoDTO;
+import kopo.poly.user.enumx.SessionEnum;
 import kopo.poly.user.service.IUserInfoService;
 import kopo.poly.user.util.CmmUtil;
 import kopo.poly.user.util.EncryptUtil;
@@ -35,7 +36,7 @@ public class LoginController {
         log.info(this.getClass().getName() + "./login-form start!");
 //        log.info(this.getClass().getName() + "./login-form end!");
 
-        return "/user/sign-in_sign-up";
+        return "/user/sign-in_sign-up/sign-in-form";
     }
 
     /*
@@ -74,8 +75,15 @@ public class LoginController {
 
                 res = 1;
 
-                session.setAttribute("SS_USER_ID", userId);
-                session.setAttribute("SS_USER_NAME", CmmUtil.nvl(rDTO.getUserName()));
+                session.setAttribute(SessionEnum.USER_ID.STRING, userId);
+                session.setAttribute(SessionEnum.USER_NAME.STRING, CmmUtil.nvl(rDTO.getUserName()));
+                session.setAttribute(SessionEnum.USER_TYPE.STRING, CmmUtil.nvl(rDTO.getUserType()));
+
+                log.info("SessionEnum.USER_ID.name() + " +
+                        SessionEnum.USER_TYPE.name());
+
+                log.info("SessionEnum.USER_ID.name().getClass() + " +
+                        SessionEnum.USER_TYPE.name().getClass());
 
                 msg = "로그인 성공! " + rDTO.getUserName() + "님 환영합니다.";
                 url = "/main";
