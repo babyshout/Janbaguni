@@ -1,5 +1,7 @@
 package kopo.poly.community.controller;
 
+import kopo.poly.community.dto.CommentDTO;
+import kopo.poly.community.service.ICommentService;
 import kopo.poly.dto.MsgDTO;
 import kopo.poly.community.dto.CommunityDTO;
 import kopo.poly.community.service.ICommunityService;
@@ -33,6 +35,8 @@ public class CommunityController {
     // @RequiredArgsConstructor를 통해 메모리에 올라간 서비스 객체를 Controller에서 사용할 수 있게 주입시켜줌
     private final ICommunityService communityService;
 
+    private final ICommentService commentService;
+
 
     /**
      * 게시판 리스트 보여주기
@@ -46,6 +50,10 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
+        List<CommentDTO> rList2 = Optional.ofNullable(commentService.getCommentList()).orElseGet(ArrayList::new);
+
+
+
 
         //공지사항 리스트 조회하기
         // java8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
@@ -81,16 +89,11 @@ public class CommunityController {
      * GetMapping(value = "notice/noticeReg") => GET방식을 통해 접속되는 URL이 notice/noticeReg 경우에 아래 함수를 실행함
      */
     @GetMapping(value = "communityReg")
-    public String communityReg(HttpSession session, ModelMap model, HttpServletRequest request) {
+    public String communityReg(HttpSession session, ModelMap model) {
         log.info(this.getClass().getName() + ".CommunityReg Start!");
 
         // 로그인된 사용자만 글 등록할 수 있게 설정
         String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
-
-        if (userId == null) {
-            // 로그인되지 않은 사용자에게는 접근 권한이 없으므로 다른 페이지로 리다이렉트 또는 에러 메시지 반환
-            return "redirect:/login/login-form"; // 로그인 페이지로 리다이렉트
-        }
 
         // 사용자가 어드민이면 isAdmin을 true로 설정
         boolean isAdmin = "admin".equals(userId);
@@ -100,6 +103,23 @@ public class CommunityController {
 
         // 함수 처리가 끝나고 보여줄 JSP 파일명
         return "/community/communityReg";
+    }
+
+
+    //로그인 상태 확인 결과
+    @GetMapping("/checkLoginStatus")
+    @ResponseBody
+    public Map<String, Object> checkLoginStatus(HttpSession session) {
+        Map<String, Object> result = new HashMap<>(); //다양한 데이터 타입을 담을 수 있게 Map을 사용
+        String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
+
+        if (userId != null) {
+            result.put("loggedIn", true); //값이 null이 아니면 true로 전달
+        } else {
+            result.put("loggedIn", false); //그렇지 않다면 false로 전달
+        }
+
+        return result; //result json으로 변환후 반환 ResponseBody를 통해 순수데이터 전송 후 List.html에서 ajax로 결과 처리
     }
 
     /**
@@ -219,8 +239,6 @@ public class CommunityController {
     @GetMapping(value = "communityEditInfo")
     public String communityEditInfo(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + ".communityEditInfo Start!");
-
-
 
         String userId = CmmUtil.nvl((String) session.getAttribute(SessionEnum.USER_ID.STRING));
         String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq")); // 커뮤니티글번호 pk
