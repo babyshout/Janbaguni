@@ -196,6 +196,7 @@ public class CommunityController {
         //댓글 List를 보내줌
         List<CommentDTO> commentList = Optional.ofNullable(commentService.getCommentList()).orElseGet(ArrayList::new);
 
+
         log.info(this.getClass().getName() + ".communityInfo Start!");
 
         //리스트 값 찍어보기
