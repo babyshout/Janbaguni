@@ -50,7 +50,7 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
-        List<CommentDTO> rList2 = Optional.ofNullable(commentService.getCommentList()).orElseGet(ArrayList::new);
+
 
 
 
@@ -193,7 +193,16 @@ public class CommunityController {
     public String communityInfo(HttpServletRequest request, ModelMap model,
                                 HttpSession session) throws Exception {
 
+        //댓글 List를 보내줌
+        List<CommentDTO> commentList = Optional.ofNullable(commentService.getCommentList()).orElseGet(ArrayList::new);
+
         log.info(this.getClass().getName() + ".communityInfo Start!");
+
+        //리스트 값 찍어보기
+        log.info("commentList Size : " + Integer.toString(commentList.size()));
+        for (CommentDTO dto : commentList) {
+            log.info("dto : " + dto.toString());
+        }
 
 
         //로그인 정보 가져오기
@@ -218,8 +227,6 @@ public class CommunityController {
         pDTO.setContents(contents);
         pDTO.setRegDt(regDt);
 
-
-
         //커뮤니티 상세정보 가져오기
         CommunityDTO rDTO = Optional.ofNullable(
                 communityService.getCommunityInfo(pDTO, true)
@@ -228,6 +235,7 @@ public class CommunityController {
         log.info("rDTO : " + rDTO.toString());
         //조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
+        model.addAttribute("commentList", commentList);
         log.info(this.getClass().getName() + ".communityInfo End!");
 
         return "community/communityInfo";

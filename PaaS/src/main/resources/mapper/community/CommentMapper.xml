@@ -3,28 +3,24 @@
 
 <!--JAVA와 연결할 Mapper 파일 설정-->
 <mapper namespace="kopo.poly.community.persistance.mapper.ICommentMapper">
-    <!--게시판 리스트 쿼리문-->
-    <select id="getCommentList" resultType="CommentDTO">
-        SELECT C.RNO, C.WRITER, C.CONTENTS, C.WDATE, U.USER_ID,
-               DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE
-        FROM COMMENT C, USER_INFO U
-        WHERE C.WRITER = U.USER_ID
-        ORDER BY C.RNO, C.WDATE ASC
+    <select id="getCommentList" resultType="CommentDTO" parameterType="CommentDTO">
+        SELECT C.RNO, C.WRITER, C.CONTENTS, DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE, C.COMMUNITY_SEQ
+        FROM COMMENT C
+        WHERE C.COMMUNITY_SEQ = #{communitySeq}
+        ORDER BY C.WDATE DESC
     </select>
 
     <!--댓글 등록 쿼리문-->
     <insert id="insertCommentInfo" parameterType="CommentDTO">
         INSERT INTO COMMENT
         (
-            COMMUNITY_SEQ, -- 해당 댓글이 속한 게시물의 식별을 위한 키
-            RNO, -- 댓글 식별을 위한 키 (예를 들어, AUTO_INCREMENT 사용)
-            WRITER, -- 댓글 작성자
-            CONTENTS, -- 댓글 내용
-            WDATE -- 댓글 작성일
+            COMMUNITY_SEQ,
+            WRITER,
+            CONTENTS,
+            WDATE
         )
         VALUES (
                    #{communitySeq},
-                   (SELECT IFNULL(MAX(A.RNO), 0) + 1 FROM COMMENT A WHERE A.COMMUNITY_SEQ = #{communitySeq}),
                    #{writer},
                    #{contents},
                    #{wdate}

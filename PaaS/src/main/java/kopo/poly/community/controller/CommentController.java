@@ -3,6 +3,7 @@ package kopo.poly.community.controller;
 import kopo.poly.community.dto.CommentDTO;
 import kopo.poly.community.dto.CommunityDTO;
 import kopo.poly.community.service.ICommentService;
+import kopo.poly.community.service.ICommunityService;
 import kopo.poly.dto.MsgDTO;
 import kopo.poly.user.enumx.SessionEnum;
 import kopo.poly.user.util.CmmUtil;
@@ -26,12 +27,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Controller
 public class CommentController {
+
     private final ICommentService commentService;
 
     @ResponseBody
     @PostMapping(value = "commentInsert")
     public MsgDTO commentInsert(HttpServletRequest request, HttpSession session){
-
 
         log.info(this.getClass().getName()+ "commentInsert Start!");
 
@@ -39,41 +40,42 @@ public class CommentController {
         MsgDTO dto = null; //메세지 구조
 
         try{
-            String userId = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
-            String rNO = CmmUtil.nvl(request.getParameter("rNO")); //댓글 번호
-            String contents = CmmUtil.nvl(request.getParameter("content")); //제목
-            String wDate = CmmUtil.nvl(request.getParameter("wDate")); //댓글 작성날짜
+            String writer = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
+            String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq"));
+            String contents = CmmUtil.nvl(request.getParameter("content")); //댓글 내용
+            String wDate = CmmUtil.nvl(request.getParameter("wDate")); //댓글 작성 날짜
 
-            log.info("writer : "+ userId);
-            log.info("rNO : " + rNO);
+            log.info("writer : " + writer);
+            log.info("communitySeq : " + communitySeq);
             log.info("contents : " + contents);
             log.info("wDate : " + wDate);
 
-            //데이터를 저장하기 위해 DTO에 값 넣어주기
-            CommentDTO pDTO = new CommentDTO(); //pDTO 생성
-            pDTO.setWriter(userId);
-            pDTO.setRNO(rNO);
+            // 데이터를 저장하기 위해 DTO에 값 넣어주기
+            CommentDTO pDTO = new CommentDTO();
+
+            pDTO.setWriter(writer);
+            pDTO.setCommunitySeq(communitySeq);
             pDTO.setContents(contents);
             pDTO.setWdate(wDate);
 
             commentService.insertCommentInfo(pDTO);
 
-            msg = userId+"님의 글이 등록되었습니다.";
+            msg = writer + "님의 댓글이 등록되었습니다.";
 
         } catch (Exception e) {
-            msg = "댓글 등록에 실패했습니다 :" +e.getMessage();
+            msg = "댓글 등록에 실패했습니다: " + e.getMessage();
             log.info(e.toString());
             e.printStackTrace();
-        }finally {
-            dto = new MsgDTO(); //AJAX에 전달 JSON으로
+        } finally {
+            dto = new MsgDTO(); // AJAX에 전달할 JSON으로
             dto.setMsg(msg);
 
             log.info(this.getClass().getName() + ".commentInsert End!");
         }
 
         return dto;
-
     }
+
 
     /**
      * 게시판 글 수정
