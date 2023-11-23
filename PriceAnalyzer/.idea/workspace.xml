@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3f562ac6-8547-4a7a-afa8-9f4e7a3db503" name="Changes" comment="경로변경&#10;MySql 포트번호 추가" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2UeGK5e94RTMgdLLvY7ovOWprTH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/SpringBootWorks/Jangbaguni/PaaS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "spring.configuration.checksum": "c505a69ec179afb91b357bbbd1b0e60d",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\SpringBootWorks\PriceAnalyzer\src\main\resources\static\image" />
+      <recent name="C:\SpringBootWorks\PriceAnalyzer\src\main\resources" />
+      <recent name="C:\SpringBootWorks\PriceAnalyzer\src\main\java\kopo" />
+      <recent name="C:\SpringBootWorks\PriceAnalyzer\src\main\java\kopo\poly" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\SpringBootWorks\PriceAnalyzer\src\main\resources\static\image" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="kopo.poly.controller" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="PriceAnalyzerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="poly" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="kopo.poly.PriceAnalyzerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3f562ac6-8547-4a7a-afa8-9f4e7a3db503" name="Changes" comment="" />
+      <created>1693292565995</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1693292565995</updated>
+      <workItem from="1693292567164" duration="1350000" />
+      <workItem from="1693439013814" duration="1311000" />
+      <workItem from="1693461879186" duration="9131000" />
+      <workItem from="1693783349241" duration="1190000" />
+      <workItem from="1694042307332" duration="6924000" />
+      <workItem from="1694124646045" duration="324000" />
+      <workItem from="1694125013335" duration="207000" />
+      <workItem from="1694646865181" duration="3318000" />
+      <workItem from="1695079694914" duration="13759000" />
+      <workItem from="1695193458811" duration="911000" />
+      <workItem from="1695252014447" duration="9143000" />
+      <workItem from="1695296031002" duration="15000" />
+      <workItem from="1695637192409" duration="5544000" />
+      <workItem from="1695707963203" duration="2292000" />
+      <workItem from="1696204371317" duration="29000" />
+      <workItem from="1696461876068" duration="1772000" />
+      <workItem from="1696910057682" duration="2501000" />
+      <workItem from="1697073937140" duration="983000" />
+      <workItem from="1697152659537" duration="252000" />
+      <workItem from="1698027024625" duration="1941000" />
+      <workItem from="1698103767152" duration="17753000" />
+      <workItem from="1698189940735" duration="4243000" />
+      <workItem from="1698276198135" duration="2178000" />
+      <workItem from="1698278464278" duration="12000" />
+      <workItem from="1698280321578" duration="1048000" />
+      <workItem from="1698304941768" duration="625000" />
+      <workItem from="1698624505990" duration="10697000" />
+      <workItem from="1698638178314" duration="315000" />
+      <workItem from="1698638640710" duration="745000" />
+      <workItem from="1698646742488" duration="8000" />
+      <workItem from="1698708471255" duration="1113000" />
+      <workItem from="1698715890626" duration="1234000" />
+    </task>
+    <task id="LOCAL-00001" summary="Naver Clova OCR 테스트">
+      <created>1693293893577</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1693293893577</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Naver Clova OCR 테스트">
+      <created>1693439144236</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1693439144236</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Naver Clova OCR 테스트 2일차..">
+      <created>1693472988696</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1693472988696</updated>
+    </task>
+    <task id="LOCAL-00004" summary="코드 유지보수를 위한 크롤링 메소드 정의">
+      <created>1694044308235</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1694044308235</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Naver Clova OCR Template 호출">
+      <created>1695126865714</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1695126865714</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Naver Clova OCR Template 호출">
+      <created>1695202623226</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1695202623226</updated>
+    </task>
+    <task id="LOCAL-00007" summary="짱구몰 크롤링">
+      <created>1695642324223</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1695642324223</updated>
+    </task>
+    <task id="LOCAL-00008" summary="샘플사진 업로드">
+      <created>1698104118788</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1698104118788</updated>
+    </task>
+    <task id="LOCAL-00009" summary="OCR에 Date 추가">
+      <created>1698107153735</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1698107153735</updated>
+    </task>
+    <task id="LOCAL-00010" summary="오브젝트 스토리지 기능 추가">
+      <created>1698122303564</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1698122303564</updated>
+    </task>
+    <task id="LOCAL-00011" summary="클래스명 변경">
+      <created>1698203835196</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1698203835196</updated>
+    </task>
+    <task id="LOCAL-00012" summary="변경없음 공백라인 일부 제거">
+      <created>1698278381001</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1698278381001</updated>
+    </task>
+    <task id="LOCAL-00013" summary="크롤링 데이터 URL 추가">
+      <created>1698627875350</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1698627875350</updated>
+    </task>
+    <task id="LOCAL-00014" summary="경로변경&#10;MySql 포트번호 추가">
+      <created>1698636466272</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1698636466272</updated>
+    </task>
+    <task id="LOCAL-00015" summary="경로변경&#10;MySql 포트번호 추가">
+      <created>1698636494761</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1698636494761</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Naver Clova OCR 테스트" />
+    <MESSAGE value="Naver Clova OCR 테스트 2일차.." />
+    <MESSAGE value="코드 유지보수를 위한 크롤링 메소드 정의" />
+    <MESSAGE value="Naver Clova OCR Template 호출" />
+    <MESSAGE value="짱구몰 크롤링" />
+    <MESSAGE value="샘플사진 업로드" />
+    <MESSAGE value="OCR에 Date 추가" />
+    <MESSAGE value="오브젝트 스토리지 기능 추가" />
+    <MESSAGE value="클래스명 변경" />
+    <MESSAGE value="변경없음 공백라인 일부 제거" />
+    <MESSAGE value="크롤링 데이터 URL 추가" />
+    <MESSAGE value="경로변경&#10;MySql 포트번호 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="경로변경&#10;MySql 포트번호 추가" />
+  </component>
+</project>
