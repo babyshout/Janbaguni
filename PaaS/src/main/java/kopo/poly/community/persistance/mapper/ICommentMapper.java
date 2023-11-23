@@ -1,13 +1,14 @@
 package kopo.poly.community.persistance.mapper;
 
 import kopo.poly.community.dto.CommentDTO;
+import kopo.poly.community.dto.CommunityDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface ICommentMapper {
-    List<CommentDTO> getCommentList() throws Exception;
+    List<CommentDTO> getCommentList(CommunityDTO pDTO) throws Exception;
 
 //    CommentDTO getCommentInfo(CommentDTO pDTO, boolean type) throws Exception;
 

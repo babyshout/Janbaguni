@@ -1,6 +1,7 @@
 package kopo.poly.community.service.impl;
 
 import kopo.poly.community.dto.CommentDTO;
+import kopo.poly.community.dto.CommunityDTO;
 import kopo.poly.community.persistance.mapper.ICommentMapper;
 import kopo.poly.community.service.ICommentService;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,16 @@ public class CommentService implements ICommentService {
      * @throws Exception
      */
     @Override
-    public List<CommentDTO> getCommentList() throws Exception {
+    public List<CommentDTO>  getCommentList(CommunityDTO pDTO) throws Exception{
         log.info(this.getClass().getName()+ " .getCommentList Start!");
 
-        return commentMapper.getCommentList();
+        return commentMapper.getCommentList(pDTO);
     }
+
 
     /**
      * 댓글 등록
-     * @param p
+     * @param pDTO
      * @throws Exception
      */
     @Transactional
@@ -61,7 +63,7 @@ public class CommentService implements ICommentService {
 
     /**
      * 댓글 삭제
-     * @param commentDTO
+     * @param pDTO
      * @throws Exception
      */
     @Transactional

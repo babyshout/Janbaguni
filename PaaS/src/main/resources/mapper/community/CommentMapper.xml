@@ -3,9 +3,10 @@
 
 <!--JAVA와 연결할 Mapper 파일 설정-->
 <mapper namespace="kopo.poly.community.persistance.mapper.ICommentMapper">
-    <select id="getCommentList" resultType="CommentDTO" parameterType="CommentDTO">
+    <select id="getCommentList" resultType="CommentDTO" parameterType="CommunityDTO">
         SELECT C.RNO, C.WRITER, C.CONTENTS, DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE
         FROM COMMENT C
+        WHERE C.COMMUNITY_SEQ = #{communitySeq}
         ORDER BY C.WDATE DESC
     </select>
 

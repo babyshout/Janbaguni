@@ -13,7 +13,7 @@ public interface ICommentService {
      * @return
      * @throws Exception
      */
-    List<CommentDTO> getCommentList() throws Exception;
+    List<CommentDTO> getCommentList(CommunityDTO pDTO) throws Exception;
 
     /**
      * 댓글 등록

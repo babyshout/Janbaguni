@@ -43,9 +43,7 @@ public class CommentController {
 
         try{
             String writer = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
-
             //지금 이 communitySeq가 null인데 이걸 해당 게시물 번호를 받아와야하는데 어떻게 받아오지
-            //컨트로러가 분리돼있어서 어떻게 가져올지 생각중.. 왜 머리가 안 돌아가는거야
             String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq"));
             String contents = CmmUtil.nvl(request.getParameter("content")); //댓글 내용
             String wDate = CmmUtil.nvl(request.getParameter("wDate")); //댓글 작성 날짜
