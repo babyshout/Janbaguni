@@ -4,6 +4,8 @@ import kopo.poly.order.dto.OcrResultComposite;
 import kopo.poly.order.dto.SearchCrawlingComposite;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+//import org.springframework.cloud.context.config.annotation.RefreshScope;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +17,13 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/order")
+//@RefreshScope
 public class OcrController {
     @GetMapping("/upload-form")
     public String uploadForm(HttpSession session) throws Exception {
         String userId = (String) session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
-            return"user/sign-in_sign-up";
+            return"redirect:/login/login-form";
         }else{
             return "/order/upload-form"; // Return the name of the HTML template (upload-form.html)
         }
@@ -34,7 +37,7 @@ public class OcrController {
         String userId = (String)session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
             session.removeAttribute("SS_OCR_RESULT");
-            return"user/sign-in_sign-up";
+            return"redirect:/login/login-form";
         }
         OcrResultComposite result = (OcrResultComposite) session.getAttribute("SS_OCR_RESULT");
 
@@ -54,7 +57,7 @@ public class OcrController {
         String userId = (String)session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
             session.removeAttribute("SS_SEARCH_CRAWLING");
-            return"user/sign-in_sign-up";
+            return"redirect:/login/login-form";
         }
         SearchCrawlingComposite result = (SearchCrawlingComposite) session.getAttribute("SS_SEARCH_CRAWLING");
 

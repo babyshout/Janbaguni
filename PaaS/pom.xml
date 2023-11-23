@@ -15,8 +15,23 @@
     <description>Test</description>
     <properties>
         <java.version>1.8</java.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
     </properties>
+
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>3.1.5</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -58,6 +73,13 @@
 <!--            <artifactId>mariadb-java-client</artifactId>-->
 <!--            <scope>runtime</scope>-->
 <!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-config-client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -86,7 +108,17 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
     </dependencies>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>

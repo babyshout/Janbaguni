@@ -10,7 +10,7 @@ import kopo.poly.order.utill.StringPreprocessingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+//import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/order")
+//@RefreshScope
 public class RestCrawlingController {
     @Value("${naver.service.template.secretKey}")
     private String secretKey;
