@@ -14,6 +14,8 @@ public class CommentDTO {
     private String contents; // 댓글내용
     private String wdate; // 작성날짜
 
+    private String communitySeq;
+
 
 
 }

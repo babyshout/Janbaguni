@@ -57,15 +57,14 @@
                 location.href = "/community/communityList"; // 공지사항 리스트 이동
             })
             $("#btnCommentSend").on("click", function () {
-                doSendComment(); //댓글 등록 실행
+                addComment(); //댓글 등록 실행
             })
         })
 
 
-
         //수정하기
         function doEdit() {
-            console.log("세션 아이디 : "+session_user_id);
+            console.log("세션 아이디 : " + session_user_id);
             // console.log("디티오 아이디 : "+user_id);
             if (session_user_id === user_id) {
                 alert("communitySeq : " + communitySeq);
@@ -255,7 +254,7 @@
     </div>
 
 
-    <form style="padding-bottom: 100px">
+    <form>
     <div class="container2">
         <!-- 이전 디자인 부분은 그대로 유지 -->
 

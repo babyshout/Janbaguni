@@ -31,7 +31,7 @@ public class CommentService implements ICommentService {
 
     /**
      * 댓글 등록
-     * @param pDTO
+     * @param p
      * @throws Exception
      */
     @Transactional
@@ -61,7 +61,7 @@ public class CommentService implements ICommentService {
 
     /**
      * 댓글 삭제
-     * @param pDTO
+     * @param commentDTO
      * @throws Exception
      */
     @Transactional
