@@ -23,7 +23,7 @@ public class OcrController {
     public String uploadForm(HttpSession session) throws Exception {
         String userId = (String) session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
-            return"/login/login-form";
+            return"redirect:/login/login-form";
         }else{
             return "/order/upload-form"; // Return the name of the HTML template (upload-form.html)
         }
@@ -37,7 +37,7 @@ public class OcrController {
         String userId = (String)session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
             session.removeAttribute("SS_OCR_RESULT");
-            return"/login/login-form";
+            return"redirect:/login/login-form";
         }
         OcrResultComposite result = (OcrResultComposite) session.getAttribute("SS_OCR_RESULT");
 
@@ -57,7 +57,7 @@ public class OcrController {
         String userId = (String)session.getAttribute("SS_USER_ID");
         if(userId == null || userId.equals("")){
             session.removeAttribute("SS_SEARCH_CRAWLING");
-            return"/login/login-form";
+            return"redirect:/login/login-form";
         }
         SearchCrawlingComposite result = (SearchCrawlingComposite) session.getAttribute("SS_SEARCH_CRAWLING");
 
