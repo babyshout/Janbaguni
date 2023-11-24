@@ -9,6 +9,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.session.data.redis.config.ConfigureRedisAction;
 
 @NoArgsConstructor
@@ -23,7 +25,7 @@ public class RedisConfig {
     private int redisPort;
 
     @Value("${spring.redis.username}")
-    private String redisUername;
+    private String redisUserName;
     @Value("${spring.redis.password}")
     private String redisPassword;
 
@@ -32,19 +34,22 @@ public class RedisConfig {
 
         log.info("redisHost : " + redisHost);
         log.info("redisPort : " + redisPort);
-        log.info("redisUername : " + redisUername);
+        log.info("redisUserName : " + redisUserName);
         log.info("redisPassword : " + redisPassword);
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
         redisStandaloneConfiguration.setPort(redisPort);
-        redisStandaloneConfiguration.setUsername(redisUername);
+        redisStandaloneConfiguration.setUsername(redisUserName);
         redisStandaloneConfiguration.setPassword(redisPassword);
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
 
         return lettuceConnectionFactory;
     }
-
+    @Bean
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+        return new GenericJackson2JsonRedisSerializer();
+    }
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();

@@ -1,11 +1,17 @@
 package kopo.poly.order.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.*;
 
 
 @Getter
 @Setter
+@Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonDeserialize
+@AllArgsConstructor
+@NoArgsConstructor
 public class OcrDTO {
     private String userId;
     private String ocrDate;

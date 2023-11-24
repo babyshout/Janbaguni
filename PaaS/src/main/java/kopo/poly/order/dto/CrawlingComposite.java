@@ -1,10 +1,16 @@
 package kopo.poly.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonDeserialize
 public class CrawlingComposite {
     private List<List<ProductCrawlingDTO>> aceList;
     private List<List<ProductCrawlingDTO>> goodFoodList;
@@ -15,6 +21,8 @@ public class CrawlingComposite {
     private List<List<ProductCrawlingDTO>> monoMartList;
 
     private List<ProductCrawlingDTO> bestList;
+
+    public CrawlingComposite(){}
 
     public CrawlingComposite(List<List<ProductCrawlingDTO>> aceList, List<List<ProductCrawlingDTO>> goodFoodList,
                              List<List<ProductCrawlingDTO>> babyLeafList, List<List<ProductCrawlingDTO>> foodEnList,

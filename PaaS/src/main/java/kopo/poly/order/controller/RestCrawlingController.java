@@ -42,6 +42,7 @@ public class RestCrawlingController {
     @PostMapping("/crawlingResult")
     public List<List<ProductCrawlingDTO>> crawlingResult(@RequestBody Map<String, String> requestBody, HttpSession session) {
         CrawlingComposite tmp = (CrawlingComposite) session.getAttribute("SS_CRAWLING_RESULT");
+//        session.removeAttribute("SS_CRAWLING_RESULT");
         List<List<ProductCrawlingDTO>> resultList = new ArrayList<>();
 
 
@@ -81,7 +82,7 @@ public class RestCrawlingController {
                 resultList.add(tmp.getBestList());
 
         }
-        session.setMaxInactiveInterval(1800);
+
         return resultList;
     }
 

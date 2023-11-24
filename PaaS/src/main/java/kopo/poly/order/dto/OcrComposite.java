@@ -1,10 +1,16 @@
 package kopo.poly.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonDeserialize
 public class OcrComposite {
     private List<String> nameList;
     private List<String> unitList;

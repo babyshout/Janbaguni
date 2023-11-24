@@ -1,10 +1,16 @@
 package kopo.poly.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @Getter
+@Data
+@JsonDeserialize
+
 public class OcrResultComposite {
     private OrderDTO orderDTO;
 //    private CrawlingComposite crawlingComposite;
