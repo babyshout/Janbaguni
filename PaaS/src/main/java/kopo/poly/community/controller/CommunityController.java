@@ -44,15 +44,26 @@ public class CommunityController {
      * GetMapping(value = "community/communityList") => GET방식을 통해 접속되는 URL이 community/communityList인 경우에 아래 함수를 실행함
      */
     @GetMapping(value = "communityList")
-    public String communityList(ModelMap model) throws Exception {
+    public String communityList(ModelMap model, @RequestParam(defaultValue = "1")int page) throws Exception {
 
         //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
 
+        // 페이지당 보여줄 아이템 개수 정의
+        int itemsPerPage = 5;
 
+        // 페이지네이션을 위해 전체 아이템 개수 구하기
+        int totalItems = rList.size();
 
+        // 전체 페이지 개수 계산
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        // 현재 페이지에 해당하는 아이템들만 선택하여 rList에 할당
+        int fromIndex = (page - 1) * itemsPerPage;
+        int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
+        rList = rList.subList(fromIndex, toIndex);
 
 
         //공지사항 리스트 조회하기
@@ -72,8 +83,12 @@ public class CommunityController {
         //공지사항 결과를 JSP로 전달하기 위해 model 객체에 추가
         //조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
 
         //실행됐는지 확인하기 위해 로그 찍어주기
+        log.info(this.getClass().getName() + ".페이지 번호 : " + page);
         log.info(this.getClass().getName() + ".CommunityList End!");
 
         //함수 처리가 끝나고 보여줄 JSP 파일명

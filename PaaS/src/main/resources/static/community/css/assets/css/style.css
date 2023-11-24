@@ -1,6 +1,35 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap");
 
 
+.pagination {
+    margin-top: 10px; /* 조절 가능한 값 */
+}
+
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.pagination li {
+    margin-right: 5px; /* 조절 가능한 값 */
+}
+
+.pagination a {
+    text-decoration: none;
+    padding: 8px 12px;
+    background-color: #e0e0e0; /* 배경 색상 */
+    color: #333; /* 글자 색상 */
+    border-radius: 4px;
+}
+
+.pagination .active a {
+    background-color: #333; /* 활성화된 페이지의 배경 색상 */
+    color: #fff; /* 활성화된 페이지의 글자 색상 */
+}
+
+
 /*댓글 css*/
 .container2 {
     width: 80%;
