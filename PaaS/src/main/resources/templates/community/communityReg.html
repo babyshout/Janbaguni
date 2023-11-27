@@ -230,27 +230,20 @@
                     </dl>
                     <dl>
                         <dt>공지글 여부</dt>
-                        <!--컨트롤러로 받아온 isAdmin이 true일 경우에만 라디오 버튼 표시 -->
+                        <!-- isAdmin이 true일 때 공지사항 여부 라디오 버튼을 보이게 함 -->
                         <dd th:if="${isAdmin}">
                             <input type="radio" name="communityYn" value="Y" /> 예
                             <input type="radio" name="communityYn" value="N" /> 아니오
                         </dd>
-                        <!--컨트롤러로 받아온 isAdmin인 false (일반 사용자)일 경우에는 텍스트 표시-->
+                        <!-- isAdmin이 false일 때 공지사항 여부를 강제로 'N'으로 지정 -->
                         <dd th:unless="${isAdmin}">
-                            지정할 수 없습니다.
+                            <input type="hidden" name="communityYn" value="N" />
+                            <span>지정할 수 없습니다.</span>
                         </dd>
                     </dl>
-
                 </div>
                 <div class="info">
-                    <dl>
-                        <dt>글쓴이</dt>
-                        <dd><input type="text" placeholder="글쓴이 입력"/></dd>
-                    </dl>
-                    <dl>
-                        <dt>비밀번호</dt>
-                        <dd><input type="password" placeholder="비밀번호 입력" /></dd>
-                    </dl>
+
                 </div>
                 <div class="cont">
                     <textarea name="contents" placeholder="내용 입력"></textarea>

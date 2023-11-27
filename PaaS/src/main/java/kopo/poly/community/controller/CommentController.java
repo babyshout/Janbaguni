@@ -39,8 +39,6 @@ public class CommentController {
         String msg = ""; //메세지 내용
         MsgDTO dto = null; //메세지 구조
 
-
-
         try{
             String writer = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
             //지금 이 communitySeq가 null인데 이걸 해당 게시물 번호를 받아와야하는데 어떻게 받아오지

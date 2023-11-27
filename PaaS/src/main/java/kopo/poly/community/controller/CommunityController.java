@@ -21,11 +21,11 @@ import java.util.*;
 /**
  * controller를 선언해야만 Spring 프레임워크에서 Controller인지 인식이 가능하다
  * 자바 서블릿 역할 수행
- *
+ * <p>
  * slf4j는 스프링 프레임워크에서 로그 처리하는 인터페이스 기술이며,
  * 로그처리 기술인 log4j와 logback과 인터페이스 역할을 수행한다.
  * 스프링 프레임워크는 기본으로 logback을 채택해서 로그 처리를 한다.
- * */
+ */
 @Slf4j
 @RequestMapping(value = "/community") // -> /community로 시작하는 url은 무조건 community컨트롤러에서 처리
 @RequiredArgsConstructor // 생성자 주입을 하기 위한 어노테이션
@@ -44,12 +44,15 @@ public class CommunityController {
      * GetMapping(value = "community/communityList") => GET방식을 통해 접속되는 URL이 community/communityList인 경우에 아래 함수를 실행함
      */
     @GetMapping(value = "communityList")
-    public String communityList(ModelMap model, @RequestParam(defaultValue = "1")int page) throws Exception {
+    public String communityList(ModelMap model, @RequestParam(defaultValue = "1") int page) throws Exception {
 
         //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
+
+        // 리스트를 역순으로 정렬
+        Collections.reverse(rList);
 
         // 페이지당 보여줄 아이템 개수 정의
         int itemsPerPage = 5;
@@ -64,7 +67,6 @@ public class CommunityController {
         int fromIndex = (page - 1) * itemsPerPage;
         int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
         rList = rList.subList(fromIndex, toIndex);
-
 
         //공지사항 리스트 조회하기
         // java8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
@@ -154,7 +156,7 @@ public class CommunityController {
 
         try {
             //로그인된 사용자 아이디 가져오기
-            String userId = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
+            String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
             String title = CmmUtil.nvl(request.getParameter("title")); //제목
             String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); //공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); //내용
@@ -185,7 +187,7 @@ public class CommunityController {
             communityService.insertCommunityInfo(pDTO); // INoticeService 함수를 호출함
 
             //저장이 완료되면 사용자에게 보여줄 메시지 작성
-            msg = userId+"님의 글이 등록되었습니다."; // 서비스 호출이 정상적으로 작동하면 "등록되었습니다." 메세지를 전달하기 위해 문자열 저장하기
+            msg = userId + "님의 글이 등록되었습니다."; // 서비스 호출이 정상적으로 작동하면 "등록되었습니다." 메세지를 전달하기 위해 문자열 저장하기
         } catch (Exception e) { //catch 구문은 서비스 호출 중 오류가 발생되면 실행되기 때문에 "실패하였습니다." 문자열 저장
             //저장이 실패되면 사용자에게 보여줄 메세지
             msg = "글 등록에 실패하였습니다. : " + e.getMessage();
@@ -208,11 +210,7 @@ public class CommunityController {
     public String communityInfo(HttpServletRequest request, ModelMap model,
                                 HttpSession session) throws Exception {
 
-
-
         log.info(this.getClass().getName() + ".communityInfo Start!");
-
-
 
         //로그인 정보 가져오기
         String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
@@ -277,7 +275,7 @@ public class CommunityController {
         //로그 꼭 찍어주기
         log.info("userId : " + userId);
         log.info("communitySeq : " + communitySeq);
-        log.info("title: "+ title);
+        log.info("title: " + title);
         log.info("contents : " + contents);
 
 
@@ -327,7 +325,7 @@ public class CommunityController {
              * */
 
             log.info("session user_id : " + userId);
-            log.info("communitySeq : " + communitySeq );
+            log.info("communitySeq : " + communitySeq);
             log.info("title : " + title);
             log.info("communityYn : " + communityYn);
             log.info("contents : " + contents);
@@ -420,33 +418,48 @@ public class CommunityController {
      */
     @ResponseBody
     @GetMapping(value = "/communitySearch")
-    public List<CommunityDTO> searchKeyWord(HttpServletRequest request, ModelMap model) throws Exception {
+    public List<CommunityDTO> searchKeyWord(HttpServletRequest request, ModelMap model, @RequestParam(defaultValue = "1") int page) throws Exception {
         //String 문자열로 던져주면 Json형식으로 변환을 하지 않기 때문에 List로 던져줘야함 List<CommunityDTO>
 
-            log.info(this.getClass().getName() + "communitySearch Start!");
+        log.info(this.getClass().getName() + "communitySearch Start!");
 
-            String keyWord = CmmUtil.nvl(request.getParameter("keyWord"));
+        String keyWord = CmmUtil.nvl(request.getParameter("keyWord"));
 
-            log.info("keyWord : " + keyWord);
+        log.info("keyWord : " + keyWord);
 
-            CommunityDTO pDTO = new CommunityDTO();
-            pDTO.setKeyWord(keyWord);
+        CommunityDTO pDTO = new CommunityDTO();
+        pDTO.setKeyWord(keyWord);
 
-            // communityService.getSearchKeyWord 메소드를 호출하여 검색 결과를 가져오기
-            List<CommunityDTO> rList = Optional.ofNullable(
-                    communityService.getSearchKeyWord(pDTO)
-            ).orElseGet(ArrayList::new);
+        // communityService.getSearchKeyWord 메소드를 호출하여 검색 결과를 가져오기
+        List<CommunityDTO> rList = Optional.ofNullable(
+                communityService.getSearchKeyWord(pDTO)
+        ).orElseGet(ArrayList::new);
 
-            log.info("rList.size() : " + rList.size());
-            // TODO toString() 이 뭐하는 함수인지 확인하기!
-            log.info("rList.toString() : " + rList.toString());
-            log.info("rList : " + rList);
-            rList.stream().forEach(communityDTO -> {
-                log.info("List's dto : " + communityDTO.toString());
-            });
+        log.info("rList.size() : " + rList.size());
+        // TODO toString() 이 뭐하는 함수인지 확인하기!
+        log.info("rList.toString() : " + rList.toString());
+        log.info("rList : " + rList);
+        rList.stream().forEach(communityDTO -> {
+            log.info("List's dto : " + communityDTO.toString());
+        });
+        // 페이지당 보여줄 아이템 개수 정의
+        int itemsPerPage = 40;
 
-            model.addAttribute("keyWord", keyWord );
+        // 페이지네이션을 위해 전체 아이템 개수 구하기
+        int totalItems = rList.size();
 
-            return rList;
+        // 전체 페이지 개수 계산
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        // 현재 페이지에 해당하는 아이템들만 선택하여 rList에 할당
+        int fromIndex = (page - 1) * itemsPerPage;
+        int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
+        rList = rList.subList(fromIndex, toIndex);
+
+
+        model.addAttribute("keyWord", keyWord);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        return rList;
     }
 }
