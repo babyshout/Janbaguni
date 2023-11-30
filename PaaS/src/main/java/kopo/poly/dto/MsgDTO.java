@@ -14,6 +14,6 @@ public class MsgDTO {
     private int result;
     private String msg;
 
-    private String searchResult;
+    private String item; // 이것저것 담는용 ..
 
 }

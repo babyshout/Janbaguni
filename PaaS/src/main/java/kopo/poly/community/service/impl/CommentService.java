@@ -30,6 +30,15 @@ public class CommentService implements ICommentService {
         return commentMapper.getCommentList(pDTO);
     }
 
+    @Override
+    public CommentDTO getComment(CommentDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".getComment Start!!!");
+
+        return commentMapper.getComment(pDTO);
+    }
+
+
+
 
     /**
      * 댓글 등록

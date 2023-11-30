@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,7 +22,7 @@ import java.util.Optional;
 @RequestMapping(value = "/comment")
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class CommentController {
 
     private final ICommentService commentService;
@@ -82,7 +79,7 @@ public class CommentController {
      * 게시판 글 수정
      */
     @ResponseBody
-    @PostMapping(value = "commentUpdate")
+    @PostMapping(value = "commentUpdateInfo")
     public MsgDTO commentUpdate(HttpSession session, HttpServletRequest request){
         log.info(this.getClass().getName()+ " .commentUpdate Start!");
 
@@ -90,19 +87,19 @@ public class CommentController {
         MsgDTO dto = null; //결과 메시지 구조
 
         try{
-            String userId = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
+            String writer = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
             String rNO = CmmUtil.nvl(request.getParameter("rNO")); //댓글 번호
             String contents = CmmUtil.nvl(request.getParameter("contents")); //제목
             String wDate = CmmUtil.nvl(request.getParameter("wDate")); //댓글 작성날짜
 
-            log.info("writer : "+ userId);
+            log.info("writer : "+ writer);
             log.info("rNO : " + rNO);
             log.info("contents : " + contents);
             log.info("wDate : " + wDate);
 
             //데이터를 저장하기 위해 DTO에 값 넣어주기
             CommentDTO pDTO = new CommentDTO(); //pDTO 생성
-            pDTO.setWriter(userId);
+            pDTO.setWriter(writer);
             pDTO.setRNO(rNO);
             pDTO.setContents(contents);
             pDTO.setWdate(wDate);
@@ -122,6 +119,104 @@ public class CommentController {
         return dto;
     }
 
+    //준수형이 친거
+//    @PostMapping(value = "delete")
+//    public MsgDTO delete(HttpServletRequest request){
+//        log.info(this.getClass().getName() + ".delete Start!!!!");
+//        MsgDTO dto = null;
+//        String msg = "";
+//        String rNo = CmmUtil.nvl(request.getParameter("rNO"));
+//        CommentDTO pDTO = new CommentDTO();
+//
+//        try{
+//            pDTO.setRNO(rNo);
+//            commentService.deleteCommentInfo(pDTO);
+//            msg = "삭제되었습니다.";
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            msg = "오류가 발생했습니다.";
+//        }finally {
+//            dto = new MsgDTO();
+//            dto.setMsg(msg);
+//        }
+//
+//
+//        log.info(this.getClass().getName() + ".delete End!!!!");
+//
+//        return dto;
+//
+//    }
+
+//    /**
+//     * 댓글 삭제 (준수형이 친거)
+//     */
+//    @ResponseBody
+//    @PostMapping(value = "commentDeleteInfo")
+//    public MsgDTO commentDelete(HttpServletRequest request, HttpSession session){
+//        log.info(this.getClass().getName()+".commentDelete Start!");
+//        MsgDTO dto = new MsgDTO();
+//
+//        try{
+//            String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq"));
+//            String rNO = CmmUtil.nvl(request.getParameter("rNO")); //댓글번호
+//
+//
+//            //로그 찍어주기
+//            log.info("communitySeq : " + communitySeq);
+//            log.info("rNO : " + rNO); //댓글 번호
+//
+//
+//            // 값 전달은 DTO 객체를 이용해 처리할 전달 받은 값을 DTO 객체에 넣음
+//            CommentDTO pDTO = new CommentDTO();
+//            pDTO.setCommunitySeq(communitySeq);
+//            CommentDTO rDTO = commentService.getComment(pDTO);
+//
+//
+//            pDTO.setRNO(rNO); // 댓글 번호
+//            dto.setItem(rDTO.getWriter());
+//            dto.setResult(Integer.parseInt(rNO));
+//
+//        }catch (Exception e){
+//            dto.setMsg("오류가 발생했습니다.");
+//            dto.setResult(-1);
+//        }
+//
+////        String msg = "";
+////        MsgDTO dto = null; //결과 메세지 구조
+////
+////        try {
+////            String communitySeq = CmmUtil.nvl(request.getParameter("communitySeq"));
+////            String rNO = CmmUtil.nvl(request.getParameter("rNO")); //댓글번호
+////
+////
+////            //로그 찍어주기
+////            log.info("communitySeq : " + communitySeq);
+////            log.info("rNO : " + rNO); //댓글 번호
+////
+////
+////            // 값 전달은 DTO 객체를 이용해 처리할 전달 받은 값을 DTO 객체에 넣음
+////            CommentDTO pDTO = new CommentDTO();
+////            pDTO.setCommunitySeq(communitySeq);
+////
+////            pDTO.setRNO(rNO); // 댓글 번호
+////            CommentDTO rDTO = commentService.getComment(pDTO);
+////            //DB에서 댓글 삭제
+////            commentService.deleteCommentInfo(rDTO);
+////            dto.setItem(rDTO.getWriter());
+////
+////            msg = "삭제되었습니다.";
+////        }catch (Exception e){
+////            msg = "실패하였습니다 : " + e.getMessage();
+////            log.info(e.toString());
+////            e.printStackTrace();
+////        }finally {
+////            dto = new MsgDTO();
+////            dto.setMsg(msg);
+////
+////        }
+//        return dto;
+//    }
+
     /**
      * 댓글 삭제
      */
@@ -135,16 +230,13 @@ public class CommentController {
 
         try {
             String rNO = CmmUtil.nvl(request.getParameter("rNO")); //댓글번호
-            String userId = ((String) session.getAttribute(SessionEnum.USER_ID.STRING));
 
 
             //로그 찍어주기
             log.info("rNO : " + rNO); //댓글 번호
-            log.info("writer : " + userId); //작성자
 
             // 값 전달은 DTO 객체를 이용해 처리할 전달 받은 값을 DTO 객체에 넣음
             CommentDTO pDTO = new CommentDTO();
-            pDTO.setWriter(userId); //작성자 세션에 올라가있는 userId
             pDTO.setRNO(rNO); // 댓글 번호
 
             //DB에서 댓글 삭제
@@ -161,6 +253,4 @@ public class CommentController {
         }
         return dto;
     }
-
-
 }

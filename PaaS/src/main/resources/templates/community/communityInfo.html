@@ -59,10 +59,15 @@
             $("#btnCommentSend").on("click", function () {
                 addComment(); //댓글 등록 실행
             })
+
+            $("#btnCommentEdit").on("click", function () {
+                editComment();
+            })
+
         })
 
 
-        //수정하기
+        //게시글 수정하기
         function doEdit() {
             console.log("세션 아이디 : " + session_user_id);
             // console.log("디티오 아이디 : "+user_id);
@@ -76,11 +81,10 @@
             } else {
                 location.href = "/community/communityList"; // 공지사항 리스트 이동
                 alert("본인이 작성한 글만 수정 가능합니다.");
-
             }
         }
 
-        //삭제하기
+        //게시글 삭제하기
         function doDelete() {
             if (session_user_id === user_id) {
                 if (confirm("작성한 글을 삭제하시겠습니까?")) {
@@ -103,7 +107,7 @@
 
         }
 
-
+        //댓글 등록함수 부분
         function addComment() {
             // 사용자로부터 입력 받은 댓글 내용
             let commentText = $("#commentText").val();
@@ -119,7 +123,6 @@
                 let day = String(today.getDate()).padStart(2, '0');
                 return year + '-' + month + '-' + day;
             }
-
 
             // // 글 등록 버튼 클릭 이벤트 처리
             // $("#btnWrite").on("click", function () {
@@ -186,54 +189,55 @@
             });
         }
 
-        // 댓글 수정
-        function editComment(commentId, currentContents, communitySeq) {
-            var updatedContent = prompt("댓글을 수정하세요.", currentContents);
+        //댓글 수정하기
+        // function editComment() {
+        //     console.log("세션 아이디 : " + session_user_id);
+        //     // console.log("디티오 아이디 : "+user_id);
+        //     if (session_user_id === user_id) {
+        //         alert("communitySeq : " + communitySeq);
+        //         location.href = "/community/communityEditInfo?communitySeq=" + communitySeq;
+        //
+        //     } else if (session_user_id === "") {
+        //         alert("로그인 하시길 바랍니다.");
+        //
+        //     } else {
+        //         location.href = "/community/communityList"; // 공지사항 리스트 이동
+        //         alert("본인이 작성한 글만 수정 가능합니다.");
+        //
+        //     }
+        // }
 
-            if (updatedContent === null) {
-                return; // 취소 버튼 클릭 시 아무 동작도 하지 않음
-            }
+        //댓글 삭제하기
+        function deleteComment(rNO, communitySeq, writer) {
 
-            $.ajax({
-                type: "POST",
-                url: "community/commentUpdateInfo",
-                data: {
-                    rNO: commentId,
-                    contents: updatedContent,
-                    communitySeq: communitySeq
-                },
-                success: function (data) {
-                    alert(data.msg);
-                    // 댓글 수정 후 필요한 동작 수행 (예: 댓글 목록 갱신)
-                    updateCommentList();
-                },
-                error: function () {
-                    alert("댓글 수정 중 오류가 발생했습니다.");
+            alert("rNO : "+rNO);
+
+            var confirmation = confirm("정말로 삭제하시겠습니까?");
+            if (confirmation) {
+                if (session_user_id === writer) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/comment/commentDelete",
+                        data: {
+                            rNO: rNO,
+                        },
+                        success: function (response) {
+                            alert(response.msg);
+                            if (response.msg === "삭제되었습니다.") {
+                                $("#comment-" + rNO).remove();
+                            }
+                        },
+                        error: function (error) {
+                            console.error("댓글 삭제 실패:", error);
+                        }
+                    });
+                } else {
+                    alert("자신이 작성한 댓글만 삭제할 수 있습니다.");
                 }
-            });
-        }
-
-        // 댓글 삭제
-        function deleteComment(commentId, communitySeq) {
-            if (confirm("댓글을 삭제하시겠습니까?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "community/commentDeleteInfo",
-                    data: {
-                        rNO: commentId,
-                        communitySeq: communitySeq
-                    },
-                    success: function (data) {
-                        alert(data.msg);
-                        // 댓글 삭제 후 필요한 동작 수행 (예: 댓글 목록 갱신)
-                        updateCommentList();
-                    },
-                    error: function () {
-                        alert("댓글 삭제 중 오류가 발생했습니다.");
-                    }
-                });
             }
         }
+
+
 
     </script>
 </head>
@@ -354,7 +358,7 @@
                         <dd th:text="${rDTO.readCnt}"></dd>
                     </dl>
                 </div>
-                <div class="cont" th:utext="${rDTO.contents}"></div>
+                <div class="cont" th:text="${rDTO.contents}"></div>
             </div>
             <div class="bt_list">
                 <button id="btnEdit" class="custom-button" type="button">수정</button>
@@ -365,39 +369,39 @@
     </div>
 
 
-    <form style="padding-bottom: 100px">
-        <div class="container2">
-            <!-- 이전 디자인 부분은 그대로 유지 -->
+    <div class="container2" style="padding-bottom: 150px">
+        <!-- 이전 디자인 부분은 그대로 유지 -->
 
-            <div class="comments">
-                <h2>댓글</h2>
+        <div class="comments">
+            <h2>댓글</h2>
 
 
-                <!-- 댓글 목록 출력 부분 -->
-                <div id="commentList">
-                    <div th:each="comment : ${commentList}" class="comment" th:id="${'comment-' + comment.rNO}">
-                        <div class="comment-author" th:text="${comment.writer}"></div>
-                        <div class="comment-date" th:text="'댓글 작성일: ' + ${comment.wdate}"></div>
-                        <div class="comment-content" th:text="${comment.contents}"></div>
+            <!-- 댓글 목록 출력 부분 -->
+            <div id="commentList">
+                <div th:each="comment : ${commentList}" class="comment" th:id="${'comment-' + comment.rNO}">
+                    <div class="comment-author" th:text="${comment.writer}"></div>
+                    <div class="comment-date" th:text="'댓글 작성일: ' + ${comment.wdate}"></div>
+                    <div class="comment-content" th:text="${comment.contents}"></div>
 
-                        <!-- 수정 버튼 -->
-                        <button class="btn-edit-comment" onclick="editComment('${comment.rNO}', '${comment.contents}', '${comment.communitySeq}')">수정</button>
+                    <!-- 수정 버튼 -->
+                    <button class="btn-edit-comment" onclick="editComment('${comment.rNO}', '${comment.contents}', '${comment.communitySeq}', '${comment.writer}')">수정</button>
 
-                        <!-- 삭제 버튼 -->
-                        <button class="btn-delete-comment" onclick="deleteComment('${comment.rNO}', '${comment.communitySeq}')">삭제</button>
-                    </div>
-                </div>
+                    <!-- 삭제 버튼 -->
+<!--                    <button class="btn-delete-comment" th:onclick="deleteComment(${comment.rNO}, ${comment.communitySeq}, ${comment.writer})">삭제</button>-->
+                    <button class="btn-delete-comment" th:attr="onclick='deleteComment(' + ${comment.rNO} + ', ' + ${comment.communitySeq} + ', \'' + ${comment.writer} + '\')'">삭제</button>
 
-                <div class="comment-input">
-                    <textarea id="commentText" rows="3" placeholder="댓글을 입력하세요"></textarea>
-                </div>
-
-                <div class="comment-button">
-                    <button class="button-comment" id="btnCommentSend" onclick="commentInsert()">댓글 작성</button>
                 </div>
             </div>
+
+            <div class="comment-input">
+                <textarea id="commentText" rows="3" placeholder="댓글을 입력하세요"></textarea>
+            </div>
+
+            <div class="comment-button">
+                <button class="button-comment" id="btnCommentSend">댓글 작성</button>
+            </div>
         </div>
-    </form>
+    </div>
 
 </main>
 <footer>

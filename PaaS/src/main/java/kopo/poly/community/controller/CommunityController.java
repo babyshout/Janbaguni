@@ -243,17 +243,19 @@ public class CommunityController {
         List<CommentDTO> commentList = Optional.ofNullable(commentService.getCommentList(pDTO)).orElseGet(ArrayList::new);
 
 
-        //리스트 값 찍어보기
-        log.info("commentList Size : " + Integer.toString(commentList.size()));
-//        commentList.stream().forEach(communityDTO -> {
-//            log.info("List's dto : " + communityDTO.toString());
-//        });
-
 
         log.info("rDTO : " + rDTO.toString());
         //조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("commentList", commentList);
+
+
+        //리스트 값 찍어보기
+        log.info("commentList Size : " + Integer.toString(commentList.size()));
+        commentList.stream().forEach(communityDTO -> {
+            log.info("List's dto : " + communityDTO.toString());
+        });
+
         log.info(this.getClass().getName() + ".communityInfo End!");
 
         return "community/communityInfo";
