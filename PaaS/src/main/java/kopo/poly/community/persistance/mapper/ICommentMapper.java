@@ -10,7 +10,6 @@ import java.util.List;
 public interface ICommentMapper {
     List<CommentDTO> getCommentList(CommunityDTO pDTO) throws Exception;
 
-    CommentDTO getComment(CommentDTO pDTO) throws Exception;
 
 //    CommentDTO getCommentInfo(CommentDTO pDTO, boolean type) throws Exception;
 

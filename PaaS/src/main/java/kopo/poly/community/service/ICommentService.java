@@ -15,7 +15,6 @@ public interface ICommentService {
      */
     List<CommentDTO> getCommentList(CommunityDTO pDTO) throws Exception;
 
-    CommentDTO getComment(CommentDTO pDTO) throws Exception;
 
     /**
      * 댓글 등록
