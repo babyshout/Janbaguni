@@ -46,7 +46,7 @@ public class CommunityController {
     @GetMapping(value = "communityList")
     public String communityList(ModelMap model, @RequestParam(defaultValue = "1") int page) throws Exception {
 
-        //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
+        // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악한다.)
         log.info(this.getClass().getName() + ".CommunityList Start!");
 
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
@@ -68,32 +68,17 @@ public class CommunityController {
         int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
         rList = rList.subList(fromIndex, toIndex);
 
-        //공지사항 리스트 조회하기
-        // java8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
-        //service를 호출하여 공지사항 결과를 받아줌
-//        List<CommunityDTO> rList = Optional.ofNullable(
-//                CommunityService.getCommunityList()
-//        ).orElseGet(ArrayList::new);
-
-
-//        리스트 값 찍어보기
-//        log.info("rList Size : " + Integer.toString(rList.size()));
-//        for (CommunityDTO dto : rList) {
-//            log.info("dto : " + dto.toString());
-//        }
-
-        //공지사항 결과를 JSP로 전달하기 위해 model 객체에 추가
-        //조회된 리스트 결과값 넣어주기
+        // 공지사항 결과를 JSP로 전달하기 위해 model 객체에 추가
+        // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
 
-
-        //실행됐는지 확인하기 위해 로그 찍어주기
+        // 실행됐는지 확인하기 위해 로그 찍어주기
         log.info(this.getClass().getName() + ".페이지 번호 : " + page);
         log.info(this.getClass().getName() + ".CommunityList End!");
 
-        //함수 처리가 끝나고 보여줄 JSP 파일명
+        // 함수 처리가 끝나고 보여줄 JSP 파일명
         // webapp/WEB-INF/views/notice/communityList.html -> jsp 파일 실행
         return "/community/communityList";
     }

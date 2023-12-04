@@ -4,17 +4,18 @@
 <!--JAVA와 연결할 Mapper 파일 설정-->
 <mapper namespace="kopo.poly.community.persistance.mapper.ICommentMapper">
     <select id="getCommentList" resultType="CommentDTO" parameterType="CommunityDTO">
-        SELECT C.RNO, C.WRITER, C.CONTENTS, DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE
+        SELECT C.RNO, C.WRITER, C.CONTENTS, C.COMMUNITY_SEQ, DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE
         FROM COMMENT C
         WHERE C.COMMUNITY_SEQ = #{communitySeq}
         ORDER BY C.WDATE DESC
     </select>
 
-    <select id="getComment" resultType="CommentDTO" parameterType="CommentDTO">
-        SELECT C.RNO, C.WRITER, C.CONTENTS, DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE
-        FROM COMMENT C
-        WHERE C.rNO = #{rNO};
-    </select>
+
+<!--    <select id="getComment" resultType="CommentDTO" parameterType="CommentDTO">-->
+<!--        SELECT C.RNO, C.WRITER, C.CONTENTS, DATE_FORMAT(C.WDATE, '%Y-%m-%d') AS WDATE-->
+<!--        FROM COMMENT C-->
+<!--        WHERE C.rNO = #{rNO};-->
+<!--    </select>-->
 
     <!--댓글 등록 쿼리문-->
     <insert id="insertCommentInfo" parameterType="CommentDTO">
@@ -45,8 +46,8 @@
         SET
             WRITER = #{writer},
             CONTENTS = #{contents},
-            WDATE = #{wdate}
-        WHERE RNO = #{rno}
+            WDATE = NOW()
+        WHERE RNO = #{rNO}
     </update>
 
 </mapper>

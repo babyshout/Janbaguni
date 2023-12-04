@@ -79,7 +79,7 @@ public class CommentController {
      * 게시판 글 수정
      */
     @ResponseBody
-    @PostMapping(value = "commentUpdateInfo")
+    @PostMapping(value = "commentUpdate")
     public MsgDTO commentUpdate(HttpSession session, HttpServletRequest request){
         log.info(this.getClass().getName()+ " .commentUpdate Start!");
 
@@ -90,19 +90,19 @@ public class CommentController {
             String writer = (String)session.getAttribute(SessionEnum.USER_ID.STRING);
             String rNO = CmmUtil.nvl(request.getParameter("rNO")); //댓글 번호
             String contents = CmmUtil.nvl(request.getParameter("contents")); //제목
-            String wDate = CmmUtil.nvl(request.getParameter("wDate")); //댓글 작성날짜
+
 
             log.info("writer : "+ writer);
             log.info("rNO : " + rNO);
             log.info("contents : " + contents);
-            log.info("wDate : " + wDate);
+
 
             //데이터를 저장하기 위해 DTO에 값 넣어주기
             CommentDTO pDTO = new CommentDTO(); //pDTO 생성
             pDTO.setWriter(writer);
             pDTO.setRNO(rNO);
             pDTO.setContents(contents);
-            pDTO.setWdate(wDate);
+
 
             commentService.updateCommentInfo(pDTO);
 

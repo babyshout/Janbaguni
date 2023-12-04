@@ -2,34 +2,39 @@
 
 
 .pagination {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .pagination ul {
     list-style: none;
     padding: 0;
-    margin: 0;
     display: flex;
 }
 
 .pagination li {
-    margin-right: 5px; /* 조절 가능한 값 */
+    margin-right: 5px;
 }
 
 .pagination a {
     text-decoration: none;
-    padding: 8px 12px;
-    background-color: #e0e0e0; /* 배경 색상 */
-    color: #333; /* 글자 색상 */
-    border-radius: 4px;
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
 }
 
 .pagination .active a {
-    background-color: #333; /* 활성화된 페이지의 배경 색상 */
-    color: #fff; /* 활성화된 페이지의 글자 색상 */
+    background-color: #4CAF50;
+    color: white;
 }
+/*페이징 여기까지*/
 
 
 /*댓글 css*/

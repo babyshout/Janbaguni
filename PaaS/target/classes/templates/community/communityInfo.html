@@ -60,10 +60,6 @@
                 addComment(); //댓글 등록 실행
             })
 
-            $("#btnCommentEdit").on("click", function () {
-                editComment();
-            })
-
         })
 
 
@@ -106,7 +102,6 @@
             }
 
         }
-
 
 
         //댓글 등록함수 부분
@@ -191,56 +186,80 @@
             });
         }
 
-        // 댓글 수정 폼을 보여주는 함수
-        function showEditCommentForm(rNO, contents, communitySeq, writer) {
+
+        //댓글 수정하기 폼
+        function showEditCommentForm(rNO, contents, communitySeq, writer, wdate) {
+
+            console.log("rNO : ", rNO);
+            console.log("contents : ", contents);
+            console.log("communitySeq : ", communitySeq);
+            console.log("writer : ", writer);
+            console.log("wdate : ", wdate);
+
             // 기존 댓글 내용을 수정 폼에 채우기
             $("#editCommentText-" + rNO).val(contents);
 
             // 기존 댓글 내용을 감추고 수정 폼을 보여주기
-            $("#comment-contents-" + rNO).hide();
             $(".edit-comment-form").hide();
-            $(".edit-comment-form").filter("[id='comment-" + rNO + "']").show();
+            $("#comment-" + rNO + " .edit-comment-form").show();
+
         }
 
-        // 수정된 댓글을 저장하는 함수
-        function saveEditComment(rNO, communitySeq, writer) {
+        // 댓글 수정 폼을 저장하는 함수
+        function saveEditComment(rNO, contents, communitySeq, writer) {
             // 수정된 댓글 내용 가져오기
-            var editedContents = $("#editCommentText-" + rNO).val();
+            console.log("수정 댓글 : " + contents);
 
-            // AJAX로 commentUpdate 처리
+            let parameters = {
+                'rNO' : rNO,
+                'contents': contents,
+                'communitySeq': communitySeq,
+                'writer' : writer
+            }
+            let commentContents = document.getElementById("editCommentText-" + rNO);
+
+            // console.log($("#editCommentText-" + rNO).val());
+
+            console.log(commentContents)
+            console.log(parameters)
+            console.log("commentContents.contents.value : " + commentContents.value)
+            // Ajax를 사용하여 서버에 수정된 댓글 내용을 전송
             $.ajax({
                 type: "POST",
                 url: "/comment/commentUpdate",
                 data: {
                     rNO: rNO,
-                    contents: editedContents,
+                    contents: commentContents.value,
+                    communitySeq: communitySeq,
+                    writer: writer,
+
                 },
                 success: function (response) {
+                    // 서버에서 성공적으로 응답이 왔을 때의 처리
                     alert(response.msg);
-                    if (response.msg === "수정되었습니다.") {
-                        // 수정된 댓글 내용 업데이트
-                        $("#comment-contents-" + rNO).text(editedContents);
+                    // 수정된 내용으로 화면 업데이트 등 필요한 작업 수행
+                    // 예: 수정된 내용을 해당 댓글 영역에 반영
+                    $("#comment-contents-" + rNO).text(commentContents.value);
 
-                        // 수정 폼 감추기
-                        $(".edit-comment-form").filter("[id='comment-" + rNO + "']").hide();
-                        // 원래의 댓글 내용 보여주기
-                        $("#comment-contents-" + rNO).show();
-                    }
+                    // 수정 폼 감추기
+                    $("#comment-" + rNO + " .edit-comment-form").hide();
                 },
                 error: function (error) {
-                    console.error("댓글 수정 실패:", error);
+                    // 서버 요청 실패 시의 처리
+                    console.log("error : " + error);
+                    alert(error.msg);
                 }
             });
         }
 
 
-
         //댓글 삭제하기
         function deleteComment(rNO, communitySeq, writer) {
 
-            alert("rNO : "+rNO);
+            // alert("rNO : " + rNO);
 
             var confirmation = confirm("정말로 삭제하시겠습니까?");
+
             if (confirmation) {
                 if (session_user_id === writer) {
                     $.ajax({
@@ -264,7 +283,6 @@
                 }
             }
         }
-
 
 
     </script>
@@ -408,19 +426,30 @@
                 <div th:each="comment : ${commentList}" class="comment" th:id="${'comment-' + comment.rNO}">
                     <div class="comment-author" th:text="${comment.writer}"></div>
                     <div class="comment-date" th:text="'댓글 작성일: ' + ${comment.wdate}"></div>
-                    <div class="comment-content" th:text="${comment.contents}" id="${'comment-contents-' + comment.rNO}"></div>
+                    <div class="comment-content" th:text="${comment.contents}"
+                         th:id="'comment-contents-' + ${comment.rNO}"></div>
 
                     <!-- 수정 버튼 -->
-                    <button class="btn-edit-comment" onclick="showEditCommentForm('${comment.rNO}', '${comment.contents}', '${comment.communitySeq}', '${comment.writer}')">수정</button>
+                    <button class="btn-edit-comment"
+                            th:attr="onclick='showEditCommentForm(\'' + ${comment.rNO} + '\', \'' + ${comment.contents} + '\', \'' + ${comment.communitySeq} + '\', \'' + ${comment.writer} + '\', \'' + ${comment.wdate}+'\')'">
+                        수정
+                    </button>
 
                     <!-- 삭제 버튼 -->
-                    <button class="btn-delete-comment" th:attr="onclick='deleteComment(' + ${comment.rNO} + ', ' + ${comment.communitySeq} + ', \'' + ${comment.writer} + '\')'">삭제</button>
+                    <button class="btn-delete-comment"
+                            th:attr="onclick='deleteComment(\'' + ${comment.rNO} + '\', \'' + ${comment.communitySeq} + '\', \'' + ${comment.writer} + '\')'">
+                        삭제
+                    </button>
 
                     <!-- 수정하는 입력 창 -->
                     <div class="edit-comment-form" style="display: none;">
-                        <textarea id="editCommentText-${comment.rNO}" rows="3" placeholder="댓글을 수정하세요"></textarea>
-                        <button class="btn-save-edit-comment" onclick="saveEditComment('${comment.rNO}', '${comment.communitySeq}', '${comment.writer}')">저장</button>
+                        <textarea th:id="'editCommentText-' + ${comment.rNO}" rows="3" placeholder="댓글을 수정하세요"></textarea>
+                        <button class="btn-save-edit-comment"
+                                th:attr="onclick='saveEditComment(\'' + ${comment.rNO} + '\', \''+ ${comment.contents} + '\', \'' + ${comment.communitySeq} + '\', \'' + ${comment.writer} + '\')'">
+                            저장
+                        </button>
                     </div>
+
                 </div>
             </div>
 

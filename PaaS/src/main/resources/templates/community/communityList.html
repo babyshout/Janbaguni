@@ -283,10 +283,20 @@
         </div>
 
         <!-- 페이징 처리를 위한 div 추가 -->
-        <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center;" th:if="${totalPages > 0}">
+        <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center;" th:if="${totalPages > 1}">
             <ul style="list-style: none; padding: 0;">
-                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${pageNumber == currentPage} ? 'active'" style="margin-right: 5px;">
-                    <a th:href="@{'?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                <li th:if="${currentPage > 1}">
+                    <a th:href="@{'/community/communityList?page=' + ${currentPage - 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${pageNumber == currentPage ? 'active' : ''}" style="margin-right: 5px;">
+                    <a th:href="@{'/community/communityList?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages}">
+                    <a th:href="@{'/community/communityList?page=' + ${currentPage + 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
                 </li>
             </ul>
         </div>
