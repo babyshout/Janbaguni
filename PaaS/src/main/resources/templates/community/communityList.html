@@ -11,12 +11,8 @@
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
 
-    <style>
-
-
-    </style>
-
     <!-- CSS here -->
+
     <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
     <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
@@ -53,7 +49,7 @@
             // 공지글이 있는 경우 맨 위로 이동
             let noticeRow = $(".notice");
             if (noticeRow.length > 0) {
-                noticeRow.prependTo("#listTable tbody");
+                noticeRow.prependTo("#listTable tbody"); //prepend 첫번째로 추가된다.
             }
             // 글 등록 버튼 클릭 이벤트 처리
             $("#btnWrite").on("click", function () {
@@ -308,6 +304,7 @@
 
 
 <footer>
+
     <div class="footer-wrappper footer-bg">
         <!-- Footer Start-->
         <div class="footer-area footer-padding">
@@ -405,6 +402,7 @@
     </div>
 </footer>
 <!-- Scroll Up -->
+
 <div id="back-top">
     <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
