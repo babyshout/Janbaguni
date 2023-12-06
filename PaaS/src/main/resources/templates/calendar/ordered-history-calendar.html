@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>calendar</title>
+
+  <script src="/js/jquery-3.6.0.min.js"></script>
+
+  <script src="/fullcalendar-6.1.9/dist/index.global.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          var calendarEl = document.getElementById('calendar');
+
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+              headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth'
+              },
+              initialDate: new Date(),
+              lang: 'ko',
+              navLinks: true,
+              editable: false,
+              eventSources: [
+                  {
+                      url: "/order/history/getCalendarTestData"
+                  },
+                  // {
+                  //     url: "/order/history/getCalendarData"
+                  // },
+                  {
+                      title: 'Business Lunch',
+                      start: '2023-01-03T13:00:00',
+                      constraint: 'businessHours'
+                  },
+                  {
+                      title: 'Meeting',
+                      start: '2023-01-13T11:00:00',
+                      constraint: 'availableForMeeting', // defined below
+                      color: '#257e4a'
+                  },
+                  {
+                      title: 'Conference',
+                      start: '2023-01-18',
+                      end: '2023-01-20'
+                  },
+                  {
+                      title: 'Party',
+                      start: '2023-01-29T20:00:00'
+                  },
+
+                  // areas where "Meeting" must be dropped
+                  {
+                      groupId: 'availableForMeeting',
+                      start: '2023-01-11T10:00:00',
+                      end: '2023-01-11T16:00:00',
+                      display: 'background'
+                  },
+                  {
+                      groupId: 'availableForMeeting',
+                      start: '2023-01-13T10:00:00',
+                      end: '2023-01-13T16:00:00',
+                      display: 'background'
+                  },
+
+                  // red areas where no events can be dropped
+                  {
+                      start: '2023-01-24',
+                      end: '2023-01-28',
+                      overlap: false,
+                      display: 'background',
+                      color: '#ff9f89'
+                  },
+                  {
+                      start: '2023-01-06',
+                      end: '2023-01-08',
+                      overlap: false,
+                      display: 'background',
+                      color: '#ff9f89'
+                  }
+              ],
+              eventClick: function (info) {
+                  info.jsEvent.preventDefault();
+
+                  console.log("info.event.url");
+                  console.log(info.event.url)
+
+                  console.log("info")
+                  console.log(info);
+                  console.log("info.event")
+                  console.log(info.event);
+
+
+                  console.log("info.event.start.getDate")
+                  console.log(info.event.start.getDate());
+                  console.log("info.event.start.getTime")
+                  console.log(info.event.start.getTime());
+
+                  console.log("info.event.start.toJson")
+                  console.log(info.event.start.toJSON());
+                  console.log("info.event.start.toString")
+                  console.log(info.event.start.toString());
+
+
+                  // $.ajax({
+                  //     url: "/order/history/detail",
+                  //     type: "get",
+                  //     dataType: "JSON",
+                  //     data : {
+                  //         start : info.event.start,
+                  //         title : info.event.title,
+                  //         url : info.event.url,
+                  //         allDay : info.event.allDay,
+                  //         orderedHistoryDTO : info.event.extendedProps.orderedHistoryDTO
+                  //     }
+                  // })
+
+                  if (info.event.url) {
+                      location.href = info.event.url;
+                  }
+
+                  // location.href = info.event.orderedHistoryDTO.ocrDate
+              }
+          });
+
+          calendar.render();
+
+
+      })
+  </script>
+</head>
+<body>
+<h1>
+  캘린더
+</h1>
+
+<div id="calendar"></div>
+
+</body>
+</html>

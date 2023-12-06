@@ -1,8 +1,10 @@
-package kopo.poly.order.history.dto;
+package kopo.poly.calendar.history.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -15,10 +17,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@ToString
 public class OrderedHistoryDTO {
-    private LocalDate start_day;
-    private LocalDate end_day;
-    private String title;
-
-
+    private Number price;
+    private String userId;
+    private LocalDate ocrDate;
 }
