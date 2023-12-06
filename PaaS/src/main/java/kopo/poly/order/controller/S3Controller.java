@@ -7,6 +7,7 @@ import kopo.poly.order.utill.DateUtil;
 import kopo.poly.order.utill.StringPreprocessingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+//import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+//@RefreshScope
 public class S3Controller {
     private final IS3UploadService s3UploadService;
 

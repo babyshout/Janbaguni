@@ -10,7 +10,7 @@ import kopo.poly.order.utill.StringPreprocessingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+//import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/order")
+//@RefreshScope
 public class RestCrawlingController {
     @Value("${naver.service.template.secretKey}")
     private String secretKey;
@@ -42,6 +43,7 @@ public class RestCrawlingController {
     @PostMapping("/crawlingResult")
     public List<List<ProductCrawlingDTO>> crawlingResult(@RequestBody Map<String, String> requestBody, HttpSession session) {
         CrawlingComposite tmp = (CrawlingComposite) session.getAttribute("SS_CRAWLING_RESULT");
+//        session.removeAttribute("SS_CRAWLING_RESULT");
         List<List<ProductCrawlingDTO>> resultList = new ArrayList<>();
 
 
@@ -81,7 +83,7 @@ public class RestCrawlingController {
                 resultList.add(tmp.getBestList());
 
         }
-        session.setMaxInactiveInterval(1800);
+
         return resultList;
     }
 
@@ -197,14 +199,14 @@ public class RestCrawlingController {
             tempFile.delete();
             if (result.getDate() == null || result.getDate().isEmpty()) {
                 tempFile.delete();
-            } // Delete the temporary file
+            } // 임시파일 삭제
 
             log.info("tempFile.Path : " + tempFile.getPath());
 
 
             try {
                 log.info("이미지 url db 저장 시작!!!");
-                imageUrl = s3UploadService.upload(copiedFile, saveFileName);
+                imageUrl = s3UploadService.upload(copiedFile, saveFileName); //Object Storage에 업로드
                 orderDTO.setUserId(userId);
                 orderDTO.setUrl(imageUrl);
                 orderDTO.setOcrDate(result.getDate());
@@ -213,7 +215,7 @@ public class RestCrawlingController {
                 for (int i = 0; i < result.getNameList().size(); i++) {
                     OcrDTO ocrDTO = new OcrDTO();
                     ocrDTO.setUserId(userId);
-                    ocrDTO.setUrl(imageUrl);
+                    ocrDTO.setUrl(imageUrl); // Object Storage 경로
                     ocrDTO.setOcrDate(result.getDate());
                     ocrDTO.setProductName(result.getNameList().get(i));
                     ocrDTO.setPrice(result.getPriceList().get(i));

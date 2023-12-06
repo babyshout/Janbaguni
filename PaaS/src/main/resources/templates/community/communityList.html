@@ -11,12 +11,8 @@
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
 
-    <style>
-
-
-    </style>
-
     <!-- CSS here -->
+
     <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
     <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
@@ -34,11 +30,11 @@
 
     <script type="text/javascript">
 
+
         //상세보기 이동
         function doDetail(communitySeq) {
             location.href = "/community/communityInfo?communitySeq=" + communitySeq;
         }
-
 
         //html 파일이 실행될때 자동 실행
         $(document).ready(function () {
@@ -53,9 +49,32 @@
             // 공지글이 있는 경우 맨 위로 이동
             let noticeRow = $(".notice");
             if (noticeRow.length > 0) {
-                noticeRow.prependTo("#listTable tbody");
+                noticeRow.prependTo("#listTable tbody"); //prepend 첫번째로 추가된다.
             }
+            // 글 등록 버튼 클릭 이벤트 처리
+            $("#btnWrite").on("click", function () {
+                // AJAX를 통해 로그인 상태 확인
+                $.ajax({
+                    url: "/community/checkLoginStatus", // checkLoginStatus에서 받아온 result 결과로 처리
+                    type: "GET",
+                    success: function(response) {
+                        if (response.loggedIn) { // 받은 result 결과값이 true인 경우 Reg페이지 이동
+                            // 로그인 된 경우 글 등록 페이지로 이동
+                            window.location.href = "/community/communityReg";
+                        } else { //false인 경우 로그인페이지로 이동
+                            // 로그인되지 않은 경우 알림 띄우기
+                            alert("로그인이 필요합니다.");
+                            window.location.href = "/login/login-form";
+                        }
+                    },
+                    error: function() { //에러 처리
+                        // 에러 처리
+                        alert("서버 오류가 발생했습니다.");
+                    }
+                });
+            });
         });
+
 
 
         // 테이블 갱신 함수
@@ -74,7 +93,6 @@
                         updateTable(json);
                     } else {
                         alert("검색된 결과가 없습니다.");
-                        location.href= "communityList";
                     }
                 }
             });
@@ -111,15 +129,8 @@
 
         }
 
-
-
-
     </script>
 
-    <style>
-
-
-    </style>
 </head>
 
 <body>
@@ -211,7 +222,7 @@
     </section>
 
     <article style="padding-bottom: 300px; padding-top: 150px">
-        <div class="container" style="height: 450px;">
+        <div class="container">
             <h2>게시판</h2>
 
             <div class="aside">
@@ -248,44 +259,52 @@
                 </thead>
                 <tbody id="tableBody">
                 <!-- 기존 행들을 반복 출력하는 부분은 그대로 유지 -->
-                <!--공지글 맨 위에 출력 특별한 클래스로 notice-row라는 이름으로 지정후 위에 페이지 로딩 완료시 시작되는 함수 실행-->
                 <tr th:each="dto : ${rList}" th:class="${dto.communityYn == 'Y'} ? 'notice-row' : ''">
                     <!-- 행 내용 -->
                     <td th:if="${dto.communityYn == 'Y'}">
                         <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">공지</span>
                     </td>
                     <td th:unless="${dto.communityYn == 'Y'}">
-                        <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.communitySeq}]]</span>
+                        <!-- 제목 클릭 시 상세정보 페이지로 이동 -->
+                        <span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'" style="cursor: pointer;">[[${dto.communitySeq}]]</span>
                     </td>
-                    <td>[[${dto.title}]]</td>
-                    <td>[[${dto.userId}]]</td>
-                    <td>[[${dto.regDt}]]</td>
-                    <td>[[${dto.readCnt}]]</td>
+                    <!--그냥 다 눌렀을 때 들어가게 만듦-->
+                    <td><span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'" style="cursor: pointer;">[[${dto.title}]]</span></td>
+                    <td><span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'" style="cursor: pointer;">[[${dto.userId}]]</span></td>
+                    <td><span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'" style="cursor: pointer;">[[${dto.regDt}]]</span></td>
+                    <td><span th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'" style="cursor: pointer;">[[${dto.readCnt}]]</span></td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
-        <!--            <div class="board_page">-->
-        <!--                <a href="#" class="bt first">&lt;&lt;</a>-->
-        <!--                <a href="#" class="bt prev">&lt;</a>-->
-        <!--                <a href="#" class="num on">1</a>-->
-        <!--                <a href="#" class="num">2</a>-->
-        <!--                <a href="#" class="num">3</a>-->
-        <!--                <a href="#" class="num">4</a>-->
-        <!--                <a href="#" class="num">5</a>-->
-        <!--                <a href="#" class="bt next">&gt;</a>-->
-        <!--                <a href="#" class="bt last">&gt;&gt;</a>-->
-        <!--            </div>-->
+        <!-- 페이징 처리를 위한 div 추가 -->
+        <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center;" th:if="${totalPages > 1}">
+            <ul style="list-style: none; padding: 0;">
+                <li th:if="${currentPage > 1}">
+                    <a th:href="@{'/community/communityList?page=' + ${currentPage - 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${pageNumber == currentPage ? 'active' : ''}" style="margin-right: 5px;">
+                    <a th:href="@{'/community/communityList?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages}">
+                    <a th:href="@{'/community/communityList?page=' + ${currentPage + 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div class="bt_wrap">
-            <a href="communityReg" class="on">등록</a>
-            <!-- <a href="#">수정</a> -->
+            <button id="btnWrite" class="on">등록</button>
         </div>
     </article>
 </main>
 
 
 <footer>
+
     <div class="footer-wrappper footer-bg">
         <!-- Footer Start-->
         <div class="footer-area footer-padding">
@@ -383,6 +402,7 @@
     </div>
 </footer>
 <!-- Scroll Up -->
+
 <div id="back-top">
     <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>

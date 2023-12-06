@@ -84,8 +84,8 @@
         FROM
             COMMUNITY C
         WHERE
-            C.TITLE LIKE CONCAT('%', #{keyWord}, '%') OR
-            C.CONTENTS LIKE CONCAT('%', #{keyWord}, '%')
+            UPPER(C.TITLE) LIKE CONCAT('%', UPPER(#{keyWord}), '%') OR
+            UPPER(C.CONTENTS) LIKE CONCAT('%', UPPER(#{keyWord}), '%')
     </select>
 
 

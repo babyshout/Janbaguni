@@ -47,6 +47,7 @@ public class LoginController {
     public Map<String, Object> loginProc(HttpServletRequest request, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
+
         int res = 0; // 로그인 처리 결과를 저장할 변수
         String msg = "";
         String url = "/main";
@@ -305,5 +306,9 @@ public class LoginController {
 
         return "/user/bingguxi/find/find-passwd-result";
     }
-
+    @GetMapping(value="test")
+    public String test(HttpSession session){
+        session.invalidate();
+        return "redirect:/login/login-form";
+    }
 }
