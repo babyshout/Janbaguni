@@ -40,34 +40,34 @@ public class NaverOrderPaperOcr {
         log.info("callApi 시작!");
 
         try {
-            URL url = new URL(apiURL); // API URL을 URL 객체로 만듭니다.
-            HttpURLConnection con = (HttpURLConnection)url.openConnection(); // URL 연결을 위한 HttpURLConnection 객체를 생성합니다.
-            con.setUseCaches(false); // 캐시 사용을 비활성화합니다.
-            con.setDoInput(true); // 입력 스트림 사용을 활성화합니다.
-            con.setDoOutput(true); // 출력 스트림 사용을 활성화합니다.
-            con.setReadTimeout(30000); // 읽기 타임아웃을 설정합니다.
-            con.setRequestMethod(type); // HTTP 메서드를 설정합니다.
-            String boundary = "----" + UUID.randomUUID().toString().replaceAll("-", ""); // 경계 문자열을 생성합니다.
-            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary); // HTTP 요청 헤더를 설정합니다.
-            con.setRequestProperty("X-OCR-SECRET", secretKey); // 시크릿 키를 설정합니다.
+            URL url = new URL(apiURL); // API URL을 URL 객체로
+            HttpURLConnection con = (HttpURLConnection)url.openConnection(); // URL 연결을 위한 HttpURLConnection 객체를
+            con.setUseCaches(false); // 캐시 사용을 비활성화
+            con.setDoInput(true); // 입력 스트림 사용을 활성화
+            con.setDoOutput(true); // 출력 스트림 사용을 활성화
+            con.setReadTimeout(30000); // 읽기 타임아웃을 설정
+            con.setRequestMethod(type); // HTTP 메서드를 설정
+            String boundary = "----" + UUID.randomUUID().toString().replaceAll("-", ""); // 경계 문자열을 생성
+            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary); // HTTP 요청 헤더를 설정합
+            con.setRequestProperty("X-OCR-SECRET", secretKey); // 시크릿 키 설정
 
-            JSONObject json = new JSONObject(); // JSON 객체를 생성합니다.
-            json.put("version", "V2"); // JSON 객체에 버전 정보를 추가합니다.
-            json.put("requestId", UUID.randomUUID().toString()); // JSON 객체에 요청 ID를 추가합니다.
-            json.put("timestamp", System.currentTimeMillis()); // JSON 객체에 타임스탬프를 추가합니다.
-            JSONObject image = new JSONObject(); // JSON 객체를 생성합니다.
-            image.put("format", ext); // 이미지 형식 정보를 추가합니다.
-            image.put("name", "demo"); // 이미지 이름을 추가합니다.
-            JSONArray images = new JSONArray(); // JSON 배열을 생성합니다.
-            images.add(image); // JSON 배열에 이미지 정보를 추가합니다.
-            json.put("images", images); // JSON 객체에 이미지 배열을 추가합니다.
-            String postParams = json.toString(); // JSON 객체를 문자열로 변환합니다.
+            JSONObject json = new JSONObject(); // JSON 객체를 생성
+            json.put("version", "V2"); // JSON 객체에 버전 정보를 추가
+            json.put("requestId", UUID.randomUUID().toString()); // JSON 객체에 요청 ID를 추가
+            json.put("timestamp", System.currentTimeMillis()); // JSON 객체에 타임스탬프를 추가
+            JSONObject image = new JSONObject(); // JSON 객체를 생성
+            image.put("format", ext); // 이미지 형식 정보를 추가
+            image.put("name", "demo"); // 이미지 이름을 추가
+            JSONArray images = new JSONArray(); // JSON 배열을 생성
+            images.add(image); // JSON 배열에 이미지 정보를 추가
+            json.put("images", images); // JSON 객체에 이미지 배열을 추가
+            String postParams = json.toString(); // JSON 객체를 문자열로 변환
 
-            con.connect(); // 서버에 연결합니다.
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream()); // 출력 스트림을 생성합니다.
-            File file = new File(imageFile); // 이미지 파일 객체를 생성합니다.
-            writeMultiPart(wr, postParams, file, boundary); // 멀티파트 요청을 작성합니다.
-            wr.close(); // 출력 스트림을 닫습니다.
+            con.connect(); // 서버에 연결
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream()); // 출력 스트림을 생성
+            File file = new File(imageFile); // 이미지 파일 객체를 생성
+            writeMultiPart(wr, postParams, file, boundary); // 멀티파트 요청을 작성
+            wr.close();
 
             int responseCode = con.getResponseCode(); // HTTP 응답 코드를 가져옵니다.
             BufferedReader br;
@@ -134,26 +134,26 @@ public class NaverOrderPaperOcr {
     }
 
     /**
-     * API 응답 데이터를 가공합니다.
+     * API 응답 데이터 가공
      * @param {StringBuffer} response 응답값
      * @returns {List} 추출된 텍스트 목록
      */
     private List<String> jsonParse(StringBuffer response) throws ParseException {
         // JSON 파싱
-        JSONParser jp = new JSONParser(); // JSON 파서 객체를 생성합니다.
-        JSONObject jobj = (JSONObject) jp.parse(response.toString()); // JSON 응답을 파싱합니다.
+        JSONParser jp = new JSONParser(); // JSON 파서 객체를 생성
+        JSONObject jobj = (JSONObject) jp.parse(response.toString()); // JSON 응답을 파싱
         // "images" 배열 객체를 가져옵니다.
         JSONArray JSONArrayPerson = (JSONArray)jobj.get("images");
-        JSONObject JSONObjImage = (JSONObject)JSONArrayPerson.get(0); // 배열에서 첫 번째 이미지 객체를 가져옵니다.
-        JSONArray s = (JSONArray) JSONObjImage.get("fields"); // 이미지에서 필드 배열을 가져옵니다.
+        JSONObject JSONObjImage = (JSONObject)JSONArrayPerson.get(0); // 배열에서 첫 번째 이미지 객체를 가져오기
+        JSONArray s = (JSONArray) JSONObjImage.get("fields"); // 이미지에서 필드 배열을 가져오기
         // 필드 배열을 Map 리스트로 변환합니다.
         List<Map<String, Object>> m = JsonUtill.getListMapFromJsonArray(s);
         List<String> result = new ArrayList<>();
         List<String> productName = new ArrayList<>();
         for (Map<String, Object> as : m) {
-            result.add((String) as.get("inferText")); // 추출된 텍스트를 결과 리스트에 추가합니다.
+            result.add((String) as.get("inferText")); // 추출된 텍스트를 결과 리스트에 추가
         }
 
-        return result; // 추출된 텍스트 목록을 반환합니다.
+        return result; // 추출된 텍스트 목록을 반환
     }
 }
