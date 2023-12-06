@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @ToString
-public class OrderedHistoryDTO {
+public class OrderedHistoryByDayDTO {
     private Number price;
     private String userId;
     private LocalDate ocrDate;

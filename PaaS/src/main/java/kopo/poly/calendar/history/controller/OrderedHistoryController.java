@@ -1,7 +1,7 @@
 package kopo.poly.calendar.history.controller;
 
 import kopo.poly.calendar.history.dto.CalendarEventDTO;
-import kopo.poly.calendar.history.dto.OrderedHistoryDTO;
+import kopo.poly.calendar.history.dto.OrderedHistoryByDayDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,16 +73,16 @@ public class OrderedHistoryController {
         List<CalendarEventDTO> rList = new ArrayList<>();
 
         CalendarEventDTO dto = new CalendarEventDTO();
-        OrderedHistoryDTO orderedHistoryDTO = new OrderedHistoryDTO();
+        OrderedHistoryByDayDTO orderedHistoryByDayDTO = new OrderedHistoryByDayDTO();
         String url;
 
-        orderedHistoryDTO.setUserId("USER_ID");
-        orderedHistoryDTO.setPrice(Integer.parseInt("100000"));
-        orderedHistoryDTO.setOcrDate(LocalDate.now());
-        dto.setOrderedHistoryDTO(orderedHistoryDTO);
-        dto.setStart(orderedHistoryDTO.getOcrDate());
+        orderedHistoryByDayDTO.setUserId("USER_ID");
+        orderedHistoryByDayDTO.setPrice(Integer.parseInt("100000"));
+        orderedHistoryByDayDTO.setOcrDate(LocalDate.now());
+        dto.setOrderedHistoryByDayDTO(orderedHistoryByDayDTO);
+        dto.setStart(orderedHistoryByDayDTO.getOcrDate());
         dto.setTitle(dto.getStart().toString() + "의 타이틀");
-        url = "/order/history/detail?ocrDate=" + orderedHistoryDTO.getOcrDate();
+        url = "/order/history/detail?ocrDate=" + orderedHistoryByDayDTO.getOcrDate();
         dto.setUrl(url);
 
         log.info("dto1 : " + dto.toString());
@@ -91,15 +91,15 @@ public class OrderedHistoryController {
 
 
         dto = new CalendarEventDTO();
-        orderedHistoryDTO = new OrderedHistoryDTO();
+        orderedHistoryByDayDTO = new OrderedHistoryByDayDTO();
 
-        orderedHistoryDTO.setUserId("USER_ID");
-        orderedHistoryDTO.setPrice(Integer.parseInt("200000"));
-        orderedHistoryDTO.setOcrDate(LocalDate.of(2023, 12, 25));
-        dto.setOrderedHistoryDTO(orderedHistoryDTO);
-        dto.setStart(orderedHistoryDTO.getOcrDate());
+        orderedHistoryByDayDTO.setUserId("USER_ID");
+        orderedHistoryByDayDTO.setPrice(Integer.parseInt("200000"));
+        orderedHistoryByDayDTO.setOcrDate(LocalDate.of(2023, 12, 25));
+        dto.setOrderedHistoryByDayDTO(orderedHistoryByDayDTO);
+        dto.setStart(orderedHistoryByDayDTO.getOcrDate());
         dto.setTitle(dto.getStart().toString() + "의 타이틀");
-        url = "/order/history/detail?ocrDate" + orderedHistoryDTO.getOcrDate();
+        url = "/order/history/detail?ocrDate" + orderedHistoryByDayDTO.getOcrDate();
         dto.setUrl(url);
 
         log.info("dto2 : " + dto.toString());

@@ -30,5 +30,5 @@ public class CalendarEventDTO {
 
     private boolean allDay = true;
 
-    private OrderedHistoryDTO orderedHistoryDTO;
+    private OrderedHistoryByDayDTO orderedHistoryByDayDTO;
 }
