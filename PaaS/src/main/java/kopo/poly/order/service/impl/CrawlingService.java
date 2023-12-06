@@ -65,13 +65,6 @@ public class CrawlingService implements ICrawlingService {
         }finally {
             return productList;
         }
-
-//        if (!productList.isEmpty()) {
-//            return productList;
-//        } else {
-//            return null;
-//        }
-
     }
 
     private List<ProductCrawlingDTO> getTestData(String url, String selector, String price, String linkUrl, String getUrl) throws IOException {
