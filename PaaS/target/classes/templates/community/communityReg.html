@@ -73,16 +73,18 @@
                 return;
             }
             let communityCheck = false; //체크 여부 확인 변수
-            for (let i = 0; i < f.communityYn.length; i++) {
-                if (f.communityYn[i].checked) {
-                    communityCheck = true;
-                    break;
+            if (f.userId === "admin"){ //아이디가 admin인 경우에만 공지글 여부 확인 라디오 버튼 확인여부 판단
+                for (let i = 0; i < f.communityYn.length; i++) {
+                    if (f.communityYn[i].checked) {
+                        communityCheck = true;
+                        break;
+                    }
                 }
-            }
-            if (communityCheck === false) {
-                alert("공지글 여부를 선택하시기 바랍니다.");
-                f.communityYn[0].focus();
-                return;
+                if (communityCheck === false) { //admin일때만 적용됨
+                    alert("공지글 여부를 선택하시기 바랍니다.");
+                    f.communityYn[0].focus();
+                    return;
+                }
             }
             if (f.contents.value === "") {
                 alert("내용을 입력하시기 바랍니다.");
@@ -122,6 +124,7 @@
                 }
             )
         }
+
     </script>
 </head>
 <body>
@@ -227,22 +230,20 @@
                     </dl>
                     <dl>
                         <dt>공지글 여부</dt>
-                        <dd>
-                            <input type="radio" name="communityYn" value="Y"> 예
-                            <input type="radio" name="communityYn" value="N"> 아니오
+                        <!-- isAdmin이 true일 때 공지사항 여부 라디오 버튼을 보이게 함 -->
+                        <dd th:if="${isAdmin}">
+                            <input type="radio" name="communityYn" value="Y" /> 예
+                            <input type="radio" name="communityYn" value="N" /> 아니오
+                        </dd>
+                        <!-- isAdmin이 false일 때 공지사항 여부를 강제로 'N'으로 지정 -->
+                        <dd th:unless="${isAdmin}">
+                            <input type="hidden" name="communityYn" value="N" />
+                            <span>지정할 수 없습니다.</span>
                         </dd>
                     </dl>
-
                 </div>
                 <div class="info">
-                    <dl>
-                        <dt>글쓴이</dt>
-                        <dd><input type="text" placeholder="글쓴이 입력" /></dd>
-                    </dl>
-                    <dl>
-                        <dt>비밀번호</dt>
-                        <dd><input type="password" placeholder="비밀번호 입력" /></dd>
-                    </dl>
+
                 </div>
                 <div class="cont">
                     <textarea name="contents" placeholder="내용 입력"></textarea>
@@ -251,13 +252,14 @@
         </div>
         <div class="bt_wrap">
             <button id="btnSend" type="button" class="custom-button">등록</button>
-            <button type="reset" class="custom-button cancel-button">취소</button>
+            <button id="btnBack" type="reset" class="custom-button cancel-button">취소</button>
         </div>
     </div>
     </form>
+</main>
 
 
-
+<!--footer부분-->
 <footer>
     <div class="footer-wrappper footer-bg">
         <!-- Footer Start-->
@@ -397,4 +399,4 @@
 <script src="/community/css/assets/js/main.js"></script>
 
 </body>
-</html
+</html>
