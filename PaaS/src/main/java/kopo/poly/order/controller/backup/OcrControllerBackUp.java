@@ -168,7 +168,7 @@ package kopo.poly.order.controller.backup;//package kopo.poly.order.controller;
 //        }
 //
 //
-//        orderDTO.setOcrDate(result.getDate());
+//        orderDTO.setOcrDateLocalDate(result.getDate());
 //        boolean saveValue = "Y".equals(save); // "Y" 값을 체크로 간주, 그 외의 경우는 false로 설정
 //        log.info("saveValue : "+ save + "!!!!!!!!!");
 //        try {

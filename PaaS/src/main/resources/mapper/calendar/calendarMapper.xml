@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.calendar.history.persistance.mapper.IOrderedHistoryMapper">
+<!--# SELECT USER_ID,-->
+<!--        #        OCR_DATE,-->
+<!--        #        SUM(CONVERT(ORD.PRICE, UNSIGNED) * CONVERT(ORD.COUNT, INTEGER))-->
+<!--        #-->
+<!--        # FROM ORDERED ORD-->
+<!--        # GROUP BY ORD.USER_ID, ORD.OCR_DATE-->
+
+
+<!--        # SELECT-->
+<!--        #     USER_ID,-->
+<!--        #     OCR_DATE,-->
+<!--        #     SUM(CONVERT(ORD.PRICE, FLOAT))-->
+<!--        # FROM ORDERED ORD-->
+<!--        # GROUP BY USER_ID, OCR_DATE-->
+
+<!--    TODO 이거 정상작동 확인함, 이거 기반으로 sql 쿼리문 짜면 될듯-->
+<!--        SELECT-->
+<!--        USER_ID,-->
+<!--        OCR_DATE,-->
+<!--        CONVERT(ORD.PRICE, FLOAT) * CONVERT(ORD.COUNT, FLOAT),-->
+<!--        ORD.PRICE,-->
+<!--        CONVERT(ORD.PRICE, UNSIGNED),-->
+<!--        regexp_replace(-->
+<!--        ORD.PRICE,-->
+<!--        '[^0-9]{0,}[,.][^0-9]{0,}',-->
+<!--        ''-->
+<!--        ) REG_REPLACE,-->
+<!--        ORD.COUNT,-->
+<!--        CONVERT(ORD.COUNT, FLOAT),-->
+<!--        regexp_replace(-->
+<!--        ORD.PRICE,-->
+<!--        '[^0-9]{0,}[,.][^0-9]{0,}',-->
+<!--        ''-->
+<!--        ) * CONVERT(ORD.COUNT, FLOAT) OK-->
+<!--        FROM ORDERED ORD-->
+    <select id="getUserOrderedHistoryByDayDTOList"
+            parameterType="OrderedHistoryByDayDTO"
+            resultType="OrderedHistoryByDayDTO">
+        SELECT USER_ID,
+               OCR_DATE,
+               SUM(
+                           CONVERT(
+                                   regexp_replace(
+                                           ORD.PRICE,
+                                           '[^0-9]{0,}[,.][^0-9]{0,}',
+                                           ''
+                                       ), UNSIGNED) * CONVERT(ORD.COUNT, FLOAT)
+                   ) AS PRICE_SUM,
+               STR_TO_DATE(regexp_replace(
+                                   ORD.OCR_DATE,
+                                   '[^0-9]{0,}[년연월일][^0-9]{0,}',
+                                   '-'
+                               ),
+                           '%Y-%m-%d-'
+                   )
+                     AS OCR_DATE_LOCAL_DATE
+        FROM ORDERED ORD
+        WHERE ORD.USER_ID = #{userId}
+        GROUP BY ORD.OCR_DATE,
+                 ORD.USER_ID
+    </select>
+
+    <select id="getUserOrderedList"
+            parameterType="OrderedHistoryByDayDTO"
+            resultType="OrderedDTO">
+        SELECT *
+        FROM ORDERED ORD
+        WHERE USER_ID = #{userId} AND
+                STR_TO_DATE(regexp_replace(
+                                    ORD.OCR_DATE,
+                                    '[^0-9]{0,}[년연월일][^0-9]{0,}',
+                                    '-'
+                                ),
+                            '%Y-%m-%d-'
+                    ) = #{ocrDateLocalDate}
+    </select>
+
+<!--        # SELECT REGEXP_REPLACE('11.360', '[^0-9]{0,}[,.][^0-9]{0,}', '')-->
+</mapper>
