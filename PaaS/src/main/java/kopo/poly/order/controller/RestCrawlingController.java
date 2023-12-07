@@ -211,6 +211,9 @@ public class RestCrawlingController {
                 orderDTO.setUrl(imageUrl);
                 orderDTO.setOcrDate(result.getDate());
 
+                List<String> priceList = new ArrayList<>();
+                priceList = result.getPriceList();
+                stringUtil.parseStringToPrice(priceList);
 
                 for (int i = 0; i < result.getNameList().size(); i++) {
                     OcrDTO ocrDTO = new OcrDTO();
@@ -218,7 +221,8 @@ public class RestCrawlingController {
                     ocrDTO.setUrl(imageUrl); // Object Storage 경로
                     ocrDTO.setOcrDate(result.getDate());
                     ocrDTO.setProductName(result.getNameList().get(i));
-                    ocrDTO.setPrice(result.getPriceList().get(i));
+                    ;
+                    ocrDTO.setPrice(priceList.get(i));
                     ocrDTO.setCount(result.getCounstList().get(i));
                     ocrDTO.setUnit(result.getUnitList().get(i));
 

@@ -25,6 +25,36 @@ public class StringPreprocessingUtil {
         }
     }
 
+    public List<String> parseStringToPrice(List<String> str){
+        List<String> parseString = new ArrayList<>();
+        String regex = "[!@#$%^&*()_+\\-=\\[\\]{};':\",.<>?l]"; // 특수 문자 패턴 + 알파벳 l
+        Pattern pattern = Pattern.compile(regex); // 패턴 객체 생성
+
+        List<String> result = new ArrayList<>();
+        for (String s : str) {
+            if (s.indexOf("(") > -1) {
+                StringBuffer sb = new StringBuffer(s);
+                sb.delete(s.indexOf("("), s.indexOf(")") + 1);
+                parseString.add(sb.toString());
+            }
+        }
+        for(String s : parseString){
+            Matcher matcher = pattern.matcher(s);
+            if(matcher.find()){
+                StringBuffer sb = new StringBuffer(s);
+                // 특수문자가 시작되는 부분을 찾았을 때
+                int startIndex = matcher.start();
+                sb.delete(startIndex, sb.length());
+                result.add(sb.toString());
+            }
+        }
+
+        if(result.size() == 0){
+            return str;
+        }
+        return result;
+    }
+
     /***
      * 
      * @param str 파싱할 문자열 리스트

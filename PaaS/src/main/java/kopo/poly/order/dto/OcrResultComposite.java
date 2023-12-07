@@ -15,6 +15,7 @@ public class OcrResultComposite {
     private OrderDTO orderDTO;
 //    private CrawlingComposite crawlingComposite;
     private OcrComposite ocrComposite;
+    public OcrResultComposite(){}
 
     public OcrResultComposite(OrderDTO orderDTO, OcrComposite ocrComposite){
         this.orderDTO = orderDTO;
