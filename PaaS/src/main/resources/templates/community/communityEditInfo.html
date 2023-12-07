@@ -78,19 +78,22 @@
                       f.title.focus();
                       return;
                   }
-                  let communityCheck = false; //체크 여부 확인 변수
 
-                  for (let i = 0; i < f.communityYn.length; i++) {
-                      if (f.communityYn[i].checked) {
-                          communityCheck = true;
-                          break;
+                  let communityCheck = false; //체크 여부 확인 변수
+                  if (f.userId === "admin"){ //아이디가 admin인 경우에만 공지글 여부 확인 라디오 버튼 확인여부 판단
+                      for (let i = 0; i < f.communityYn.length; i++) {
+                          if (f.communityYn[i].checked) {
+                              communityCheck = true;
+                              break;
+                          }
+                      }
+                      if (communityCheck === false) { //admin일때만 적용됨
+                          alert("공지글 여부를 선택하시기 바랍니다.");
+                          f.communityYn[0].focus();
+                          return;
                       }
                   }
-                  if (communityCheck === false) {
-                      alert("공지글 여부를 선택하시기 바랍니다.");
-                      f.communityYn[0].focus();
-                      return;
-                  }
+
                   if (f.contents.value === "") {
                       alert("내용을 입력하시기 바랍니다.");
                       f.contents.focus();
@@ -109,6 +112,7 @@
                           dataType: "JSON", // 전송 결과는 JSON으로 받기
                           data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
                           success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
+                              alert(communitySeq);
                               alert(json.msg); // 메시지 띄우기
                               location.href = "/community/communityList"; // 공지사항 리스트 이동
                           }
@@ -134,6 +138,7 @@
 </div>
 <!-- Preloader Start -->
 <!-- Header Start -->
+
 <div class="header-area header-transparent">
     <div class="main-header ">
         <div class="header-bottom  header-sticky">
@@ -209,6 +214,7 @@
     </section>
 
     <form name="f" id="f">
+        <input type="hidden" name="communitySeq" th:value="${rDTO.communitySeq}"/>
         <div class="board_wrap">
             <div class="board_title">
                 <strong>공지사항</strong>
@@ -217,35 +223,33 @@
             <div class="board_write_wrap">
                 <div class="board_write">
                     <div class="title">
-                        <input type="hidden" name="communitySeq" th:value="${#request.getParameter('communitySeq')}" />
                         <dl>
                             <dt>제목</dt>
-                            <dd><input type="text" name="title" placeholder="제목 입력" /></dd>
+                            <!-- 모델의 DTO에서 title 속성 값을 가져와서 출력 -->
+                            <dd><input type="text" name="title" placeholder="제목 입력" th:value="${rDTO.title}" /></dd>
                         </dl>
                         <dl>
                             <dt>공지글 여부</dt>
-                            <dd>
-                                <input type="radio" name="communityYn" value="Y"> 예
-                                <input type="radio" name="communityYn" value="N"> 아니오
+                            <dd th:if="${isAdmin}">
+                                <input type="radio" name="communityYn" value="Y" /> 예
+                                <input type="radio" name="communityYn" value="N" /> 아니오
+                            </dd>
+                            <dd th:unless="${isAdmin}">
+                                <input type="hidden" name="communityYn" value="N" />
+                                <span>지정할 수 없습니다.</span>
                             </dd>
                         </dl>
-
                     </div>
                     <div class="info">
-                        <dl>
-                            <dt>글쓴이</dt>
-                            <dd><input type="text" placeholder="글쓴이 입력" /></dd>
-                        </dl>
-                        <dl>
-                            <dt>비밀번호</dt>
-                            <dd><input type="password" placeholder="비밀번호 입력" /></dd>
-                        </dl>
+
                     </div>
                     <div class="cont">
-                        <textarea name="contents" placeholder="내용 입력"></textarea>
+                        <!-- 모델의 DTO에서 contents 속성 값을 가져와서 출력 -->
+                        <textarea name="contents" placeholder="내용 입력" th:text="${rDTO.contents}"></textarea>
                     </div>
                 </div>
             </div>
+
             <div class="bt_list">
                 <button id="btnSend" type="button" class="custom-button">수정</button>
             </div>
@@ -347,36 +351,9 @@
 <div id="back-top" >
     <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
-<!--<div class="container">-->
-<!--    <h1>커뮤니티 수정하기</h1>-->
-<!--    <form action="/community/communityUpdate" method="post" name="f" id="f">-->
-<!--        <input type="hidden" name="cSeq" th:value="${rDTO.communitySeq}"/>-->
-<!--        <div class="form-group">-->
-<!--            <label for="title">제목</label>-->
-<!--            <input type="text" name="title" id="title" maxlength="100" th:value="${rDTO.title}">-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label>공지글 여부</label>-->
-<!--            <div class="radio-group">-->
-<!--                예<input type="radio" name="communityYn" value="Y" th:checked="${rDTO.communityYn == 'Y'}"/>-->
-
-<!--                아니오<input type="radio" name="communityYn" value="N" th:checked="${rDTO.communityYn == 'N'}"/>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label>내용</label>-->
-<!--            <textarea name="contents" rows="10" th:text="${rDTO.contents}"></textarea>-->
-<!--        </div>-->
-<!--        <div class="buttons">-->
-<!--            <button class="button" id="btnSend" type="button">수정</button>-->
-<!--            <button class="button" type="reset">다시 작성</button>-->
-<!--        </div>-->
-<!--    </form>-->
-
-<!--</div>-->
-
 
 <!-- JS here -->
+
 <script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
 <!-- Jquery, Popper, Bootstrap -->
 <script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
