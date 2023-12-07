@@ -8,11 +8,11 @@
       <jdbc-url>jdbc:mysql://db-1qnbe-kr1.vpc-cdb.gov-ntruss.com:3306/myDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="0@redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com" uuid="2461c538-b003-407d-a32a-5a73a496d668">
+    <data-source source="LOCAL" name="@redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com" uuid="2461c538-b003-407d-a32a-5a73a496d668">
       <driver-ref>redis</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>jdbc.RedisDriver</jdbc-driver>
-      <jdbc-url>jdbc:redis://redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com:6379/0</jdbc-url>
+      <jdbc-url>jdbc:redis://redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com:6379/</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
