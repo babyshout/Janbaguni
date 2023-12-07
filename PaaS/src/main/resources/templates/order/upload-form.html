@@ -114,6 +114,21 @@
             });
 
         })
+        function validateInput() {
+            let inputElement = document.getElementById("search_input");
+            let inputValue = inputElement.value;
+
+            // 정규 표현식을 사용하여 한글 또는 영어만 허용
+            const regex =  /^[ㄱ-ㅎ가-힣a-zA-Z0-9]*$/;
+
+            if (!regex.test(inputValue)) {
+                // 입력이 유효하지 않을 경우 처리 (예: 경고 메시지 표시 또는 입력 제한)
+                alert("한글 또는 영어만 입력해주세요.");
+                // 유효하지 않은 입력 제거
+                inputElement.value = inputValue.replace(/[^\sㄱ-ㅎ가-힣a-zA-Z0-9]/g, '');
+            }
+        }
+
     </script>
     <style>
         .search_form {
@@ -252,13 +267,12 @@
                                     <ul id="navigation">
                                         <li class="active"><a href="index">Home</a></li>
                                         <li><a href="courses">Courses</a></li>
-                                        <!--communityList로 갈 수 있게 경로 변경-->
-                                        <li><a href="../community/communityList">Community</a></li>
+                                        <li><a href="/community/communityList">Community</a></li>
                                         <li><a href="#">Blog</a>
                                             <ul class="submenu">
-                                                <li><a href="blog">Blog</a></li>
-                                                <li><a href="blog_details">Blog Details</a></li>
-                                                <li><a href="elements">Element</a></li>
+                                                <li><a href="/order/history/calendar">캘린더</a></li>
+                                                <li><a href="/profile/info">프로필</a></li>
+                                                <li><a href="/login/logout">로그아웃</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="contact">Contact</a></li>
@@ -320,7 +334,7 @@
                         거래명세서(사진) 혹은 텍스트를 입력해주세요
                     </p>
                     <div class="search_container">
-                        <input class="search__input" id="search_input" type="text" placeholder="Search">
+                        <input class="search__input" id="search_input" type="text" placeholder="Search" oninput="validateInput()">
                     </div>
                 </div>
             </form>

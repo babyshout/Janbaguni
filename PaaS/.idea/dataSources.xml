@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="myDB@db-1qnbe-kr1.vpc-cdb.gov-ntruss.com" uuid="febb7849-4f35-4577-bfa4-bfa7590498c5">
+    <data-source source="LOCAL" name="myDB@db-1qnbe-kr1.vpc-cdb.gov-ntruss.com" uuid="017ed494-66b4-4091-a867-7ec107e007ee">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://db-1qnbe-kr1.vpc-cdb.gov-ntruss.com:3306/myDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="orderRedis" uuid="35a3da54-ff76-4dd8-81b0-997483b60380">
+    <data-source source="LOCAL" name="0@redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com" uuid="2461c538-b003-407d-a32a-5a73a496d668">
       <driver-ref>redis</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>jdbc.RedisDriver</jdbc-driver>
-      <jdbc-url>jdbc:redis://redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com:6379/</jdbc-url>
+      <jdbc-url>jdbc:redis://redisc-1tm9h-kr.vpc-cdb.gov-ntruss.com:6379/0</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

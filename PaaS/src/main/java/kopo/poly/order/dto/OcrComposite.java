@@ -18,6 +18,10 @@ public class OcrComposite {
     private List<String> priceList;
     private String date;
 
+    public OcrComposite() {
+
+    };
+
     public OcrComposite(List<String> nameList, List<String> unitList,List<String> counstList,List<String> priceList, String date){
         this.nameList = nameList;
         this.unitList = unitList;
