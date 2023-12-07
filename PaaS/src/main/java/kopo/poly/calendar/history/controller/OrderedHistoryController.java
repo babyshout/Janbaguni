@@ -1,7 +1,9 @@
 package kopo.poly.calendar.history.controller;
 
 import kopo.poly.calendar.history.dto.CalendarEventDTO;
+import kopo.poly.calendar.history.dto.OrderedDTO;
 import kopo.poly.calendar.history.dto.OrderedHistoryByDayDTO;
+import kopo.poly.calendar.history.service.IOrderedHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,12 +16,15 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/order/history")
 @RequiredArgsConstructor
 @Controller
 public class OrderedHistoryController {
+    
+    private final IOrderedHistoryService orderedHistoryService;
 
 
     @GetMapping("calendar")
@@ -29,8 +34,9 @@ public class OrderedHistoryController {
         return "/calendar/ordered-history-calendar";
     }
 
+    @ResponseBody
     @GetMapping("detail")
-    public String getDetail(
+    public List<OrderedDTO> getDetail(
             Model model,
             HttpServletRequest request,
             HttpSession session,
@@ -38,16 +44,28 @@ public class OrderedHistoryController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate ocrDate
     ) throws Exception {
         log.info(this.getClass().getName() + ".getDetail() START!!!!!!!!!!!!!");
-        log.info("ocrDate : " + ocrDate.toString());
+        log.info("ocrDateLocalDate : " + ocrDate.toString());
         if (session.isNew() || session.getAttribute("SS_USER_ID").equals("")) {
             log.warn("session is new!!!!");
-            return "redirect:/login/login-form";
+//            return "redirect:/login/login-form";
         }
 //        log.info("calendarEventDTO : " + calendarEventDTO.toString());
 //        log.info("paramLocalDate : " + paramLocalDate.toString());
 //        request.getParameter("")
+        String userId = (String) session.getAttribute("SS_USER_ID");
 
-        return "/calendar/ordered-history-detail";
+        OrderedHistoryByDayDTO pDTO = new OrderedHistoryByDayDTO();
+        pDTO.setUserId(userId);
+        pDTO.setOcrDateLocalDate(ocrDate);
+        List<OrderedDTO> rList = Optional.ofNullable(
+                orderedHistoryService.getUserOrderedList(pDTO)
+        ).orElseGet(ArrayList::new);
+
+        log.info("rList in contoller : " + rList);
+
+
+
+        return rList;
     }
 
     /**
@@ -69,6 +87,8 @@ public class OrderedHistoryController {
             Model model
     ) throws Exception {
 //        Map<String, String> rDTO = new HashMap<>();
+        log.info(this.getClass().getName() + ".getCalendarTestData() START!!!!");
+        log.info("유저의 calendarData test 를 가져오는 메서드");
 
         List<CalendarEventDTO> rList = new ArrayList<>();
 
@@ -77,12 +97,13 @@ public class OrderedHistoryController {
         String url;
 
         orderedHistoryByDayDTO.setUserId("USER_ID");
-        orderedHistoryByDayDTO.setPrice(Integer.parseInt("100000"));
-        orderedHistoryByDayDTO.setOcrDate(LocalDate.now());
+        orderedHistoryByDayDTO.setPriceSum(Integer.parseInt("100000"));
+        orderedHistoryByDayDTO.setOcrDateLocalDate(LocalDate.now());
         dto.setOrderedHistoryByDayDTO(orderedHistoryByDayDTO);
-        dto.setStart(orderedHistoryByDayDTO.getOcrDate());
-        dto.setTitle(dto.getStart().toString() + "의 타이틀");
-        url = "/order/history/detail?ocrDate=" + orderedHistoryByDayDTO.getOcrDate();
+        dto.setStart(orderedHistoryByDayDTO.getOcrDateLocalDate());
+        dto.setTitle(dto.getStart().toString() + "의 타이틀 가격은" +
+                orderedHistoryByDayDTO.getPriceSum());
+        url = "/order/history/detail?ocrDateLocalDate=" + orderedHistoryByDayDTO.getOcrDateLocalDate();
         dto.setUrl(url);
 
         log.info("dto1 : " + dto.toString());
@@ -94,12 +115,13 @@ public class OrderedHistoryController {
         orderedHistoryByDayDTO = new OrderedHistoryByDayDTO();
 
         orderedHistoryByDayDTO.setUserId("USER_ID");
-        orderedHistoryByDayDTO.setPrice(Integer.parseInt("200000"));
-        orderedHistoryByDayDTO.setOcrDate(LocalDate.of(2023, 12, 25));
+        orderedHistoryByDayDTO.setPriceSum(Integer.parseInt("200000"));
+        orderedHistoryByDayDTO.setOcrDateLocalDate(LocalDate.of(2023, 12, 25));
         dto.setOrderedHistoryByDayDTO(orderedHistoryByDayDTO);
-        dto.setStart(orderedHistoryByDayDTO.getOcrDate());
-        dto.setTitle(dto.getStart().toString() + "의 타이틀");
-        url = "/order/history/detail?ocrDate" + orderedHistoryByDayDTO.getOcrDate();
+        dto.setStart(orderedHistoryByDayDTO.getOcrDateLocalDate());
+        dto.setTitle(dto.getStart().toString() + "의 타이틀 가격은" +
+                orderedHistoryByDayDTO.getPriceSum());
+        url = "/order/history/detail?ocrDateLocalDate" + orderedHistoryByDayDTO.getOcrDateLocalDate();
         dto.setUrl(url);
 
         log.info("dto2 : " + dto.toString());
@@ -108,6 +130,45 @@ public class OrderedHistoryController {
         rList.add(dto);
 
 
+        return rList;
+    }
+
+
+    /**
+     * 
+     * @param session
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getCalendarData")
+    public List<CalendarEventDTO> getCalendarData(
+        HttpSession session
+        
+    ) {
+        log.info(this.getClass().getName() + ".getCalendarData() START!!");
+        log.info("유저의 calendar 이벤트 가져오는 메서드");
+        if (session.isNew() || session.getAttribute("SS_USER_ID").equals("")) {
+            log.warn("session is new!!!!");
+            session.setAttribute("SS_USER_ID", "user01");
+
+//            return "redirect:/login/login-form";
+        }
+
+
+        List<CalendarEventDTO> rList;
+
+
+        
+        // 코딩 규칙을 모두가 지키면 그것 자체로 생산성이 올라가는구나
+        OrderedHistoryByDayDTO pDTO = new OrderedHistoryByDayDTO();
+        pDTO.setUserId((String) session.getAttribute("SS_USER_ID"));
+
+        rList = orderedHistoryService.getUserCalendarEventList(pDTO);
+
+        log.info("rList : (controller) " + rList.toString());
+        
+        
+        
         return rList;
     }
 

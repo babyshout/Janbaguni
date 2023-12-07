@@ -36,23 +36,52 @@ public class OrderedHistoryService implements IOrderedHistoryService {
 
         List<OrderedHistoryByDayDTO> historyDTOList;
         historyDTOList = Optional.ofNullable(
-                orderedHistoryMapper.getUserOrderedHistoryDTOList(pDTO)
+                orderedHistoryMapper.getUserOrderedHistoryByDayDTOList(pDTO)
         ).orElseGet(ArrayList::new);
 
+        log.info("historyDTOList : " + historyDTOList.toString());
 
-        List<CalendarEventDTO> rList = null;
 
-        historyDTOList.stream().forEach(dto -> {
+        List<CalendarEventDTO> rList = new ArrayList<>();
+
+        for (OrderedHistoryByDayDTO dto :
+                historyDTOList) {
             log.info(dto.toString());
-        });
+            CalendarEventDTO calendarEventDTO = null;
+            calendarEventDTO = new CalendarEventDTO();
+            calendarEventDTO.setOrderedHistoryByDayDTO(dto);
+            calendarEventDTO.setStart(dto.getOcrDateLocalDate());
+            String url = "/order/history/detail?ocrDate=" + dto.getOcrDateLocalDate();
+            log.info(url);
+            calendarEventDTO.setUrl(url);
+            calendarEventDTO.setTitle(dto.getOcrDate() + "의 발주 총합 : " +
+                    dto.getPriceSum());
+
+            rList.add(calendarEventDTO);
+        }
+
+//        historyDTOList.stream().forEach(dto -> {
+//            log.info(dto.toString());
+//            CalendarEventDTO calendarEventDTO = null;
+//            calendarEventDTO = new CalendarEventDTO();
+//            calendarEventDTO.setOrderedHistoryByDayDTO(dto);
+//            calendarEventDTO.setStart(dto.getOcrDateLocalDate());
+//            String url = "/order/history/detail?ocrDate=" + dto.getOcrDate();
+//            log.info(url);
+//            calendarEventDTO.setUrl(url);
+//            calendarEventDTO.setTitle(dto.getOcrDate() + "의 발주 총합" +
+//                    dto.getPriceSum());
+//
+//            rList.add(calendarEventDTO);
+//        });
 
         return rList;
     }
 
     /**
-     * @param pDTO 유저정보와 ocrDate 가 담겨있음 이거로 조회해야됨
-     *             (userId, ocrDate)
-     * @return userId 와 ocrDate 를 기반으로 해당 일의 모든 발주 가져오기
+     * @param pDTO 유저정보와 ocrDateLocalDate 가 담겨있음 이거로 조회해야됨
+     *             (userId, ocrDateLocalDate)
+     * @return userId 와 ocrDateLocalDate 를 기반으로 해당 일의 모든 발주 가져오기
      */
     @Override
     public List<OrderedDTO> getUserOrderedList(OrderedHistoryByDayDTO pDTO) {

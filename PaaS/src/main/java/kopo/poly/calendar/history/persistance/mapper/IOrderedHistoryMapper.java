@@ -9,6 +9,6 @@ import java.util.List;
 @Mapper
 public interface IOrderedHistoryMapper {
 
-    List<OrderedHistoryByDayDTO> getUserOrderedHistoryDTOList(OrderedHistoryByDayDTO pDTO);
+    List<OrderedHistoryByDayDTO> getUserOrderedHistoryByDayDTOList(OrderedHistoryByDayDTO pDTO);
     List<OrderedDTO> getUserOrderedList(OrderedHistoryByDayDTO pDTO);
 }

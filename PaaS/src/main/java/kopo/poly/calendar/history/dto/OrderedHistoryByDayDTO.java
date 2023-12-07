@@ -18,7 +18,8 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @ToString
 public class OrderedHistoryByDayDTO {
-    private Number price;
+    private Integer priceSum;
     private String userId;
-    private LocalDate ocrDate;
+    private LocalDate ocrDateLocalDate;
+    private String ocrDate;
 }

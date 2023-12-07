@@ -21,10 +21,10 @@ public interface IOrderedHistoryService {
     /**
      * 
      * @param pDTO
-     * 유저정보와 ocrDate 가 담겨있음 이거로 조회해야됨
-     * (userId, ocrDate)
+     * 유저정보와 ocrDateLocalDate 가 담겨있음 이거로 조회해야됨
+     * (userId, ocrDateLocalDate)
      * @return
-     * userId 와 ocrDate 를 기반으로 해당 일의 모든 발주 가져오기
+     * userId 와 ocrDateLocalDate 를 기반으로 해당 일의 모든 발주 가져오기
      */
     List<OrderedDTO> getUserOrderedList(OrderedHistoryByDayDTO pDTO);
 }

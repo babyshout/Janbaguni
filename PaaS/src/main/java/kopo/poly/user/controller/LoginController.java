@@ -32,9 +32,12 @@ public class LoginController {
      * 로그인을 위한 입력 화면으로 이동
      * */
     @GetMapping("/login-form")
-    public String loginForm() {
+    public String loginForm(HttpSession session) {
         log.info(this.getClass().getName() + "./login-form start!");
 //        log.info(this.getClass().getName() + "./login-form end!");
+        if (session.isNew()) {
+            return "redirect:/order/upload-form";
+        }
 
         return "/user/sign-in_sign-up/sign-in-form";
     }
@@ -308,6 +311,13 @@ public class LoginController {
     }
     @GetMapping(value="test")
     public String test(HttpSession session){
+        session.invalidate();
+        return "redirect:/login/login-form";
+    }
+
+    @GetMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        log.info("logout 됨 !!!");
         session.invalidate();
         return "redirect:/login/login-form";
     }
