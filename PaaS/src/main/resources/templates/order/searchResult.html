@@ -29,7 +29,7 @@
     $(document).ready(function () {
         let aceButton = document.getElementById("aceBt");
 
-
+        exit();
 
 
         $("#aceBt").on("click", function () {
@@ -53,6 +53,44 @@
 
         aceButton.click();
     })
+
+    function exit(){
+        window.addEventListener('beforeunload', function(event) {
+            // 이 페이지를 떠나시겠습니까? 검색 정보가 사라집니다.
+            var confirmationMessage = '이 페이지를 떠나시겠습니까? 검색 정보가 사라집니다.';
+
+            // 경고 메시지 표시
+            event.returnValue = confirmationMessage;
+
+            // 사용자가 확인 버튼을 눌렀을 때의 동작
+            var onUnloadAction = function() {
+                // '/order/crawling'으로 POST 요청을 보내서 세션을 무효화
+                fetch('/order/exit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ sessionKey: 'SS_SEARCH_CRAWLING' }), // 세션 키를 전송
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // 응답이 성공하면 다른 작업을 수행할 수 있음
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+            };
+
+// 사용자가 페이지를 떠날 때의 이벤트 핸들러 등록
+            window.addEventListener('unload', onUnloadAction);
+
+            // 사용자가 확인을 누르면 unload 이벤트 핸들러 실행
+            return confirmationMessage;
+        });
+    }
+
     function fetchDataFromServer(source) {
         $.ajax({
             type: "POST",
