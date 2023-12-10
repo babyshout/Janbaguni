@@ -40,6 +40,19 @@ public class RestCrawlingController {
     OcrComposite result;
 
 
+    @PostMapping("/exit")
+    public String exit(HttpSession session, Map<String,String> requestBody){
+        String sessionKey = requestBody.get("sessionKey");
+        HttpSession targetSession = (HttpSession) session.getAttribute(sessionKey);
+        if(targetSession != null){
+            targetSession.invalidate();
+            log.info(sessionKey + " 세션 지움!!!");
+        }else{
+            log.info("지울 세션이 없음");
+        }
+
+        return "redirect:/order/upload-form";
+    }
     @PostMapping("/crawlingResult")
     public List<List<ProductCrawlingDTO>> crawlingResult(@RequestBody Map<String, String> requestBody, HttpSession session) {
         CrawlingComposite tmp = (CrawlingComposite) session.getAttribute("SS_CRAWLING_RESULT");
