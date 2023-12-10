@@ -38,6 +38,25 @@ public class CommunityController {
     private final ICommentService commentService;
 
 
+//    //바꿔야할 html 테스트용
+//    @GetMapping (value = "/index")
+//    public String changeIndex(){
+//        log.info("index Start!");
+//        log.info("index End!");
+//        return "communityList";
+//    }
+//
+//    //바꿔야할 html 테스트용
+//    @GetMapping (value = "/sampleCommunity")
+//    public String sampleCommunity(){
+//        log.info("sampleCommunity Start!");
+//        log.info("sampleCommunity End!");
+//        return "community/sampleCommunity";
+//    }
+
+
+
+
     /**
      * 게시판 리스트 보여주기
      * <p>
@@ -79,8 +98,8 @@ public class CommunityController {
         log.info(this.getClass().getName() + ".CommunityList End!");
 
         // 함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/communityList.html -> jsp 파일 실행
-        return "/community/communityList";
+        // webapp/WEB-INF/views/notice/originalFile.html -> jsp 파일 실행
+        return "community/communityList";
     }
 
     /**
@@ -449,4 +468,7 @@ public class CommunityController {
         model.addAttribute("totalPages", totalPages);
         return rList;
     }
+
+
+
 }
