@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>JangBaguNi</title>
-    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Skydash Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/vendors/feather/feather.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="/js/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/image/favicon.png"/>
+
+    <!--아이콘-->
+    <script src="https://kit.fontawesome.com/ad95056f42.js" crossorigin="anonymous"></script>
+
+
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    <link rel="manifest" href="site.webmanifest"> 이거  때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
-    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
+
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-    <!-- CSS here -->
-    <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
-    <link rel="stylesheet" href="/community/css/assets/css/flaticon.css">
-    <link rel="stylesheet" href="/community/css/assets/css/progressbar_barfiller.css">
-    <link rel="stylesheet" href="/community/css/assets/css/gijgo.css">
-    <link rel="stylesheet" href="/community/css/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/animated-headline.css">
-    <link rel="stylesheet" href="/community/css/assets/css/magnific-popup.css">
-    <link rel="stylesheet" href="/community/css/assets/css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/themify-icons.css">
-    <link rel="stylesheet" href="/community/css/assets/css/slick.css">
-    <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
-    <link rel="stylesheet" href="/community/css/assets/css/style.css">
-    <link rel="stylesheet" href="/community/css/assets/css/style2.css">
+    <title>최저가 검색하기</title>
+
     <script type="text/javascript">
         $(document).ready(function () {
             let f = document.getElementById("f");
+
+            /*유저 페이지 아이콘 회전 */
+            $('.nav-link').click(function () {
+                var icon = $(this).find('.fa-chevron-right');
+
+                // 아이콘 회전 애니메이션 추가
+                if (icon.hasClass('rotate')) {
+                    icon.removeClass('rotate');
+                } else {
+                    icon.addClass('rotate');
+                }
+            });
             // let searchForm = document.getElementById('search_form');
             // let searchInput = document.querySelector('.search__input');
             //
@@ -36,23 +53,41 @@
 
 
             // 파일 입력 필드에 파일 선택 이벤트 리스너 추가
-            document.getElementById('image').addEventListener('change', function () {
-                // 선택된 파일의 이름 가져오기
-                const fileName = this.files[0].name;
+            // document.getElementById('image').addEventListener('change', function () {
+            //     // 선택된 파일의 이름 가져오기
+            //     const fileName = this.files[0].name;
+            //
+            //     // 파일 이름을 표시할 엘리먼트 업데이트
+            //     const uploadName = document.querySelector('.upload-name');
+            //     uploadName.value = fileName;
+            // });
+            $("#enterSearch").on("click", function () {
+                // 검색어 가져오기
+                let searchText = $(".file-upload-info").val();
+                $("#loadBody").load("/loading/Loading");
 
-                // 파일 이름을 표시할 엘리먼트 업데이트
-                const uploadName = document.querySelector('.upload-name');
-                uploadName.value = fileName;
+                // AJAX 요청 보내기
+                $.ajax({
+                    type: "POST",
+                    url: "/order/searchCrawlingItem",
+                    data: {searchText: searchText},
+                    success: function (json) {
+                        // 서버 응답 처리
+                        alert(json.msg);
+                        location.href = "/order/searchResult";
+                        // 원하는 동작 수행 (예: 결과 표시, 페이지 리디렉션)
+                    },
+                    error: function (error) {
+                        // 오류 처리
+                        console.error(error);
+                    }
+                });
             });
 
-            $("#search-button").on("click", function (){
-                searchCrawling(searchForm);
-            })
-
+            searchCrawling();
             $("#btnUpload").on("click", function () {
-
                 imageSubmit(f);
-            })
+            });
 
             function imageSubmit(f) {
                 let fileInput = f.image;
@@ -83,43 +118,44 @@
                 }
             }
 
-            $(document).ready(function() {
-                // 폼 제출 이벤트를 처리
-                $("#search_form").submit(function(event) {
-                    event.preventDefault(); // 기본 폼 제출 동작 방지
+        })
 
-                    // 검색어 가져오기
-                    let searchText = $("#search_input").val();
-                    $("#loadBody").load("/loading/Loading");
+        function searchCrawling() {
 
-                    // AJAX 요청 보내기
-                    $.ajax({
-                        type: "POST",
-                        url: "/order/searchCrawlingItem",
-                        data: { searchText: searchText },
-                        success: function(json) {
-                            // 서버 응답 처리
+            // 폼 제출 이벤트를 처리
+            $("#search_form").submit(function (event) {
+                event.preventDefault(); // 기본 폼 제출 동작 방지
+                // 검색어 가져오기
+                let searchText = $("#search_input").val();
+                $("#loadBody").load("/loading/Loading");
 
-                            alert(json.msg);
-                            location.href="/order/searchResult";
+                // AJAX 요청 보내기
+                $.ajax({
+                    type: "POST",
+                    url: "/order/searchCrawlingItem",
+                    data: {searchText: searchText},
+                    success: function (json) {
+                        // 서버 응답 처리
 
-                            // 원하는 동작 수행 (예: 결과 표시, 페이지 리디렉션)
-                        },
-                        error: function(error) {
-                            // 오류 처리
-                            console.error(error);
-                        }
-                    });
+                        alert(json.msg);
+                        location.href = "/order/searchResult";
+
+                        // 원하는 동작 수행 (예: 결과 표시, 페이지 리디렉션)
+                    },
+                    error: function (error) {
+                        // 오류 처리
+                        console.error(error);
+                    }
                 });
             });
+        }
 
-        })
         function validateInput() {
             let inputElement = document.getElementById("search_input");
             let inputValue = inputElement.value;
 
             // 정규 표현식을 사용하여 한글 또는 영어만 허용
-            const regex =  /^[ㄱ-ㅎ가-힣a-zA-Z0-9]*$/;
+            const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]*$/;
 
             if (!regex.test(inputValue)) {
                 // 입력이 유효하지 않을 경우 처리 (예: 경고 메시지 표시 또는 입력 제한)
@@ -130,383 +166,426 @@
         }
 
     </script>
+
     <style>
-        .search_form {
-            width: 430px;
-            margin: 0 auto;
-            font-family: 'Raleway', sans-serif;
-        }
+        .dropBox {
+            width: 90vw;
+            height: 80vh;
 
-        .search__container {
-            padding-top: 64px;
-        }
+            margin: .6rem;
+            overflow: auto;
 
-        .search_container{
             display: flex;
+            justify-content: center;
             align-items: center;
+
+            border-radius: 5px;
+            border: 4px dashed #ddd;
+            user-select: none;
+            transition: 0.4s;
+
+            max-height: 1080px; /* 원하는 높이로 설정 */
+            overflow: auto; /* 스크롤이 필요한 경우만 스크롤 표시 */
         }
 
-        .search__title {
-            font-size: 20px;
-            font-weight: 900;
-            text-align: center;
-            /*color: #ff8b88;*/
-            color: #3f7f7f;
+        /* 드롭 반응 */
+        .dropBox.active {
+            background: #ddd;
         }
 
-        .search__input {
-            width: 100%;
-            padding: 12px 24px;
-            background-color: transparent;
-            transition: transform 250ms ease-in-out;
-            font-size: 14px;
-            line-height: 18px;
-            color: #575756;
-            background-color: transparent;
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-size: 18px 18px;
-            background-position: 95% center;
-            border-radius: 50px;
-            border: 1px solid #575756;
-            transition: all 250ms ease-in-out;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-            flex: 1;
-            align-items: center;;
-        }
-        .search__input::placeholder {
-            color: rgba(87, 87, 86, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+        .dropBox h1 {
+            font-size: 1.8rem;
         }
 
-        .search__input:hover,
-        .search__input:focus {
-            padding: 12px 0;
-            outline: 0;
-            border: 1px solid transparent;
-            border-bottom: 1px solid #575756;
-            border-radius: 0;
-            background-position: 100% center;
-        }
+        /* ----------- */
 
-        .credits__container {
-            margin-top: 24px;
-        }
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-        .credits__text {
-            text-align: center;
-            font-size: 13px;
-            line-height: 18px;
-        }
-
-        .credits__link {
-            color: #ff8b88;
-            text-decoration: none;
-            transition: color 250ms ease-in;
-        }
-
-        .credits__link:hover,
-        .credits__link:focus {
-            color: rgba(255, 139, 136, 0.75);
-        }
-
-
-
-        .filebox .upload-name {
-            display: inline-block;
-            height: 40px;
-            padding: 0 10px;
-            vertical-align: middle;
-            border: 1px solid #dddddd;
-            width: 78%;
-            color: #999999;
-        }
-        .filebox input[type="file"] {
-            position: absolute;
-            width: 0;
-            height: 0;
+        * {
+            margin: 0;
             padding: 0;
-            overflow: hidden;
-            border: 0;
+            box-sizing: border-box;
+            font-family: Pretendard, 'Malgun Gothic', sans-serif;
+        }
+
+        /*유저 페이지 아이콘 회전 */
+
+        .fa-chevron-right {
+            transition: transform 0.3s ease; /* 변환에 대한 애니메이션 효과를 적용합니다. */
+        }
+
+        .rotate {
+            transform: rotate(90deg); /* 회전 각도를 지정합니다. */
         }
     </style>
 </head>
 
-<body id="loadBody">
-<!-- ? Preloader Start -->
-<div id="preloader-active">
-    <div class="preloader d-flex align-items-center justify-content-center">
-        <div class="preloader-inner position-relative">
-            <div class="preloader-circle"></div>
-            <div class="preloader-img pere-text">
-                <img src="/community/css/assets/img/logo/loder.png" alt="">
-            </div>
+<body class="sidebar-dark" id="loadBody">
+<div class="container-scroller">
+    <!--여기가 상단바 색깔 navbar-dark로 설정해줌-->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-dark">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="index"><img src="/image/logo.svg" class="mr-2"
+                                                                      alt="logo"/></a>
+            <!--아니 왜 이거 밑에 아이콘 안 나오노? 경로 뭐노-->
+            <a class="navbar-brand brand-logo-mini" href="index"><img src="/image/logo-mini.svg" alt="logo"/></a>
         </div>
-    </div>
-</div>
-<!-- Preloader Start -->
-<!-- Header Start -->
-<div class="header-area header-transparent">
-    <div class="main-header ">
-        <div class="header-bottom  header-sticky">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <!-- Logo -->
-                    <div class="col-xl-2 col-lg-2">
-                        <div class="logo">
-                            <a href="index"><img src="/community/css/assets/img/logo/logo.png" alt=""></a>
-                        </div>
-                    </div>
-                    <div class="col-xl-10 col-lg-10">
-                        <div class="menu-wrapper d-flex align-items-center justify-content-end">
-                            <!-- Main-menu -->
-                            <div class="main-menu d-none d-lg-block">
-                                <nav>
-                                    <ul id="navigation">
-                                        <li class="active"><a href="index">Home</a></li>
-                                        <li><a href="courses">Courses</a></li>
-                                        <li><a href="/community/communityList">Community</a></li>
-                                        <li><a href="#">Blog</a>
-                                            <ul class="submenu">
-                                                <li><a href="/order/history/calendar">캘린더</a></li>
-                                                <li><a href="/profile/info">프로필</a></li>
-                                                <li><a href="/login/logout">로그아웃</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="contact">Contact</a></li>
-                                        <!-- Button -->
-                                        <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
-                                        <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
-                                    </ul>
-                                </nav>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="fa-solid fa-ellipsis icon-menu"></span>
+            </button>
+
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-toggle="offcanvas">
+                <!--            <span class="icon-menu"></span>-->
+
+                <!--            <i class=" icon-menu"></i>-->
+                <i class="fa-solid fa-ellipsis-vertical icon-menu"></i>
+            </button>
+        </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div id="right-sidebar" class="settings-panel">
+            <i class="settings-close ti-close"></i>
+            <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab"
+                       aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab"
+                       aria-controls="chats-section">CHATS</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="setting-content">
+                <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel"
+                     aria-labelledby="todo-section">
+                    <div class="add-items d-flex px-3 mb-0">
+                        <form class="form w-100">
+                            <div class="form-group d-flex">
+                                <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                                <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add
+                                </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                    <!-- Mobile Menu -->
-                    <div class="col-12">
-                        <div class="mobile_menu d-block d-lg-none"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Header End -->
-<main>
-    <!--? slider Area Start-->
-    <section class="slider-area slider-area2">
-        <div class="slider-active">
-            <!-- Single Slider -->
-            <div class="single-slider slider-height2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-8 col-lg-11 col-md-12">
-                            <div class="hero__caption hero__caption2">
-                                <h1 data-animation="bounceIn" data-delay="0.2s">Search</h1>
-                                <!-- breadcrumb Start-->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#">community</a></li>
-                                    </ol>
-                                </nav>
-                                <!-- breadcrumb End -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <div class="board_wrap">
-        <div class="board_title">
-            <strong>최저가 검색</strong>
-        </div>
-        <div class="board_list_wrap">
-            <form id="search_form" method="post"
-                  style=" width: 430px; margin: 0 auto; font-family: 'Raleway', sans-serif;">
-                <div class="search__container">
-                    <p class="search__title">
-                        거래명세서(사진) 혹은 텍스트를 입력해주세요
-                    </p>
-                    <div class="search_container">
-                        <input class="search__input" id="search_input" type="text" placeholder="Search" oninput="validateInput()">
-                    </div>
-                </div>
-            </form>
-            <div class="credits__container">
-                <p class="credits__text">이미지 저장 동의 여부를 꼭 확인해 주세요.</p>
-                <p class="credits__text" style="text-decoration: underline; ">이미지 저장 동의 시 거래명세서 이미지가 DB에 저장됩니다.</p>
-            </div>
-        </div>
-        <div class="filebox" style="display: flex; justify-content: center; align-items: center;">
-            <form id="f" method="post" enctype="multipart/form-data"
-                  style="width: 750px; font-family: 'Raleway', sans-serif;">
-                <input class="upload-name" value="첨부파일(.jpg .jpeg .png 지원)" placeholder="첨부파일" readonly
-                       style="height: 40px; padding: 0 10px; border: 1px solid #dddddd; width: 77%; color: #999999;">
-                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="margin-left: 13%">
-                <label for="image" class="select"
-                       style="padding: 10px 20px; color: #fff; background-color: #999999; cursor: pointer; height: 40px; margin-left: 10px;">파일
-                    찾기</label>
-                <br><br>
-                <input type="checkbox" name="save" id="save" value="Y">
-                <label for="save">이미지 저장하기</label>
-                <img id="btnUpload" src="/ocr/image/free-icon-upload-2297827.png"
-                     alt=" 사진 아이콘  제작자: Freepik - Flaticon https://www.flaticon.com/kr/free-icons/" title="사진 아이콘"
-                     style="cursor: pointer; width: 6%; height: 6%;">
-            </form>
-        </div>
-
-
-    </div>
-</main>
-<footer>
-    <div class="footer-wrappper footer-bg">
-        <!-- Footer Start-->
-        <div class="footer-area footer-padding">
-            <div class="container">
-                <div class="row justify-content-between">
-                    <div class="col-xl-4 col-lg-5 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="single-footer-caption mb-30">
-                                <!-- logo -->
-                                <div class="footer-logo mb-25">
-                                    <a href="index"><img src="/community/css/assets/img/logo/logo2_footer.png"
-                                                         alt=""></a>
+                    <div class="list-wrapper px-3">
+                        <ul class="d-flex flex-column-reverse todo-list">
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox">
+                                        Team review meeting at 3.00 PM
+                                    </label>
                                 </div>
-                                <div class="footer-tittle">
-                                    <div class="footer-pera">
-                                        <p>The automated process starts as soon as your clothes go into the machine.</p>
-                                    </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox">
+                                        Prepare for presentation
+                                    </label>
                                 </div>
-                                <!-- social -->
-                                <div class="footer-social">
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox">
+                                        Resolve all the low priority tickets due today
+                                    </label>
                                 </div>
-                            </div>
-                        </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li class="completed">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox" checked>
+                                        Schedule meeting for next week
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li class="completed">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox" checked>
+                                        Project review
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Our solutions</h4>
-                                <ul>
-                                    <li><a href="#">Design & creatives</a></li>
-                                    <li><a href="#">Telecommunication</a></li>
-                                    <li><a href="#">Restaurant</a></li>
-                                    <li><a href="#">Programing</a></li>
-                                    <li><a href="#">Architecture</a></li>
-                                </ul>
-                            </div>
+                    <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+                    <div class="events pt-4 px-3">
+                        <div class="wrapper d-flex mb-2">
+                            <i class="ti-control-record text-primary mr-2"></i>
+                            <span>Feb 11 2018</span>
                         </div>
+                        <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+                        <p class="text-gray mb-0">The total number of sessions</p>
                     </div>
-                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Support</h4>
-                                <ul>
-                                    <li><a href="#">Design & creatives</a></li>
-                                    <li><a href="#">Telecommunication</a></li>
-                                    <li><a href="#">Restaurant</a></li>
-                                    <li><a href="#">Programing</a></li>
-                                    <li><a href="#">Architecture</a></li>
-                                </ul>
-                            </div>
+                    <div class="events pt-4 px-3">
+                        <div class="wrapper d-flex mb-2">
+                            <i class="ti-control-record text-primary mr-2"></i>
+                            <span>Feb 7 2018</span>
                         </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Company</h4>
-                                <ul>
-                                    <li><a href="#">Design & creatives</a></li>
-                                    <li><a href="#">Telecommunication</a></li>
-                                    <li><a href="#">Restaurant</a></li>
-                                    <li><a href="#">Programing</a></li>
-                                    <li><a href="#">Architecture</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+                        <p class="text-gray mb-0 ">Call Sarah Graves</p>
                     </div>
                 </div>
+                <!-- To do section tab ends -->
+                <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+                        <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See
+                            All</small>
+                    </div>
+                    <ul class="chat-list">
+                        <li class="list active">
+                            <div class="profile"><img src="/image/faces/face1.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Thomas Douglas</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">19 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="/image/faces/face2.jpg" alt="image"><span
+                                    class="offline"></span></div>
+                            <div class="info">
+                                <div class="wrapper d-flex">
+                                    <p>Catherine</p>
+                                </div>
+                                <p>Away</p>
+                            </div>
+                            <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+                            <small class="text-muted my-auto">23 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="/image/faces/face3.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Daniel Russell</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">14 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="/image/faces/face4.jpg" alt="image"><span
+                                    class="offline"></span></div>
+                            <div class="info">
+                                <p>James Richardson</p>
+                                <p>Away</p>
+                            </div>
+                            <small class="text-muted my-auto">2 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="/image/faces/face5.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Madeline Kennedy</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">5 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="/image/faces/face6.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Sarah Graves</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">47 min</small>
+                        </li>
+                    </ul>
+                </div>
+                <!-- chat tab ends -->
             </div>
         </div>
-        <!-- footer-bottom area -->
-        <div class="footer-bottom-area">
-            <div class="container">
-                <div class="footer-border">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-xl-12 ">
-                            <div class="footer-copy-right text-center">
-                                <p>
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                                    All rights reserved | This template is made with <i class="fa fa-heart"
-                                                                                        aria-hidden="true"></i> by <a
-                                        href="https://colorlib.com" target="_blank">Colorlib</a>
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        <!-- partial -->
+        <!-- partial:../../partials/_sidebar.html -->
+        <!--왼쪽 사이드 바-->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index">
+                        <!--                    <i class="fa-solid fa-house icon-grid menu-icon"></i>-->
+                        <i class="fa-solid fa-house icon-grid menu-icon"></i>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+
+                <!--여기 준수형 파일 경로 바꿔야함-->
+                <li class="nav-item">
+                    <a class="nav-link" href="/order/upload-form">
+
+                        <i class="fa-solid fa-magnifying-glass icon-paper menu-icon"></i>
+                        <span class="menu-title">Search Product</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/community/communityList">
+
+                        <i class="fa-solid fa-comments icon-paper menu-icon"></i>
+                        <span class="menu-title">Community</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                        <i class="fa-solid fa-user icon-head menu-icon"></i>
+                        <span class=" menu-title">User Pages</span>
+
+                        <!--                       <i class="fa-solid fa-chevron-right menu-arrow"></i>-->
+                        <i class="fa-solid fa-chevron-right" style="margin-left: 0.5rem"></i>
+
+
+                        <!--                    <i class="fa-solid fa-chevron-right "></i>-->
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"><a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                            <li class="nav-item"><a class="nav-link" href="pages/samples/register.html"> Register </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- partial -->
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+
+
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">최저가 검색</h4>
+                                <p class="card-description">
+                                    찾으시는 물품의 이름을 검색해보세요
                                 </p>
+                                <form class="forms-sample" id="search_form" method="post">
+                                    <div class="form-group">
+                                        <label>최저가 검색하기</label>
+                                        <div class="input-group col-xs-12">
+                                            <input type="text" class="form-control file-upload-info"
+                                                   placeholder="찾으시는 품목을 검색하세요">
+                                            <span class="input-group-append">
+                                                    <button class="file-upload-browse btn btn-primary" id="enterSearch"
+                                                            type="button">Enter</button>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body" id="dragImageField">
+                                <h4 class="card-title">거래명세서 분석</h4>
+                                <p class="card-description">거래명세서를 업로드해 주세요</p>
+                                <form id="f" method="post" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label>File upload</label>
+                                        <input type="file" name="image" class="file-upload-browse btn btn-primary"
+                                               id="fileInput" style="display: none;">
+                                        <div class="input-group col-xs-12"
+                                             style="align-items: center; justify-content: center; display:flex;">
+                                            <div class="dropBox" id="dropBox">
+                                                <h1 id="notice">이곳에 파일을 드롭해주세요. </h1>
+                                            </div>
+                                            <button class="btn btn-outline-secondary btn-lg btn-block" type="button"
+                                                    style="width: 70%;  display: flex; justify-content: center;"
+                                                    id="uploadBtn">거래 명세서 가져오기
+                                            </button>
+                                        </div>
+                                        <div class="col-md-4 grid-margin stretch-card" id="dragDropArea"
+                                             style="text-align: center; padding: 10px;">
+                                            <p>최대 10MB 이하의 .jpg .jpeg .png 첨부가능</p>
+
+                                        </div>
+                                        <p id="fileNameView"></p>
+                                        <div class="form-check form-check-flat">
+                                            <label class="form-check-label" name="save">
+                                                <input class="checkbox" type="checkbox">
+                                                이미지 저장 동의하기
+                                                <i class="input-helper"></i></label>
+                                        </div>
+
+                                    </div>
+                                    <button type="button" id="btnUpload" class="btn btn-primary mr-2">Submit</button>
+                                    <button class="btn btn-light">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+            <!-- content-wrapper ends -->
+
+            <footer class="footer">
+                <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a
+                            href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+                    <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i
+                            class="ti-heart text-danger ml-1"></i></span>
+                </div>
+                <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a
+                            href="https://www.themewagon.com/" target="_blank">Themewagon</a></span>
+                </div>
+            </footer>
         </div>
-        <!-- Footer End-->
+        <!-- content-wrapper ends -->
+
+        <!-- partial -->
     </div>
-</footer>
-<!-- Scroll Up -->
-<div id="back-top">
-    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    <!-- main-panel ends -->
 </div>
-<link rel="stylesheet" href="/ocr/css/search.css">
-<!-- JS here -->
-<script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-<!-- Jquery, Popper, Bootstrap -->
-<script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
-<script src="/community/css/assets/js/popper.min.js"></script>
-<script src="/community/css/assets/js/bootstrap.min.js"></script>
-<!-- Jquery Mobile Menu -->
-<script src="/community/css/assets/js/jquery.slicknav.min.js"></script>
+<!-- page-body-wrapper ends -->
+<!-- partial:partials/_footer.html -->
 
-<!-- Jquery Slick , Owl-Carousel Plugins -->
-<script src="/community/css/assets/js/owl.carousel.min.js"></script>
-<script src="/community/css/assets/js/slick.min.js"></script>
-<!-- One Page, Animated-HeadLin -->
-<script src="/community/css/assets/js/wow.min.js"></script>
-<script src="/community/css/assets/js/animated.headline.js"></script>
-<script src="/community/css/assets/js/jquery.magnific-popup.js"></script>
+<!-- container-scroller -->
 
-<!-- Date Picker -->
-<script src="/community/css/assets/js/gijgo.min.js"></script>
-<!-- Nice-select, sticky -->
-<script src="/community/css/assets/js/jquery.nice-select.min.js"></script>
-<script src="/community/css/assets/js/jquery.sticky.js"></script>
-<!-- Progress -->
-<script src="/community/css/assets/js/jquery.barfiller.js"></script>
+    <!--이미지 드래그 드랍-->
+    <script src="/ocr/js/imageDrag.js"></script>
+    <!-- plugins:js -->
+    <script src="/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/vendors/chart.js/Chart.min.js"></script>
+    <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="/js/dataTables.select.min.js"></script>
 
-<!-- counter , waypoint,Hover Direction -->
-<script src="/community/css/assets/js/jquery.counterup.min.js"></script>
-<script src="/community/css/assets/js/waypoints.min.js"></script>
-<script src="/community/css/assets/js/jquery.countdown.min.js"></script>
-<script src="/community/css/assets/js/hover-direction-snake.min.js"></script>
-
-<!-- contact js -->
-<script src="/community/css/assets/js/contact.js"></script>
-<script src="/community/css/assets/js/jquery.form.js"></script>
-<script src="/community/css/assets/js/jquery.validate.min.js"></script>
-<script src="/community/css/assets/js/mail-script.js"></script>
-<script src="/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
-
-<!-- Jquery Plugins, main Jquery -->
-<script src="/community/css/assets/js/plugins.js"></script>
-<script src="/community/css/assets/js/main.js"></script>
-
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/js/off-canvas.js"></script>
+    <script src="/js/hoverable-collapse.js"></script>
+    <script src="/js/template.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/Chart.roundedBarCharts.js"></script>
+    <!-- End custom js for this page-->
 </body>
+<!-- partial:partials/_footer.html -->
+
 </html>

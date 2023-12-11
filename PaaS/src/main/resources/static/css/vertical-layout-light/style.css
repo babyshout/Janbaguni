@@ -28548,6 +28548,7 @@ div.tagsinput span.tag a {
 }
 
 .sidebar .nav .nav-item .nav-link i.menu-arrow:before {
+  /*  여기 주석 처리 했음 - 준수*/
   content: "\e649";
   font-family: "themify";
   font-style: normal;
