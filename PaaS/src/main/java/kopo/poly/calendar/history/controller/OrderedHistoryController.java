@@ -34,9 +34,9 @@ public class OrderedHistoryController {
         return "/calendar/ordered-history-calendar";
     }
 
-    @ResponseBody
+//    @ResponseBody
     @GetMapping("detail")
-    public List<OrderedDTO> getDetail(
+    public String getDetail(
             Model model,
             HttpServletRequest request,
             HttpSession session,
@@ -63,9 +63,11 @@ public class OrderedHistoryController {
 
         log.info("rList in contoller : " + rList);
 
+        model.addAttribute("rList", rList);
 
 
-        return rList;
+
+        return "/calendar/ordered-history-detail";
     }
 
     /**

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/user/profile/style.css">
+  <title>회원 정보 확인</title>
+  <script th:inline="javascript">
+      console.log("rDTO : " + [[${rDTO}]]);
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1>회원 정보</h1>
+  <div class="member-info">
+
+    <div class="info-row">
+      <span class="label">아이디:</span>
+      <span class="value" th:text="${rDTO.userId}"></span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Username:</span>
+      <span class="value" th:text="${rDTO.userName}"></span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Nickname:</span>
+      <span class="value" th:text="${rDTO.nickname}"></span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Email:</span>
+      <span class="value" th:text="${rDTO.email}"></span>
+    </div>
+
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">Address1:</span>-->
+    <!--      <span class="value" th:text="${rDTO.addr1}"></span>-->
+    <!--    </div>-->
+
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">Address2:</span>-->
+    <!--      <span class="value" th:text="${rDTO.addr2}"></span>-->
+    <!--    </div>-->
+
+    <div class="info-row">
+      <span class="label">사용자구분:</span>
+      <span class="value" th:text="${rDTO.userType}"></span>
+    </div>
+
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">요식업종:</span>-->
+    <!--      <span class="value" th:text="${rDTO.job}"></span>-->
+    <!--    </div>-->
+
+    <!--    <br/>-->
+    <!--    <br/>-->
+    <!--    <hr/>-->
+    <!--    <h4>이 아래로 화면 표시용 html</h4>-->
+
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">이름:</span>-->
+    <!--      <span class="value">홍길동</span>-->
+    <!--    </div>-->
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">아이디:</span>-->
+    <!--      <span class="value">hong123</span>-->
+    <!--    </div>-->
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">이메일:</span>-->
+    <!--      <span class="value">hong@example.com</span>-->
+    <!--    </div>-->
+    <!--    <div class="info-row">-->
+    <!--      <span class="label">가입일:</span>-->
+    <!--      <span class="value">2023-10-30</span>-->
+    <!--    </div>-->
+    <!-- 원하는 다른 회원 정보 항목 추가 -->
+  </div>
+  <a href="/profile/check-password-form">
+    <button type="button" id="check-password">회원 정보 수정</button>
+  </a>
+</div>
+</body>
+</html>

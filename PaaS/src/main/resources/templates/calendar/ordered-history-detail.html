@@ -1,10 +1,820 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Skydash Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/vendors/feather/feather.css">
+  <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" type="text/css" href="/js/select.dataTables.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="/image/favicon.png"/>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <title>장바구니 커뮤니티</title>
+
+
+  <script type="text/javascript">// 버튼을 클릭하면 모달 팝업을 엽니다.
+  $(document).ready(function () {
+      document.getElementById("showImageBtn").addEventListener("click", function () {
+          var modal = document.getElementById("imageModal");
+          modal.style.display = "block";
+          // 이미지의 URL을 설정하세요.
+      });
+
+// 모달 팝업을 닫습니다.
+      document.getElementById("closeModal").addEventListener("click", function () {
+          var modal = document.getElementById("imageModal");
+          modal.style.display = "none";
+      });
+
+      $("#bestButton").click(function () {
+          console.log("bestButton 누름");
+          fetchDataFromServer("best");
+      })
+      $("#aceButton").click(function () {
+          fetchDataFromServer("ace")
+      })
+
+      $("#goodFoodButton").on("click", function () {
+          fetchDataFromServer("goodFood");
+      })
+
+      $("#babyLeafButton").on("click", function () {
+          fetchDataFromServer("babyLeaf");
+      })
+      $("#foodEnButton").on("click", function () {
+          fetchDataFromServer("foodEn");
+      })
+
+      $("#monoMartButton").on("click", function () {
+          fetchDataFromServer("monoMart");
+      })
+
+      function fetchDataFromServer(source) {
+          $.ajax({
+              type: "POST",
+              url: "/order/crawlingResult",
+              data: JSON.stringify({source: source}),
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: function (data) {
+                  updateTable(data);
+              },
+              error: function (xhr, status, error) {
+                  console.error("요청 실패 :", status + " - ", error);
+              },
+
+          })
+      }
+      function exit(){
+          window.addEventListener('beforeunload', function(event) {
+              // 이 페이지를 떠나시겠습니까? 검색 정보가 사라집니다.
+              var confirmationMessage = '이 페이지를 떠나시겠습니까? 검색 정보가 사라집니다.';
+
+              // 경고 메시지 표시
+              event.returnValue = confirmationMessage;
+
+              // 사용자가 확인 버튼을 눌렀을 때의 동작
+              var onUnloadAction = function() {
+                  // '/order/crawling'으로 POST 요청을 보내서 세션을 무효화
+                  fetch('/order/exit', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ sessionKey: 'SS_CRAWLING_RESULT' }), // 세션 키를 전송
+                  })
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error('Network response was not ok');
+                          }
+                          // 응답이 성공하면 다른 작업을 수행할 수 있음
+                      })
+                      .catch(error => {
+                          console.error('There has been a problem with your fetch operation:', error);
+                      });
+              };
+
+// 사용자가 페이지를 떠날 때의 이벤트 핸들러 등록
+              window.addEventListener('unload', onUnloadAction);
+
+              // 사용자가 확인을 누르면 unload 이벤트 핸들러 실행
+              return confirmationMessage;
+          });
+      }
+      function updateTable(data) {
+          // OCR 결과 업데이트
+          let table = $("#resultTable");
+          let tbody = table.find('tbody');
+          tbody.empty(); // 기존 tbody의 내용을 비우는 대신에 새로운 내용을 추가하도록 변경
+
+          $.each(data, function (outerIndex, innerList) {
+              // 안쪽 리스트를 반복 처리
+              $.each(innerList, function (innerIndex, item) {
+                  let productRow = $("<tr>");
+
+                  let productLink = $("<a>").attr("href", item.url).attr("target", "_blank").text(item.productName);
+                  let productCell = $("<td>").append(productLink);
+                  productRow.append(productCell);
+
+                  // 가격 셀에 스타일 적용
+                  let priceCell = $("<td>").text(item.price).css("color", "black");
+                  productRow.append(priceCell);
+
+                  tbody.append(productRow); // tbody에 새로운 행 추가
+              });
+          });
+      }
+
+  })
+  </script>
+  <style>
+      .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .modal-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #fff;
+          padding: 20px;
+          text-align: center;
+          border-radius: 5px;
+          max-width: 80%;
+          max-height: 80%;
+          overflow: auto;
+      }
+
+      .close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          font-size: 20px;
+          cursor: pointer;
+      }
+
+      /*!* 버튼 스타일 *!*/
+      /*#showImageBtn {*/
+      /*    background-color: #4CAF50;*/
+      /*    color: #fff;*/
+      /*    padding: 10px 20px;*/
+      /*    border: none;*/
+      /*    cursor: pointer;*/
+      /*}*/
+
+      #aceListContainer {
+          display: flex;
+      }
+
+      #aceListContainer a {
+          color: black;
+      }
+
+      #aceListContainer button {
+          display: inline-block;
+          padding: 12px 24px;
+          /*background-image: linear-gradient(top, #c054ff 0%, #5274ff 100%);*/
+          background: linear-gradient(135deg, #80d0c7 0%, #198754 100%);
+          border: none;
+          border-radius: 5px;
+          color: white;
+          text-align: center;
+          font-size: 16px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+          flex: 1; /* 컨테이너 내에서 동일한 너비를 가지도록 설정합니다. */
+          margin: 0 5px; /* 버튼 간의 간격을 조절합니다. */
+      }
+
+      #aceListContainer button:hover {
+          background: linear-gradient(135deg, #80d0c7 0%, #198754 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      #aceListContainer a:hover {
+          color: rgba(256, 256, 256, 0.7);
+      }
+  </style>
+</head>
+
+<body class="sidebar-dark">
+<div class="container-scroller">
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-dark">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="images/logo.svg" class="mr-2"
+                                                                     alt="logo"/></a>
+      <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+        <span class="icon-menu"></span>
+      </button>
+      <ul class="navbar-nav mr-lg-2">
+        <li class="nav-item nav-search d-none d-lg-block">
+          <div class="input-group">
+            <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+            </div>
+            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
+                   aria-label="search" aria-describedby="search">
+          </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item dropdown">
+          <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+             data-toggle="dropdown">
+            <i class="icon-bell mx-0"></i>
+            <span class="count"></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+               aria-labelledby="notificationDropdown">
+            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+            <a class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-success">
+                  <i class="ti-info-alt mx-0"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                <p class="font-weight-light small-text mb-0 text-muted">
+                  Just now
+                </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-warning">
+                  <i class="ti-settings mx-0"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject font-weight-normal">Settings</h6>
+                <p class="font-weight-light small-text mb-0 text-muted">
+                  Private message
+                </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-info">
+                  <i class="ti-user mx-0"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                <p class="font-weight-light small-text mb-0 text-muted">
+                  2 days ago
+                </p>
+              </div>
+            </a>
+          </div>
+        </li>
+        <li class="nav-item nav-profile dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+            <img src="images/faces/face28.jpg" alt="profile"/>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+            <a class="dropdown-item">
+              <i class="ti-settings text-primary"></i>
+              Settings
+            </a>
+            <a class="dropdown-item" href="/login/logout">
+              <i class="ti-power-off text-primary"></i>
+              Logout
+            </a>
+          </div>
+        </li>
+        <li class="nav-item nav-settings d-none d-lg-flex">
+          <a class="nav-link" href="#">
+            <i class="icon-ellipsis"></i>
+          </a>
+        </li>
+      </ul>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+              data-toggle="offcanvas">
+        <span class="icon-menu"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_settings-panel.html -->
+    <!--
+          <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+              <i class="settings-close ti-close"></i>
+              <p class="settings-heading">SIDEBAR SKINS</p>
+              <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+              <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+              <p class="settings-heading mt-2">HEADER SKINS</p>
+              <div class="color-tiles mx-0 px-4">
+                <div class="tiles success"></div>
+                <div class="tiles warning"></div>
+                <div class="tiles danger"></div>
+                <div class="tiles info"></div>
+                <div class="tiles dark"></div>
+                <div class="tiles default"></div>
+              </div>
+            </div>
+          </div>
+    -->
+    <!--여기서 부터 오른쪽 사이드 바-->
+    <div id="right-sidebar" class="settings-panel">
+      <i class="settings-close ti-close"></i>
+      <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab"
+             aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab"
+             aria-controls="chats-section">CHATS</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="setting-content">
+        <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel"
+             aria-labelledby="todo-section">
+          <div class="add-items d-flex px-3 mb-0">
+            <form class="form w-100">
+              <div class="form-group d-flex">
+                <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="list-wrapper px-3">
+            <ul class="d-flex flex-column-reverse todo-list">
+              <li>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox">
+                    Team review meeting at 3.00 PM
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox">
+                    Prepare for presentation
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox">
+                    Resolve all the low priority tickets due today
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li class="completed">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox" checked>
+                    Schedule meeting for next week
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li class="completed">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox" checked>
+                    Project review
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+            </ul>
+          </div>
+          <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+          <div class="events pt-4 px-3">
+            <div class="wrapper d-flex mb-2">
+              <i class="ti-control-record text-primary mr-2"></i>
+              <span>Feb 11 2018</span>
+            </div>
+            <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+            <p class="text-gray mb-0">The total number of sessions</p>
+          </div>
+          <div class="events pt-4 px-3">
+            <div class="wrapper d-flex mb-2">
+              <i class="ti-control-record text-primary mr-2"></i>
+              <span>Feb 7 2018</span>
+            </div>
+            <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+            <p class="text-gray mb-0 ">Call Sarah Graves</p>
+          </div>
+        </div>
+        <!-- To do section tab ends -->
+        <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+          <div class="d-flex align-items-center justify-content-between border-bottom">
+            <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+            <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See
+              All</small>
+          </div>
+          <ul class="chat-list">
+            <li class="list active">
+              <div class="profile"><img src="images/faces/face1.jpg" alt="image"><span
+                  class="online"></span></div>
+              <div class="info">
+                <p>Thomas Douglas</p>
+                <p>Available</p>
+              </div>
+              <small class="text-muted my-auto">19 min</small>
+            </li>
+            <li class="list">
+              <div class="profile"><img src="images/faces/face2.jpg" alt="image"><span
+                  class="offline"></span></div>
+              <div class="info">
+                <div class="wrapper d-flex">
+                  <p>Catherine</p>
+                </div>
+                <p>Away</p>
+              </div>
+              <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+              <small class="text-muted my-auto">23 min</small>
+            </li>
+            <li class="list">
+              <div class="profile"><img src="images/faces/face3.jpg" alt="image"><span
+                  class="online"></span></div>
+              <div class="info">
+                <p>Daniel Russell</p>
+                <p>Available</p>
+              </div>
+              <small class="text-muted my-auto">14 min</small>
+            </li>
+            <li class="list">
+              <div class="profile"><img src="images/faces/face4.jpg" alt="image"><span
+                  class="offline"></span></div>
+              <div class="info">
+                <p>James Richardson</p>
+                <p>Away</p>
+              </div>
+              <small class="text-muted my-auto">2 min</small>
+            </li>
+            <li class="list">
+              <div class="profile"><img src="images/faces/face5.jpg" alt="image"><span
+                  class="online"></span></div>
+              <div class="info">
+                <p>Madeline Kennedy</p>
+                <p>Available</p>
+              </div>
+              <small class="text-muted my-auto">5 min</small>
+            </li>
+            <li class="list">
+              <div class="profile"><img src="images/faces/face6.jpg" alt="image"><span
+                  class="online"></span></div>
+              <div class="info">
+                <p>Sarah Graves</p>
+                <p>Available</p>
+              </div>
+              <small class="text-muted my-auto">47 min</small>
+            </li>
+          </ul>
+        </div>
+        <!-- chat tab ends -->
+      </div>
+    </div>
+
+    <!--여기까지 오른쪽 사이드 바-->
+    <!-- partial -->
+    <!-- partial:partials/_sidebar.html -->
+    <!--왼쪽 사이드 바-->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">
+            <i class="icon-grid menu-icon"></i>
+            <span class="menu-title">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
+             aria-controls="ui-basic">
+            <i class="icon-layout menu-icon"></i>
+            <span class="menu-title">UI Elements</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a>
+              </li>
+              <li class="nav-item"><a class="nav-link"
+                                      href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+              <li class="nav-item"><a class="nav-link"
+                                      href="pages/ui-features/typography.html">Typography</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false"
+             aria-controls="form-elements">
+            <i class="icon-columns menu-icon"></i>
+            <span class="menu-title">Form elements</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="form-elements">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic
+                Elements</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false"
+             aria-controls="charts">
+            <i class="icon-bar-graph menu-icon"></i>
+            <span class="menu-title">Charts</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="charts">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false"
+             aria-controls="tables">
+            <i class="icon-grid-2 menu-icon"></i>
+            <span class="menu-title">Tables</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="tables">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/tables/basic-table.html">Basic
+                table</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false"
+             aria-controls="icons">
+            <i class="icon-contract menu-icon"></i>
+            <span class="menu-title">Icons</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="icons">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+            <i class="icon-head menu-icon"></i>
+            <span class="menu-title">User Pages</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="auth">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+              <li class="nav-item"><a class="nav-link" href="pages/samples/register.html"> Register </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false"
+             aria-controls="error">
+            <i class="icon-ban menu-icon"></i>
+            <span class="menu-title">Error pages</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="error">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"><a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+              <li class="nav-item"><a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/documentation/documentation.html">
+            <i class="icon-paper menu-icon"></i>
+            <span class="menu-title">Documentation</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!--여기까지 왼쪽 사이드 바-->
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="col-md-12 grid-margin stretch-card">
+          <div class="card position-relative">
+            dddd
+          </div>
+        </div>
+
+
+        <div class="row">
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <p class="card-title">거래명세서 분석 결과</p>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="table-responsive">
+<!--                      <table class="display expandable-table" style="width:100%">-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                          <th>상품명</th>-->
+<!--                          <th>단위</th>-->
+<!--                          <th>개수</th>-->
+<!--                          <th>단가</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody th:each="i : ${#numbers.sequence(0, result.getOcrComposite().nameList.size() - 1)}">-->
+<!--                        <tr>-->
+<!--                          <td th:text="${result.getOcrComposite().nameList[i]}"></td>-->
+<!--                          <td th:text="${result.getOcrComposite().unitList[i]}"></td>-->
+<!--                          <td th:text="${result.getOcrComposite().counstList[i]}"></td>-->
+<!--                          <td th:text="${result.getOcrComposite().priceList[i]}"></td>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+
+<!--                      </table>-->
+                      <table class="display expandable-table" style="width:100%">
+                        <thead>
+                        <tr>
+                          <th>상품명</th>
+                          <th>단위</th>
+                          <th>개수</th>
+                          <th>단가</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="dto : ${rList}">
+                        <tr>
+                          <td th:text="${dto.productName}"></td>
+                          <td th:text="${dto.unit}"></td>
+                          <td th:text="${dto.count}"></td>
+                          <td th:text="${dto.price}"></td>
+<!--                          <td th:text="${result.getOcrComposite().priceList[i]}"></td>-->
+<!--                          <td th:text="${dto.}"></td>-->
+                        </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+<!--        <div class="container">-->
+<!--          <div class="row">-->
+<!--            <div class="col-md-2">-->
+<!--              <button class="btn btn-outline-info btn-fw" id="bestButton">최저가</button>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <button class="btn btn-outline-primary btn-fw" id="aceButton">에이스 식자재</button>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <button class="btn btn-outline-primary btn-fw" id="goodFoodButton">굿푸드몰</button>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <button class="btn btn-outline-primary btn-fw" id="babyLeafButton">짱구몰</button>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <button class="btn btn-outline-primary btn-fw" id="foodEnButton">푸드엔</button>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <button class="btn btn-outline-primary btn-fw" id="monoMartButton">모노마트</button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <!--우리가 쓸 테이블-->
+<!--        <div class="row">-->
+<!--          <div class="col-md-12 grid-margin stretch-card">-->
+<!--            <div class="card">-->
+<!--              <div class="card-body">-->
+<!--                <p class="card-title">검색 결과</p>-->
+<!--                <div class="row">-->
+<!--                  <div class="col-12">-->
+<!--                    <div class="table-responsive">-->
+<!--                      <table id="resultTable" class="display expandable-table" style="width:100%">-->
+<!--                        <thead>-->
+
+<!--                        <th style="background-color: black">상품명</th>-->
+<!--                        <th style="background-color: black">가격</th>-->
+
+<!--                        </thead>-->
+<!--                        <tbody>-->
+
+<!--                        </tbody>-->
+<!--                      </table>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!--여기까지 우리가 쓸 테이블-->
+        <div>
+          <div>
+            <button class="btn btn-inverse-primary btn-fw" id="showImageBtn">거래 명세서 확인하기</button>
+
+            <div id="imageModal" class="modal">
+              <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <img id="modalImage" th:src="${rList[0].url}"
+                     alt="Image">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a
+                        href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i
+              class="ti-heart text-danger ml-1"></i></span>
+        </div>
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a
+                        href="https://www.themewagon.com/" target="_blank">Themewagon</a></span>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+<!-- plugins:js -->
+<script src="/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="/vendors/chart.js/Chart.min.js"></script>
+<script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/js/dataTables.select.min.js"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="/js/off-canvas.js"></script>
+<script src="/js/hoverable-collapse.js"></script>
+<script src="/js/template.js"></script>
+<script src="/js/settings.js"></script>
+<script src="/js/todolist.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="/js/dashboard.js"></script>
+<script src="/js/Chart.roundedBarCharts.js"></script>
+<!-- End custom js for this page-->
 </body>
+
 </html>
+

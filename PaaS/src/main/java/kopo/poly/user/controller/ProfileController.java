@@ -70,8 +70,10 @@ public class ProfileController {
 
 
         if (rDTO.getUserType().equals("biz")) {
+            log.info("biz 리턴!!");
             return "/user/profile/info/profile-biz-info";
         } else {
+            log.info("newbiz 리턴!!");
             return "/user/profile/info/profile-newbiz-info";
         }
     }
@@ -83,7 +85,8 @@ public class ProfileController {
      * @return null 이나 "" 이 아니면 true
      */
     private boolean isValidSessionUserId(HttpSession session) {
-        return !(session.isNew() || ((String) session.getAttribute(SessionEnum.USER_ID.STRING)).equals(""));
+        return !(session == null || session.isNew() || session.getAttribute(SessionEnum.USER_ID.STRING) == null || ((String) session.getAttribute(SessionEnum.USER_ID.STRING)).equals("")
+        );
     }
 
     /**
@@ -126,6 +129,7 @@ public class ProfileController {
         if (!isValidSessionUserId(session)) {
             return "redirect:/login/login-form";
         }
+        log.info("password : " + password);
 
         // 여기서 이제 비밀번호 확인하고, 아니면 가만히 있을거임
         UserInfoDTO pDTO = new UserInfoDTO();
@@ -144,7 +148,8 @@ public class ProfileController {
         ).orElseGet(UserInfoDTO::new);
 
         if (!rDTO.getPassword().equals(pDTO.getPassword())) {
-            return "redirect:/profile/check-password-form";
+//            return "redirect:/profile/check-password-form";
+            return "redirect:/profile/info";
         }
 
 //        session.setAttribute(ProfileEnum.CHECKED, ProfileEnum.valueOf());
@@ -171,7 +176,7 @@ public class ProfileController {
         log.info(this.getClass().getName() + ".updateForm() START!!!!!!!!!!!");
         log.info(
                 "session.getAttribute(SessionEnum.USER_ID.STRING)"
-                + session.getAttribute(SessionEnum.USER_ID.STRING)
+                        + session.getAttribute(SessionEnum.USER_ID.STRING)
         );
         if (!isValidSessionUserId(session)) {
             return "redirect:/login/login-form";
@@ -180,11 +185,12 @@ public class ProfileController {
                 session.getAttribute(ProfileEnum.CHECKED.STRING));
         log.info(
                 "session.getAttribute(ProfileEnum.CHECKED.STRING)).equals(\"yes\")"
-                + ((String)session.getAttribute(ProfileEnum.CHECKED.STRING)).equals("yes")
+                        + ((String) session.getAttribute(ProfileEnum.CHECKED.STRING)).equals("yes")
         );
-        if (!((String) session.getAttribute(ProfileEnum.CHECKED.STRING)).equals("yes")) {
+        if (!((String) session.getAttribute(ProfileEnum.CHECKED.STRING)).equals("yes") || session.getAttribute(ProfileEnum.CHECKED.STRING) == null) {
             return "redirect:/profile/check-password-form";
         }
+
         UserInfoDTO pDTO = new UserInfoDTO();
         String userId = (String) session.getAttribute(SessionEnum.USER_ID.STRING);
 
@@ -207,14 +213,10 @@ public class ProfileController {
 
         log.info(this.getClass().getName() + ".updateForm() END!!!!!!!!!!!");
         if (rDTO.getUserType().equals("biz")) {
-            log.info(
-                    "profile-biz-update called!!!!!!!!"
-            );
+            log.info("profile-biz-update called!!!!!!!!");
             return "/user/profile/update/profile-biz-update";
         } else {
-            log.info(
-                    "profile-newbiz-update called!!!!!!!!"
-            );
+            log.info("profile-newbiz-update called!!!!!!!!");
             return "/user/profile/update/profile-newbiz-update";
         }
 
