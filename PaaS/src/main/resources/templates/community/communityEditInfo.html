@@ -196,10 +196,9 @@
     <!--여기가 상단바 색깔 navbar-dark로 설정해줌-->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-dark">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="index"><img src="../../images/logo.svg" class="mr-2"
-                                                                      alt="logo"/></a>
+            <a class="navbar-brand brand-logo mr-5" href="/index"><h2 style="margin-left: 10%; color: #FFFFFF;">Jangbaguni</h2></a>
             <!--아니 왜 이거 밑에 아이콘 안 나오노? 경로 뭐노-->
-            <a class="navbar-brand brand-logo-mini" href="index"><img src="../../images/logo-mini.svg" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="/index"><img src="/image/logo-mini.svg" alt="logo"/></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -271,14 +270,14 @@
                 </li>
                 <li class="nav-item nav-profile dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                        <img src="../../images/faces/face28.jpg" alt="profile"/>
+                        <img src="/image/faces/profile.png" alt="profile"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                         <a class="dropdown-item">
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/login/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -486,7 +485,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="index">
+                    <a class="nav-link" href="/index">
                         <!--                    <i class="fa-solid fa-house icon-grid menu-icon"></i>-->
                         <i class="fa-solid fa-house icon-grid menu-icon"></i>
                         <span class="menu-title">Dashboard</span>
@@ -522,8 +521,8 @@
                     </a>
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"><a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                            <li class="nav-item"><a class="nav-link" href="pages/samples/register.html"> Register </a>
+                            <li class="nav-item"><a class="nav-link" href="/profile/info"> MyPage </a></li>
+                            <li class="nav-item"><a class="nav-link" href="/login/logout"> LogOut </a>
                             </li>
                         </ul>
                     </div>
@@ -846,25 +845,28 @@
     </div>
     <!-- page-body-wrapper ends -->
 </div>
-<!-- container-scroller -->
+<!--이미지 드래그 드랍-->
+<script src="/ocr/js/imageDrag.js"></script>
 <!-- plugins:js -->
-<script src="../../vendors/js/vendor.bundle.base.js"></script>
+<script src="/vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->
-<script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-<script src="../../vendors/select2/select2.min.js"></script>
+<script src="/vendors/chart.js/Chart.min.js"></script>
+<script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/js/dataTables.select.min.js"></script>
+
 <!-- End plugin js for this page -->
 <!-- inject:js -->
-<script src="../../js/off-canvas.js"></script>
-<script src="../../js/hoverable-collapse.js"></script>
-<script src="../../js/template.js"></script>
-<script src="../../js/settings.js"></script>
-<script src="../../js/todolist.js"></script>
+<script src="/js/off-canvas.js"></script>
+<script src="/js/hoverable-collapse.js"></script>
+<script src="/js/template.js"></script>
+<script src="/js/settings.js"></script>
+<script src="/js/todolist.js"></script>
 <!-- endinject -->
 <!-- Custom js for this page-->
-<script src="../../js/file-upload.js"></script>
-<script src="../../js/typeahead.js"></script>
-<script src="../../js/select2.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/Chart.roundedBarCharts.js"></script>
 <!-- End custom js for this page-->
 </body>
 
