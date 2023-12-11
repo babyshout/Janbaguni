@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
 <head>
+    <!-- Required meta tags -->
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>JangBaguNi</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--    <link rel="manifest" href="site.webmanifest"> 이거 때문에 자꾸 F12눌렀을 에러보여서 거슬림 그래서 주석처리함-->
-    <link rel="shortcut icon" type="image/x-icon" href="/community/css/assets/img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>JangBaguni</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/vendors/feather/feather.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="/js/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/image/favicon/favicon-32x32.png"/>
+    <link rel="stylesheet" href="/communityCSS/community.css">
+    <link rel="stylesheet" href="/communityCSS/community2.css">
+    <!--아이콘-->
+    <script src="https://kit.fontawesome.com/ad95056f42.js" crossorigin="anonymous"></script>
+
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-    <!-- CSS here -->
-    <link rel="stylesheet" href="/community/css/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/slicknav.css">
-    <link rel="stylesheet" href="/community/css/assets/css/flaticon.css">
-    <link rel="stylesheet" href="/community/css/assets/css/progressbar_barfiller.css">
-    <link rel="stylesheet" href="/community/css/assets/css/gijgo.css">
-    <link rel="stylesheet" href="/community/css/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/animated-headline.css">
-    <link rel="stylesheet" href="/community/css/assets/css/magnific-popup.css">
-    <link rel="stylesheet" href="/community/css/assets/css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="/community/css/assets/css/themify-icons.css">
-    <link rel="stylesheet" href="/community/css/assets/css/slick.css">
-    <link rel="stylesheet" href="/community/css/assets/css/nice-select.css">
-    <link rel="stylesheet" href="/community/css/assets/css/style.css">
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">
 
         // Controller에서 받은 세션에 저장된 값
@@ -38,362 +40,834 @@
         const communitySeq = [[${rDTO.communitySeq}]];
 
 
-         // HTML로딩이 완료되고, 실행됨
-              $(document).ready(function () {
-                  // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                  $("#btnSend").on("click", function () {
-                      doSubmit(); // 공지사항 수정하기 실행
-                  })
-              })
+        // HTML로딩이 완료되고, 실행됨
+        $(document).ready(function () {
 
-              //글자 길이 바이트 단위로 체크하기(바이트값 전달)  varchar(바이트 크기) ex) varchar(4000) 4000 바이트까지
-              function calBytes(str) {
-                  let tcount = 0;
-                  let tmpStr = String(str);
-                  let strCnt = tmpStr.length;
-                  let onechar;
-                  for (let i = 0; i < strCnt; i++) {
-                      onechar = tmpStr.charAt(i);
-                      if (escape(onechar).length > 4) {
-                          tcount += 2;
-                      } else {
-                          tcount += 1;
-                      }
-                  }
-                  return tcount;
-              }
+            /*유저 페이지 아이콘 회전 */
+            $('.nav-link').click(function () {
+                var icon = $(this).find('.fa-chevron-right');
 
-              // 공지사항 저장하기
-              function doSubmit() {
+                // 아이콘 회전 애니메이션 추가
+                if (icon.hasClass('rotate')) {
+                    icon.removeClass('rotate');
+                } else {
+                    icon.addClass('rotate');
+                }
+            });
+            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+            $("#btnSend").on("click", function () {
+                doSubmit(); // 공지사항 수정하기 실행
+            })
+        })
 
-                  let f = document.getElementById("f"); // form 태그
+        //글자 길이 바이트 단위로 체크하기(바이트값 전달)  varchar(바이트 크기) ex) varchar(4000) 4000 바이트까지
+        function calBytes(str) {
+            let tcount = 0;
+            let tmpStr = String(str);
+            let strCnt = tmpStr.length;
+            let onechar;
+            for (let i = 0; i < strCnt; i++) {
+                onechar = tmpStr.charAt(i);
+                if (escape(onechar).length > 4) {
+                    tcount += 2;
+                } else {
+                    tcount += 1;
+                }
+            }
+            return tcount;
+        }
 
-                  if (f.title.value === "") {
-                      alert("제목을 입력하시기 바랍니다.");
-                      f.title.focus();
-                      return;
-                  }
-                  if (calBytes(f.title.value) > 200) {
-                      alert("최대 200Bytes까지 입력 가능합니다.");
-                      f.title.focus();
-                      return;
-                  }
+        // 공지사항 저장하기
+        function doSubmit() {
 
-                  let communityCheck = false; //체크 여부 확인 변수
-                  if (f.userId === "admin"){ //아이디가 admin인 경우에만 공지글 여부 확인 라디오 버튼 확인여부 판단
-                      for (let i = 0; i < f.communityYn.length; i++) {
-                          if (f.communityYn[i].checked) {
-                              communityCheck = true;
-                              break;
-                          }
-                      }
-                      if (communityCheck === false) { //admin일때만 적용됨
-                          alert("공지글 여부를 선택하시기 바랍니다.");
-                          f.communityYn[0].focus();
-                          return;
-                      }
-                  }
+            let f = document.getElementById("f"); // form 태그
 
-                  if (f.contents.value === "") {
-                      alert("내용을 입력하시기 바랍니다.");
-                      f.contents.focus();
-                      return;
-                  }
-                  if (calBytes(f.contents.value) > 4000) {
-                      alert("최대 4000Bytes까지 입력 가능합니다.");
-                      f.contents.focus();
-                      return;
-                  }
+            if (f.title.value === "") {
+                alert("제목을 입력하시기 바랍니다.");
+                f.title.focus();
+                return;
+            }
+            if (calBytes(f.title.value) > 200) {
+                alert("최대 200Bytes까지 입력 가능합니다.");
+                f.title.focus();
+                return;
+            }
 
-                  // Ajax 호출해서 글 수정하기
-                  $.ajax({
-                          url: "/community/communityUpdate",
-                          type: "post", // 전송방식은 Post
-                          dataType: "JSON", // 전송 결과는 JSON으로 받기
-                          data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                          success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
-                              alert(communitySeq);
-                              alert(json.msg); // 메시지 띄우기
-                              location.href = "/community/communityList"; // 공지사항 리스트 이동
-                          }
-                      }
-                  )
-              }
+            let communityCheck = false; //체크 여부 확인 변수
+            if (f.userId === "admin"){ //아이디가 admin인 경우에만 공지글 여부 확인 라디오 버튼 확인여부 판단
+                for (let i = 0; i < f.communityYn.length; i++) {
+                    if (f.communityYn[i].checked) {
+                        communityCheck = true;
+                        break;
+                    }
+                }
+                if (communityCheck === false) { //admin일때만 적용됨
+                    alert("공지글 여부를 선택하시기 바랍니다.");
+                    f.communityYn[0].focus();
+                    return;
+                }
+            }
+
+            if (f.contents.value === "") {
+                alert("내용을 입력하시기 바랍니다.");
+                f.contents.focus();
+                return;
+            }
+            if (calBytes(f.contents.value) > 4000) {
+                alert("최대 4000Bytes까지 입력 가능합니다.");
+                f.contents.focus();
+                return;
+            }
+
+            // Ajax 호출해서 글 수정하기
+            $.ajax({
+                    url: "/community/communityUpdate",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
+                        // alert(communitySeq);
+                        alert(json.msg); // 메시지 띄우기
+                        location.href = "/community/communityList"; // 공지사항 리스트 이동
+                    }
+                }
+            )
+        }
     </script>
+
+    <style>
+        .dropBox {
+            width: 90vw;
+            height: 80vh;
+
+            margin: .6rem;
+            overflow: auto;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 5px;
+            border: 4px dashed #ddd;
+            user-select: none;
+            transition: 0.4s;
+
+            max-height: 1080px; /* 원하는 높이로 설정 */
+            overflow: auto; /* 스크롤이 필요한 경우만 스크롤 표시 */
+        }
+
+        /* 드롭 반응 */
+        .dropBox.active {
+            background: #ddd;
+        }
+
+        .dropBox h1 {
+            font-size: 1.8rem;
+        }
+
+        /* ----------- */
+
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Pretendard, 'Malgun Gothic', sans-serif;
+        }
+
+        /*유저 페이지 아이콘 회전 */
+
+        .fa-chevron-right {
+            transition: transform 0.3s ease; /* 변환에 대한 애니메이션 효과를 적용합니다. */
+        }
+
+        .rotate {
+            transform: rotate(90deg); /* 회전 각도를 지정합니다. */
+        }
+    </style>
+
 
 </head>
 
-<body>
-
-<!-- ? Preloader Start -->
-<div id="preloader-active">
-    <div class="preloader d-flex align-items-center justify-content-center">
-        <div class="preloader-inner position-relative">
-            <div class="preloader-circle"></div>
-            <div class="preloader-img pere-text">
-                <img src="/community/css/assets/img/logo/loder.png" alt="">
-            </div>
+<body class="sidebar-dark">
+<div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <!--여기가 상단바 색깔 navbar-dark로 설정해줌-->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-dark">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="/index"><h2 style="margin-left: 10%; color: #FFFFFF;">Jangbaguni</h2></a>
+            <!--아니 왜 이거 밑에 아이콘 안 나오노? 경로 뭐노-->
+            <a class="navbar-brand brand-logo-mini" href="/index"><img src="/image/logo-mini.svg" alt="logo"/></a>
         </div>
-    </div>
-</div>
-<!-- Preloader Start -->
-<!-- Header Start -->
-
-<div class="header-area header-transparent">
-    <div class="main-header ">
-        <div class="header-bottom  header-sticky">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <!-- Logo -->
-                    <div class="col-xl-2 col-lg-2">
-                        <div class="logo">
-                           <!--여기 아래 부분 로고 눌렀을 때 인덱스로 가지게 돼있음-->
-                            <a href="index"><img src="/community/css/assets/img/logo/logo.png" alt=""></a>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="icon-menu"></span>
+            </button>
+            <ul class="navbar-nav mr-lg-2">
+                <li class="nav-item nav-search d-none d-lg-block">
+                    <div class="input-group">
+                        <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                            <!--                <span class="input-group-text" id="search">-->
+                            <!--                  <i class="icon-search"></i>-->
+                            <!--                </span>-->
                         </div>
+                        <!--검색창-->
+                        <!--            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">-->
                     </div>
-                    <div class="col-xl-10 col-lg-10">
-                        <div class="menu-wrapper d-flex align-items-center justify-content-end">
-                            <!-- Main-menu -->
-                            <div class="main-menu d-none d-lg-block">
-                                <nav>
-                                    <ul id="navigation">
-                                        <li class="active" ><a href="index">Home</a></li>
-                                        <li><a href="courses">Courses</a></li>
-                                        <li><a href="communityList">Community</a></li>
-                                        <li><a href="#">Blog</a>
-                                            <ul class="submenu">
-                                                <li><a href="blog">Blog</a></li>
-                                                <li><a href="blog_details">Blog Details</a></li>
-                                                <li><a href="elements">Element</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="contact">Contact</a></li>
-                                        <!-- Button -->
-                                        <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
-                                        <li class="button-header"><a href="login" class="btn btn3">Log in</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Mobile Menu -->
-                    <div class="col-12">
-                        <div class="mobile_menu d-block d-lg-none"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Header End -->
-<main>
-    <!--? slider Area Start-->
-    <section class="slider-area slider-area2">
-        <div class="slider-active">
-            <!-- Single Slider -->
-            <div class="single-slider slider-height2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-8 col-lg-11 col-md-12">
-                            <div class="hero__caption hero__caption2">
-                                <h1 data-animation="bounceIn" data-delay="0.2s">Community</h1>
-                                <!-- breadcrumb Start-->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#">community</a></li>
-                                    </ol>
-                                </nav>
-                                <!-- breadcrumb End -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <form name="f" id="f">
-        <input type="hidden" name="communitySeq" th:value="${rDTO.communitySeq}"/>
-        <div class="board_wrap">
-            <div class="board_title">
-                <strong>공지사항</strong>
-                <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
-            </div>
-            <div class="board_write_wrap">
-                <div class="board_write">
-                    <div class="title">
-                        <dl>
-                            <dt>제목</dt>
-                            <!-- 모델의 DTO에서 title 속성 값을 가져와서 출력 -->
-                            <dd><input type="text" name="title" placeholder="제목 입력" th:value="${rDTO.title}" /></dd>
-                        </dl>
-                        <dl>
-                            <dt>공지글 여부</dt>
-                            <dd th:if="${isAdmin}">
-                                <input type="radio" name="communityYn" value="Y" /> 예
-                                <input type="radio" name="communityYn" value="N" /> 아니오
-                            </dd>
-                            <dd th:unless="${isAdmin}">
-                                <input type="hidden" name="communityYn" value="N" />
-                                <span>지정할 수 없습니다.</span>
-                            </dd>
-                        </dl>
-                    </div>
-                    <div class="info">
-
-                    </div>
-                    <div class="cont">
-                        <!-- 모델의 DTO에서 contents 속성 값을 가져와서 출력 -->
-                        <textarea name="contents" placeholder="내용 입력" th:text="${rDTO.contents}"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bt_list">
-                <button id="btnSend" type="button" class="custom-button">수정</button>
-            </div>
-        </div>
-    </form>
-</main>
-<footer>
-    <div class="footer-wrappper footer-bg">
-        <!-- Footer Start-->
-        <div class="footer-area footer-padding">
-            <div class="container">
-                <div class="row justify-content-between">
-                    <div class="col-xl-4 col-lg-5 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="single-footer-caption mb-30">
-                                <!-- logo -->
-                                <div class="footer-logo mb-25">
-                                    <a href="index"><img src="/community/cs  s/assets/img/logo/logo2_footer.png" alt=""></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item dropdown">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                       data-toggle="dropdown">
+                        <i class="icon-bell mx-0"></i>
+                        <span class="count"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                         aria-labelledby="notificationDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                        <a class="dropdown-item preview-item">
+                            <div class="preview-thumbnail">
+                                <div class="preview-icon bg-success">
+                                    <i class="ti-info-alt mx-0"></i>
                                 </div>
-                                <div class="footer-tittle">
-                                    <div class="footer-pera">
-                                        <p>The automated process starts as soon as your clothes go into the machine.</p>
+                            </div>
+                            <div class="preview-item-content">
+                                <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    Just now
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item preview-item">
+                            <div class="preview-thumbnail">
+                                <div class="preview-icon bg-warning">
+                                    <i class="ti-settings mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="preview-item-content">
+                                <h6 class="preview-subject font-weight-normal">Settings</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    Private message
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item preview-item">
+                            <div class="preview-thumbnail">
+                                <div class="preview-icon bg-info">
+                                    <i class="ti-user mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="preview-item-content">
+                                <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    2 days ago
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                        <img src="/image/faces/profile.png" alt="profile"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item">
+                            <i class="ti-settings text-primary"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item" href="/login/logout">
+                            <i class="ti-power-off text-primary"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item nav-settings d-none d-lg-flex">
+                    <a class="nav-link" href="#">
+                        <i class="icon-ellipsis"></i>
+                    </a>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-toggle="offcanvas">
+                <span class="icon-menu"></span>
+            </button>
+        </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_settings-panel.html -->
+        <!--    <div class="theme-setting-wrapper">-->
+        <!--이거 톱니바퀴 없앰-->
+
+        <!--      <div id="settings-trigger"><i class="ti-settings"></i></div>-->
+        <!--      <div id="theme-settings" class="settings-panel">-->
+        <!--        <i class="settings-close ti-close"></i>-->
+        <!--        <p class="settings-heading">SIDEBAR SKINS</p>-->
+        <!--        <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>-->
+        <!--        <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>-->
+        <!--        <p class="settings-heading mt-2">HEADER SKINS</p>-->
+        <!--        <div class="color-tiles mx-0 px-4">-->
+        <!--          <div class="tiles success"></div>-->
+        <!--          <div class="tiles warning"></div>-->
+        <!--          <div class="tiles danger"></div>-->
+        <!--          <div class="tiles info"></div>-->
+        <!--          <div class="tiles dark"></div>-->
+        <!--          <div class="tiles default"></div>-->
+        <!--        </div>-->
+        <!--      </div>-->
+        <!--    </div>-->
+        <div id="right-sidebar" class="settings-panel">
+            <i class="settings-close ti-close"></i>
+            <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab"
+                       aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab"
+                       aria-controls="chats-section">CHATS</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="setting-content">
+                <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel"
+                     aria-labelledby="todo-section">
+                    <div class="add-items d-flex px-3 mb-0">
+                        <form class="form w-100">
+                            <div class="form-group d-flex">
+                                <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                                <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="list-wrapper px-3">
+                        <ul class="d-flex flex-column-reverse todo-list">
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox">
+                                        Team review meeting at 3.00 PM
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox">
+                                        Prepare for presentation
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox">
+                                        Resolve all the low priority tickets due today
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li class="completed">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox" checked>
+                                        Schedule meeting for next week
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                            <li class="completed">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="checkbox" type="checkbox" checked>
+                                        Project review
+                                    </label>
+                                </div>
+                                <i class="remove ti-close"></i>
+                            </li>
+                        </ul>
+                    </div>
+                    <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+                    <div class="events pt-4 px-3">
+                        <div class="wrapper d-flex mb-2">
+                            <i class="ti-control-record text-primary mr-2"></i>
+                            <span>Feb 11 2018</span>
+                        </div>
+                        <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+                        <p class="text-gray mb-0">The total number of sessions</p>
+                    </div>
+                    <div class="events pt-4 px-3">
+                        <div class="wrapper d-flex mb-2">
+                            <i class="ti-control-record text-primary mr-2"></i>
+                            <span>Feb 7 2018</span>
+                        </div>
+                        <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+                        <p class="text-gray mb-0 ">Call Sarah Graves</p>
+                    </div>
+                </div>
+                <!-- To do section tab ends -->
+                <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                        <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+                        <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See
+                            All</small>
+                    </div>
+                    <ul class="chat-list">
+                        <li class="list active">
+                            <div class="profile"><img src="../../images/faces/face1.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Thomas Douglas</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">19 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="../../images/faces/face2.jpg" alt="image"><span
+                                    class="offline"></span></div>
+                            <div class="info">
+                                <div class="wrapper d-flex">
+                                    <p>Catherine</p>
+                                </div>
+                                <p>Away</p>
+                            </div>
+                            <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+                            <small class="text-muted my-auto">23 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="../../images/faces/face3.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Daniel Russell</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">14 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="../../images/faces/face4.jpg" alt="image"><span
+                                    class="offline"></span></div>
+                            <div class="info">
+                                <p>James Richardson</p>
+                                <p>Away</p>
+                            </div>
+                            <small class="text-muted my-auto">2 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="../../images/faces/face5.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Madeline Kennedy</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">5 min</small>
+                        </li>
+                        <li class="list">
+                            <div class="profile"><img src="../../images/faces/face6.jpg" alt="image"><span
+                                    class="online"></span></div>
+                            <div class="info">
+                                <p>Sarah Graves</p>
+                                <p>Available</p>
+                            </div>
+                            <small class="text-muted my-auto">47 min</small>
+                        </li>
+                    </ul>
+                </div>
+                <!-- chat tab ends -->
+            </div>
+        </div>
+        <!-- partial -->
+        <!-- partial:../../partials/_sidebar.html -->
+        <!--왼쪽 사이드 바-->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/index">
+                        <!--                    <i class="fa-solid fa-house icon-grid menu-icon"></i>-->
+                        <i class="fa-solid fa-house icon-grid menu-icon"></i>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+
+                <!--여기 준수형 파일 경로 바꿔야함-->
+                <li class="nav-item">
+                    <a class="nav-link" href="/order/upload-form">
+
+                        <i class="fa-solid fa-magnifying-glass icon-paper menu-icon"></i>
+                        <span class="menu-title">Search Product</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/community/communityList">
+
+                        <i class="fa-solid fa-comments icon-paper menu-icon"></i>
+                        <span class="menu-title">Community</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                        <i class="fa-solid fa-user icon-head menu-icon"></i>
+                        <span class=" menu-title">User Pages</span>
+
+                        <!--                       <i class="fa-solid fa-chevron-right menu-arrow"></i>-->
+                        <i class="fa-solid fa-chevron-right" style="margin-left: 0.5rem"></i>
+
+
+                        <!--                    <i class="fa-solid fa-chevron-right "></i>-->
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"><a class="nav-link" href="/profile/info"> MyPage </a></li>
+                            <li class="nav-item"><a class="nav-link" href="/login/logout"> LogOut </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!--여기까지 왼쪽 사이드 바-->
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">Community Notice</p>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <form name="f" id="f">
+                                                <input type="hidden" name="communitySeq"
+                                                       th:value="${rDTO.communitySeq}"/>
+                                                <div class="board_wrap">
+                                                    <div class="board_title">
+                                                        <strong>공지사항</strong>
+                                                        <p>공지사항을 빠르고 정확하게 안내해드립니다.</p>
+                                                    </div>
+                                                    <div class="board_write_wrap">
+                                                        <div class="board_write">
+                                                            <div class="title">
+                                                                <dl>
+                                                                    <dt>제목</dt>
+                                                                    <!-- 모델의 DTO에서 title 속성 값을 가져와서 출력 -->
+                                                                    <dd><input type="text" name="title"
+                                                                               placeholder="제목 입력"
+                                                                               th:value="${rDTO.title}"/></dd>
+                                                                </dl>
+                                                                <dl>
+                                                                    <dt>공지글 여부</dt>
+                                                                    <dd th:if="${isAdmin}">
+                                                                        <input type="radio" name="communityYn"
+                                                                               value="Y"/> 예
+                                                                        <input type="radio" name="communityYn"
+                                                                               value="N"/> 아니오
+                                                                    </dd>
+                                                                    <dd th:unless="${isAdmin}">
+                                                                        <input type="hidden" name="communityYn"
+                                                                               value="N"/>
+                                                                        <span>지정할 수 없습니다.</span>
+                                                                    </dd>
+                                                                </dl>
+                                                            </div>
+                                                            <div class="info">
+
+                                                            </div>
+                                                            <div class="cont">
+                                                                <!-- 모델의 DTO에서 contents 속성 값을 가져와서 출력 -->
+                                                                <textarea name="contents" placeholder="내용 입력"
+                                                                          th:text="${rDTO.contents}"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="bt_list">
+                                                        <button id="btnSend" type="button" class="custom-button">수정
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
+                                        <!-- 페이징 처리를 위한 div 추가 -->
                                     </div>
                                 </div>
-                                <!-- social -->
-                                <div class="footer-social">
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--여기까지 우리가 쓸 테이블-->
+                <div class="row">
+
+                    <!--
+                                <div class="col-md-6 grid-margin stretch-card">
+
                                 </div>
+                                <div class="col-md-6 grid-margin stretch-card">
+
+                                </div>
+                                <div class="col-12 grid-margin stretch-card">
+
+                                </div>
+                                <div class="col-md-6 grid-margin stretch-card">
+
+                                </div>
+                                <div class="col-md-6 grid-margin stretch-card">
+
+                                </div>
+                                <div class="col-md-6 grid-margin stretch-card">
+
+                                </div>
+                    -->
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <!--여기에서 공지글 여부 버튼 결정-->
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Checkbox Controls</h4>
+                                <p class="card-description">Checkbox and radio controls (default appearance is in
+                                    primary color)</p>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input">
+                                                        Default
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" checked>
+                                                        Checked
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" disabled>
+                                                        Disabled
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" disabled
+                                                               checked>
+                                                        Disabled checked
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="optionsRadios" id="optionsRadios1" value="">
+                                                        Default
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="optionsRadios" id="optionsRadios2" value="option2"
+                                                               checked>
+                                                        Selected
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="optionsRadios2" id="optionsRadios3" value="option3"
+                                                               disabled>
+                                                        Disabled
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="optionsRadio2" id="optionsRadios4" value="option4"
+                                                               disabled checked>
+                                                        Selected and disabled
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-description">Add class <code>.form-check-{color}</code> for checkbox and
+                                    radio controls in theme colors</p>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="form-check form-check-primary">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" checked>
+                                                        Primary
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-success">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" checked>
+                                                        Success
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-info">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" checked>
+                                                        Info
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-danger">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" checked>
+                                                        Danger
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-warning">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" checked>
+                                                        Warning
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="form-check form-check-primary">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="ExampleRadio1" id="ExampleRadio1" checked>
+                                                        Primary
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-success">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="ExampleRadio2" id="ExampleRadio2" checked>
+                                                        Success
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-info">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="ExampleRadio3" id="ExampleRadio3" checked>
+                                                        Info
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-danger">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="ExampleRadio4" id="ExampleRadio4" checked>
+                                                        Danger
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-warning">
+                                                    <label class="form-check-label">
+                                                        <input type="radio" class="form-check-input"
+                                                               name="ExampleRadio5" id="ExampleRadio5" checked>
+                                                        Warning
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Our solutions</h4>
-                                <ul>
-                                    <li><a href="#">Design & creatives</a></li>
-                                    <li><a href="#">Telecommunication</a></li>
-                                    <li><a href="#">Restaurant</a></li>
-                                    <li><a href="#">Programing</a></li>
-                                    <li><a href="#">Architecture</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-12 grid-margin stretch-card">
+                        <!--이거 나중에 배너로 쓸 div로 쓸까 생각중-->
+                        <!--
+                                      <div class="card">
+                                        <div class="card-body">
+                                          <h4 class="card-title">Inline forms</h4>
+                                          <p class="card-description">
+                                            Use the <code>.form-inline</code> class to display a series of labels, form controls, and buttons on a single horizontal row
+                                          </p>
+                                          <form class="form-inline">
+                                            <label class="sr-only" for="inlineFormInputName2">Name</label>
+                                            <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Jane Doe">
+
+                                            <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                              <div class="input-group-prepend">
+                                                <div class="input-group-text">@</div>
+                                              </div>
+                                              <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Username">
+                                            </div>
+                                            <div class="form-check mx-sm-2">
+                                              <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" checked>
+                                                Remember me
+                                              </label>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                          </form>
+                                        </div>
+                                      </div>
+                        -->
                     </div>
-                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Support</h4>
-                                <ul>
-                                    <li><a href="#">Design & creatives</a></li>
-                                    <li><a href="#">Telecommunication</a></li>
-                                    <li><a href="#">Restaurant</a></li>
-                                    <li><a href="#">Programing</a></li>
-                                    <li><a href="#">Architecture</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-12 grid-margin">
+
                     </div>
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="footer-tittle">
-                                <h4>Company</h4>
-                                <ul>
-                                    <li><a href="#">Design & creatives</a></li>
-                                    <li><a href="#">Telecommunication</a></li>
-                                    <li><a href="#">Restaurant</a></li>
-                                    <li><a href="#">Programing</a></li>
-                                    <li><a href="#">Architecture</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-md-6 grid-margin stretch-card">
+
+                    </div>
+                    <div class="col-md-6 grid-margin stretch-card">
+
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- footer-bottom area -->
-        <div class="footer-bottom-area">
-            <div class="container">
-                <div class="footer-border">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-xl-12 ">
-                            <div class="footer-copy-right text-center">
-                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- content-wrapper ends -->
+            <!-- partial:../../partials/_footer.html -->
+            <footer class="footer">
+                <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a
+                            href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+                    <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i
+                            class="ti-heart text-danger ml-1"></i></span>
                 </div>
-            </div>
+            </footer>
+            <!-- partial -->
         </div>
-        <!-- Footer End-->
+        <!-- main-panel ends -->
     </div>
-</footer>
-<!-- Scroll Up -->
-<div id="back-top" >
-    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    <!-- page-body-wrapper ends -->
 </div>
+<!--이미지 드래그 드랍-->
+<script src="/ocr/js/imageDrag.js"></script>
+<!-- plugins:js -->
+<script src="/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="/vendors/chart.js/Chart.min.js"></script>
+<script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/js/dataTables.select.min.js"></script>
 
-<!-- JS here -->
-
-<script src="/community/css/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-<!-- Jquery, Popper, Bootstrap -->
-<script src="/community/css/assets/js/vendor/jquery-1.12.4.min.js"></script>
-<script src="/community/css/assets/js/popper.min.js"></script>
-<script src="/community/css/assets/js/bootstrap.min.js"></script>
-<!-- Jquery Mobile Menu -->
-<script src="/community/css/assets/js/jquery.slicknav.min.js"></script>
-
-<!-- Jquery Slick , Owl-Carousel Plugins -->
-<script src="/community/css/assets/js/owl.carousel.min.js"></script>
-<script src="/community/css/assets/js/slick.min.js"></script>
-<!-- One Page, Animated-HeadLin -->
-<script src="/community/css/assets/js/wow.min.js"></script>
-<script src="/community/css/assets/js/animated.headline.js"></script>
-<script src="/community/css/assets/js/jquery.magnific-popup.js"></script>
-
-<!-- Date Picker -->
-<script src="/community/css/assets/js/gijgo.min.js"></script>
-<!-- Nice-select, sticky -->
-<script src="/community/css/assets/js/jquery.nice-select.min.js"></script>
-<script src="/community/css/assets/js/jquery.sticky.js"></script>
-<!-- Progress -->
-<script src="/community/css/assets/js/jquery.barfiller.js"></script>
-
-<!-- counter , waypoint,Hover Direction -->
-<script src="/community/css/assets/js/jquery.counterup.min.js"></script>
-<script src="/community/css/assets/js/waypoints.min.js"></script>
-<script src="/community/css/assets/js/jquery.countdown.min.js"></script>
-<script src="/community/css/assets/js/hover-direction-snake.min.js"></script>
-
-<!-- contact js -->
-<script src="/community/css/assets/js/contact.js"></script>
-<script src="/community/css/assets/js/jquery.form.js"></script>
-<script src="/community/css/assets/js/jquery.validate.min.js"></script>
-<script src="/community/css/assets/js/mail-script.js"></script>
-<script src="/community/css/assets/js/jquery.ajaxchimp.min.js"></script>
-
-<!-- Jquery Plugins, main Jquery -->
-<script src="/community/css/assets/js/plugins.js"></script>
-<script src="/community/css/assets/js/main.js"></script>
-
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="/js/off-canvas.js"></script>
+<script src="/js/hoverable-collapse.js"></script>
+<script src="/js/template.js"></script>
+<script src="/js/settings.js"></script>
+<script src="/js/todolist.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="/js/dashboard.js"></script>
+<script src="/js/Chart.roundedBarCharts.js"></script>
+<!-- End custom js for this page-->
 </body>
+
 </html>
