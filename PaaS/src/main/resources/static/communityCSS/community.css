@@ -157,7 +157,7 @@ a {
 }
 
 .board_wrap {
-    width: 1000px;
+    width: 1420px;
     margin: 0px auto;
 }
 
@@ -166,7 +166,7 @@ a {
 }
 
 .board_title strong {
-    font-size: 3rem;
+    font-size: 37px;
 }
 
 .board_title p {
@@ -314,7 +314,7 @@ a {
 .board_view .title {
     padding: 20px 15px;
     border-bottom: 1px dashed #ddd;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .board_view .info {
@@ -364,7 +364,7 @@ a {
     padding: 15px;
     border-bottom: 1px solid #000;
     line-height: 160%;
-    font-size: 1.4rem;
+    font-size: 1rem;
 }
 
 .board_write {
