@@ -57,6 +57,9 @@ public class CommunityController {
 
 
 
+
+
+
     /**
      * 게시판 리스트 보여주기
      * <p>
