@@ -14,24 +14,107 @@
   <!-- Plugin css for this page -->
   <link rel="stylesheet" href="/vendors/select2/select2.min.css">
   <link rel="stylesheet" href="/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+
+  <link rel="stylesheet" type="text/css" href="/js/select.dataTables.min.css">
+  <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="/images/favicon.png" />
+  <link rel="shortcut icon" href="/image/favicon/favicon-32x32.png"/>
+
+  <!--아이콘-->
+  <script src="https://kit.fontawesome.com/ad95056f42.js" crossorigin="anonymous"></script>
+
+  <!--  추가한 style, jquery, script-->
+  <style>
+
+      /*아이콘 회전*/
+      .dropBox {
+          width: 90vw;
+          height: 80vh;
+
+          margin: .6rem;
+          overflow: auto;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          border-radius: 5px;
+          border: 4px dashed #ddd;
+          user-select: none;
+          transition: 0.4s;
+
+          max-height: 1080px; /* 원하는 높이로 설정 */
+          overflow: auto; /* 스크롤이 필요한 경우만 스크롤 표시 */
+      }
+
+      /* 드롭 반응 */
+      .dropBox.active {
+          background: #ddd;
+      }
+
+      .dropBox h1 {
+          font-size: 1.8rem;
+      }
+
+      /* ----------- */
+
+      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Pretendard, 'Malgun Gothic', sans-serif;
+      }
+
+      /*유저 페이지 아이콘 회전 */
+
+      .fa-chevron-right {
+          transition: transform 0.3s ease; /* 변환에 대한 애니메이션 효과를 적용합니다. */
+      }
+
+      .rotate {
+          transform: rotate(90deg); /* 회전 각도를 지정합니다. */
+      }
+
+
+  </style>
+  <script src="/js/jquery-3.6.0.min.js"></script>
+  <script>
+      $(document).ready(() => {
+          /*유저 페이지 아이콘 회전 */
+          $('.nav-link').click(function () {
+              var icon = $(this).find('.fa-chevron-right');
+
+              // 아이콘 회전 애니메이션 추가
+              if (icon.hasClass('rotate')) {
+                  icon.removeClass('rotate');
+              } else {
+                  icon.addClass('rotate');
+              }
+          });
+      })
+  </script>
+  <!--  추가한 style, jquery, script 끝-->
+
 
   <script th:inline="javascript">
       console.log("rDTO : " + [[${rDTO}]])
   </script>
 </head>
 
-<body>
+<body class="sidebar-dark">
 <div class="container-scroller">
-  <!-- partial:/partials/_navbar.html -->
-  <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-dark">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-      <a class="navbar-brand brand-logo mr-5" href="/index.html"><img src="/images/logo.svg" class="mr-2" alt="logo"/></a>
-      <a class="navbar-brand brand-logo-mini" href="/index.html"><img src="/images/logo-mini.svg" alt="logo"/></a>
+      <a class="navbar-brand brand-logo mr-5" href="index"><h2 style="margin-left: 10%; color: #FFFFFF;">Jangbaguni</h2></a>
+      <!--아니 왜 이거 밑에 아이콘 안 나오노? 경로 뭐노-->
+      <a class="navbar-brand brand-logo-mini" href="index"><img src="/image/logo-mini.svg" alt="logo"/></a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
       <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -41,21 +124,24 @@
         <li class="nav-item nav-search d-none d-lg-block">
           <div class="input-group">
             <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                <span class="input-group-text" id="search">
-                  <i class="icon-search"></i>
-                </span>
+              <!--                <span class="input-group-text" id="search">-->
+              <!--                  <i class="icon-search"></i>-->
+              <!--                </span>-->
             </div>
-            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            <!--검색창-->
+            <!--            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">-->
           </div>
         </li>
       </ul>
       <ul class="navbar-nav navbar-nav-right">
         <li class="nav-item dropdown">
-          <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-            <i class="icon-bell mx-0"></i>
-            <span class="count"></span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+          <!--          <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"-->
+          <!--             data-toggle="dropdown">-->
+          <!--            <i class="icon-bell mx-0"></i>-->
+          <!--            <span class="count"></span>-->
+          <!--          </a>-->
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+               aria-labelledby="notificationDropdown">
             <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
             <a class="dropdown-item preview-item">
               <div class="preview-thumbnail">
@@ -100,51 +186,51 @@
         </li>
         <li class="nav-item nav-profile dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-            <img src="/images/faces/face28.jpg" alt="profile"/>
+            <img src="/image/faces/profile.png" alt="profile"/>
           </a>
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-            <a class="dropdown-item">
-              <i class="ti-settings text-primary"></i>
-              Settings
-            </a>
-            <a class="dropdown-item">
+            <a class="dropdown-item" href="/login/logout">
               <i class="ti-power-off text-primary"></i>
               Logout
             </a>
           </div>
         </li>
-        <li class="nav-item nav-settings d-none d-lg-flex">
-          <a class="nav-link" href="#">
-            <i class="icon-ellipsis"></i>
-          </a>
-        </li>
+        <!--        <li class="nav-item nav-settings d-none d-lg-flex">-->
+        <!--          <a class="nav-link" href="#">-->
+        <!--            <i class="icon-ellipsis"></i>-->
+        <!--          </a>-->
+        <!--        </li>-->
       </ul>
-      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+              data-toggle="offcanvas">
         <span class="icon-menu"></span>
       </button>
     </div>
   </nav>
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
-    <!-- partial:/partials/_settings-panel.html -->
-    <div class="theme-setting-wrapper">
-      <div id="settings-trigger"><i class="ti-settings"></i></div>
-      <div id="theme-settings" class="settings-panel">
-        <i class="settings-close ti-close"></i>
-        <p class="settings-heading">SIDEBAR SKINS</p>
-        <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
-        <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
-        <p class="settings-heading mt-2">HEADER SKINS</p>
-        <div class="color-tiles mx-0 px-4">
-          <div class="tiles success"></div>
-          <div class="tiles warning"></div>
-          <div class="tiles danger"></div>
-          <div class="tiles info"></div>
-          <div class="tiles dark"></div>
-          <div class="tiles default"></div>
-        </div>
-      </div>
-    </div>
+    <!-- partial:partials/_settings-panel.html -->
+    <!--
+          <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+              <i class="settings-close ti-close"></i>
+              <p class="settings-heading">SIDEBAR SKINS</p>
+              <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+              <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+              <p class="settings-heading mt-2">HEADER SKINS</p>
+              <div class="color-tiles mx-0 px-4">
+                <div class="tiles success"></div>
+                <div class="tiles warning"></div>
+                <div class="tiles danger"></div>
+                <div class="tiles info"></div>
+                <div class="tiles dark"></div>
+                <div class="tiles default"></div>
+              </div>
+            </div>
+          </div>
+    -->
+    <!--여기서 부터 오른쪽 사이드 바-->
     <div id="right-sidebar" class="settings-panel">
       <i class="settings-close ti-close"></i>
       <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
@@ -240,7 +326,7 @@
           </div>
           <ul class="chat-list">
             <li class="list active">
-              <div class="profile"><img src="/images/faces/face1.jpg" alt="image"><span class="online"></span></div>
+              <div class="profile"><img src="images/faces/face1.jpg" alt="image"><span class="online"></span></div>
               <div class="info">
                 <p>Thomas Douglas</p>
                 <p>Available</p>
@@ -248,7 +334,7 @@
               <small class="text-muted my-auto">19 min</small>
             </li>
             <li class="list">
-              <div class="profile"><img src="/images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
+              <div class="profile"><img src="images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
               <div class="info">
                 <div class="wrapper d-flex">
                   <p>Catherine</p>
@@ -259,7 +345,7 @@
               <small class="text-muted my-auto">23 min</small>
             </li>
             <li class="list">
-              <div class="profile"><img src="/images/faces/face3.jpg" alt="image"><span class="online"></span></div>
+              <div class="profile"><img src="images/faces/face3.jpg" alt="image"><span class="online"></span></div>
               <div class="info">
                 <p>Daniel Russell</p>
                 <p>Available</p>
@@ -267,7 +353,7 @@
               <small class="text-muted my-auto">14 min</small>
             </li>
             <li class="list">
-              <div class="profile"><img src="/images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
+              <div class="profile"><img src="images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
               <div class="info">
                 <p>James Richardson</p>
                 <p>Away</p>
@@ -275,7 +361,7 @@
               <small class="text-muted my-auto">2 min</small>
             </li>
             <li class="list">
-              <div class="profile"><img src="/images/faces/face5.jpg" alt="image"><span class="online"></span></div>
+              <div class="profile"><img src="images/faces/face5.jpg" alt="image"><span class="online"></span></div>
               <div class="info">
                 <p>Madeline Kennedy</p>
                 <p>Available</p>
@@ -283,7 +369,7 @@
               <small class="text-muted my-auto">5 min</small>
             </li>
             <li class="list">
-              <div class="profile"><img src="/images/faces/face6.jpg" alt="image"><span class="online"></span></div>
+              <div class="profile"><img src="images/faces/face6.jpg" alt="image"><span class="online"></span></div>
               <div class="info">
                 <p>Sarah Graves</p>
                 <p>Available</p>
@@ -295,112 +381,67 @@
         <!-- chat tab ends -->
       </div>
     </div>
+
+    <!--여기까지 오른쪽 사이드 바-->
     <!-- partial -->
-    <!-- partial:/partials/_sidebar.html -->
+    <!-- partial:partials/_sidebar.html -->
+    <!--왼쪽 사이드 바-->
+    <!--왼쪽 사이드 바-->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="/index.html">
-            <i class="icon-grid menu-icon"></i>
+          <a class="nav-link" href="/index">
+            <!--                    <i class="fa-solid fa-house icon-grid menu-icon"></i>-->
+            <i class="fa-solid fa-house icon-grid menu-icon"></i>
             <span class="menu-title">Dashboard</span>
           </a>
         </li>
+
+        <!--여기 준수형 파일 경로 바꿔야함-->
         <li class="nav-item">
-          <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-            <i class="icon-layout menu-icon"></i>
-            <span class="menu-title">UI Elements</span>
-            <i class="menu-arrow"></i>
+          <a class="nav-link" href="/order/upload-form">
+
+            <i class="fa-solid fa-magnifying-glass icon-paper menu-icon"></i>
+            <span class="menu-title">Search Product</span>
           </a>
-          <div class="collapse" id="ui-basic">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/buttons.html">Buttons</a></li>
-              <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a></li>
-              <li class="nav-item"> <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a></li>
-            </ul>
-          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-            <i class="icon-columns menu-icon"></i>
-            <span class="menu-title">Form elements</span>
-            <i class="menu-arrow"></i>
+          <a class="nav-link" href="/community/communityList">
+
+            <i class="fa-solid fa-comments icon-paper menu-icon"></i>
+            <span class="menu-title">Community</span>
           </a>
-          <div class="collapse" id="form-elements">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"><a class="nav-link" href="/pages/forms/basic_elements.html">Basic Elements</a></li>
-            </ul>
-          </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-            <i class="icon-bar-graph menu-icon"></i>
-            <span class="menu-title">Charts</span>
-            <i class="menu-arrow"></i>
-          </a>
-          <div class="collapse" id="charts">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/pages/charts/chartjs.html">ChartJs</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-            <i class="icon-grid-2 menu-icon"></i>
-            <span class="menu-title">Tables</span>
-            <i class="menu-arrow"></i>
-          </a>
-          <div class="collapse" id="tables">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/pages/tables/basic-table.html">Basic table</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-            <i class="icon-contract menu-icon"></i>
-            <span class="menu-title">Icons</span>
-            <i class="menu-arrow"></i>
-          </a>
-          <div class="collapse" id="icons">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/pages/icons/mdi.html">Mdi icons</a></li>
-            </ul>
-          </div>
-        </li>
+
         <li class="nav-item">
           <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-            <i class="icon-head menu-icon"></i>
-            <span class="menu-title">User Pages</span>
-            <i class="menu-arrow"></i>
+            <i class="fa-solid fa-user icon-head menu-icon"></i>
+            <span class=" menu-title">User Pages</span>
+
+            <!--                       <i class="fa-solid fa-chevron-right menu-arrow"></i>-->
+            <i class="fa-solid fa-chevron-right" style="margin-left: 0.5rem"></i>
+
+
+            <!--                    <i class="fa-solid fa-chevron-right "></i>-->
           </a>
           <div class="collapse" id="auth">
             <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/pages/samples/login.html"> Login </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/pages/samples/register.html"> Register </a></li>
+              <li class="nav-item"><a class="nav-link" href="/profile/info"> MyPage </a></li>
+              <li class="nav-item"><a class="nav-link" href="/login/logout"> LogOut </a>
+              </li>
             </ul>
           </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-            <i class="icon-ban menu-icon"></i>
-            <span class="menu-title">Error pages</span>
-            <i class="menu-arrow"></i>
-          </a>
-          <div class="collapse" id="error">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="/pages/samples/error-404.html"> 404 </a></li>
-              <li class="nav-item"> <a class="nav-link" href="/pages/samples/error-500.html"> 500 </a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/pages/documentation/documentation.html">
-            <i class="icon-paper menu-icon"></i>
-            <span class="menu-title">Documentation</span>
-          </a>
         </li>
       </ul>
     </nav>
+
+    <!--여기까지 왼쪽 사이드 바-->
+
+    <!--여기까지 왼쪽 사이드 바-->
+
+
+
+
     <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">

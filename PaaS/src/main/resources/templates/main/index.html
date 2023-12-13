@@ -24,6 +24,22 @@
 
     <!--아이콘-->
     <script src="https://kit.fontawesome.com/ad95056f42.js" crossorigin="anonymous"></script>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            /*유저 페이지 아이콘 회전 */
+            $('.nav-link').click(function () {
+                var icon = $(this).find('.fa-chevron-right');
+
+                // 아이콘 회전 애니메이션 추가
+                if (icon.hasClass('rotate')) {
+                    icon.removeClass('rotate');
+                } else {
+                    icon.addClass('rotate');
+                }
+            });
+        })
+    </script>
 
     <style>
 
